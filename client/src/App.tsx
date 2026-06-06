@@ -15,6 +15,7 @@ import Contato from "./pages/Contato";
 import Noticias from "./pages/Noticias";
 import NoticiaDetalhe from "./pages/NoticiaDetalhe";
 import Transparencia from "./pages/Transparencia";
+import Obrigado from "./pages/Obrigado";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -38,6 +39,7 @@ function Router() {
       <Route path="/noticias" component={() => <Layout><Noticias /></Layout>} />
       <Route path="/noticias/:slug" component={({ params }) => <Layout><NoticiaDetalhe slug={params.slug} /></Layout>} />
       <Route path="/transparencia" component={() => <Layout><Transparencia /></Layout>} />
+      <Route path="/obrigado" component={() => <Obrigado />} />
       <Route component={NotFound} />
     </Switch>
   );

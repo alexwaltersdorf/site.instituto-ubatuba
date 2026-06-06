@@ -17,6 +17,8 @@ import {
   updatePost,
 } from "./db";
 import { notifyOwner } from "./_core/notification";
+import Stripe from "stripe";
+import { DONATION_TIERS, DONATION_CURRENCY, DONATION_PRODUCT_NAME, DONATION_PRODUCT_DESCRIPTION } from "./stripe-products";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
@@ -171,6 +173,69 @@ export const appRouter = router({
     list: adminProcedure.query(async () => {
       return getContacts();
     }),
+  }),
+
+  /* ── Doações (Stripe) ── */
+  donation: router({
+    createCheckout: publicProcedure
+      .input(
+        z.object({
+          tierId: z.string().optional(),           // ID do tier pré-definido
+          customAmountBRL: z.number().min(500).max(1000000).optional(), // valor livre em centavos
+          donorName: z.string().optional(),
+          donorEmail: z.string().email().optional(),
+          origin: z.string().url(),                // window.location.origin do frontend
+        })
+      )
+      .mutation(async ({ input }) => {
+        const stripeKey = process.env.STRIPE_SECRET_KEY;
+        if (!stripeKey) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Pagamentos não configurados." });
+
+        const stripe = new Stripe(stripeKey);
+
+        // Determina o valor da doação
+        let amountBRL: number;
+        if (input.tierId) {
+          const tier = DONATION_TIERS.find((t) => t.id === input.tierId);
+          if (!tier) throw new TRPCError({ code: "BAD_REQUEST", message: "Plano de doação inválido." });
+          amountBRL = tier.amountBRL;
+        } else if (input.customAmountBRL) {
+          amountBRL = input.customAmountBRL;
+        } else {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Informe um valor de doação." });
+        }
+
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ["card"],
+          mode: "payment",
+          line_items: [
+            {
+              price_data: {
+                currency: DONATION_CURRENCY,
+                unit_amount: amountBRL,
+                product_data: {
+                  name: DONATION_PRODUCT_NAME,
+                  description: DONATION_PRODUCT_DESCRIPTION,
+                },
+              },
+              quantity: 1,
+            },
+          ],
+          customer_email: input.donorEmail,
+          metadata: {
+            customer_name: input.donorName ?? "",
+            customer_email: input.donorEmail ?? "",
+            tier_id: input.tierId ?? "custom",
+            amount_brl_cents: amountBRL.toString(),
+          },
+          allow_promotion_codes: true,
+          success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${input.origin}/apoie`,
+        });
+
+        if (!session.url) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erro ao criar sessão de pagamento." });
+        return { checkoutUrl: session.url };
+      }),
   }),
 
   /* ── Canal de Ética ── */

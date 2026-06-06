@@ -77,3 +77,12 @@
 - [x] Router tRPC para canal de ética (envio anônimo + consulta por protocolo)
 - [x] Notificar owner ao receber mensagem pelo canal de ética
 - [x] 14 testes Vitest passando (incluindo 4 novos para canal de ética)
+
+## Doações Online (Stripe)
+
+- [x] Configurar Stripe no projeto via webdev_add_feature
+- [x] Criar endpoint tRPC para gerar Stripe Checkout Session (valores fixos + valor livre)
+- [x] Criar página /obrigado para confirmação pós-doação (success_url)
+- [x] Atualizar página Apoie com seção de doação com botões de valores pré-definidos (R$30, R$50, R$100, R$200) e valor personalizado
+- [x] Webhook Stripe para confirmar pagamentos e notificar o owner
+- [x] 14 testes Vitest passando

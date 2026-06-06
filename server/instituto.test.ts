@@ -66,6 +66,26 @@ vi.mock("./_core/notification", () => ({
   notifyOwner: vi.fn().mockResolvedValue(true),
 }));
 
+// Mock do Stripe para testes de doação
+vi.mock("stripe", () => {
+  const mockSession = {
+    id: "cs_test_mock123",
+    url: "https://checkout.stripe.com/pay/cs_test_mock123",
+    amount_total: 10000,
+    payment_status: "paid",
+    metadata: { customer_name: "Teste", customer_email: "teste@exemplo.com" },
+    customer_details: null,
+  };
+  const MockStripe = vi.fn().mockImplementation(() => ({
+    checkout: {
+      sessions: {
+        create: vi.fn().mockResolvedValue(mockSession),
+      },
+    },
+  }));
+  return { default: MockStripe };
+});
+
 function createPublicContext(): TrpcContext {
   return {
     user: null,
@@ -226,5 +246,54 @@ describe("ethics.checkStatus", () => {
     await expect(
       caller.ethics.checkStatus({ protocol: "INEXISTENTE" })
     ).rejects.toThrow("Protocolo não encontrado.");
+  });
+});
+
+describe("donation.createCheckout", () => {
+  beforeEach(() => {
+    process.env.STRIPE_SECRET_KEY = "sk_test_mock_key_for_testing";
+  });
+
+  it("cria checkout com tier pré-definido e retorna URL", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    const result = await caller.donation.createCheckout({
+      tierId: "doe-100",
+      origin: "https://institutoubatuba.org",
+    });
+    expect(result.checkoutUrl).toContain("checkout.stripe.com");
+  });
+
+  it("cria checkout com valor personalizado", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    const result = await caller.donation.createCheckout({
+      customAmountBRL: 7500, // R$ 75,00 em centavos
+      donorName: "Maria Silva",
+      donorEmail: "maria@exemplo.com",
+      origin: "https://institutoubatuba.org",
+    });
+    expect(result.checkoutUrl).toBeTruthy();
+  });
+
+  it("rejeita quando nem tierId nem customAmountBRL são fornecidos", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    await expect(
+      caller.donation.createCheckout({
+        origin: "https://institutoubatuba.org",
+      })
+    ).rejects.toThrow("Informe um valor de doação.");
+  });
+
+  it("rejeita tier inválido", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    await expect(
+      caller.donation.createCheckout({
+        tierId: "tier-inexistente",
+        origin: "https://institutoubatuba.org",
+      })
+    ).rejects.toThrow("Plano de doação inválido.");
   });
 });

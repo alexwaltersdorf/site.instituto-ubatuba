@@ -1,7 +1,49 @@
-import { Heart, Users, Handshake, ArrowRight, CheckCircle, Building2, Leaf } from "lucide-react";
+import { useState } from "react";
+import { Heart, Users, Handshake, ArrowRight, CheckCircle, Building2, Leaf, CreditCard, Lock, Loader2, Gift } from "lucide-react";
 import { Link } from "wouter";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { trpc } from "@/lib/trpc";
+import { cn } from "@/lib/utils";
 
 const HERO_IMAGE = "/manus-storage/ubatuba-hero_110ea313.jpg";
+
+// Planos de doação (espelham os valores do backend)
+const DONATION_TIERS = [
+  {
+    id: "doe-30",
+    label: "R$ 30",
+    amountBRL: 30,
+    description: "Apoiador da Natureza",
+    impact: "Cobre materiais esportivos para uma criança por 1 mês nas escolinhas.",
+    popular: false,
+  },
+  {
+    id: "doe-50",
+    label: "R$ 50",
+    amountBRL: 50,
+    description: "Guardião do Santuário",
+    impact: "Financia um exame de saúde preventivo para uma família da comunidade.",
+    popular: false,
+  },
+  {
+    id: "doe-100",
+    label: "R$ 100",
+    amountBRL: 100,
+    description: "Protetor do Ecossistema",
+    impact: "Garante 1 mês de atividades esportivas e educacionais para 3 crianças.",
+    popular: true,
+  },
+  {
+    id: "doe-200",
+    label: "R$ 200",
+    amountBRL: 200,
+    description: "Embaixador Socioambiental",
+    impact: "Sustenta um mês completo do Projeto Itaguá Azul de conservação marinha.",
+    popular: false,
+  },
+];
 
 const formasApoio = [
   {
@@ -21,24 +63,6 @@ const formasApoio = [
     bg: "bg-forest/10",
     border: "border-forest/20",
     iconBg: "bg-forest",
-  },
-  {
-    id: "doacoes",
-    icon: Heart,
-    titulo: "Doações",
-    subtitulo: "Transforme recursos em impacto",
-    descricao: "Cada doação, independentemente do valor, contribui diretamente para manter e expandir nossos programas. Seus recursos financiam equipamentos esportivos, materiais educativos, exames de saúde e ações de conservação ambiental.",
-    beneficios: [
-      "Transparência total na aplicação dos recursos",
-      "Relatórios periódicos de impacto",
-      "Possibilidade de doação recorrente",
-      "Reconhecimento como apoiador do instituto",
-    ],
-    cta: "Fazer uma doação",
-    color: "text-earth",
-    bg: "bg-earth/10",
-    border: "border-earth/20",
-    iconBg: "bg-earth",
   },
   {
     id: "parcerias",
@@ -66,6 +90,227 @@ const empresasParceiras = [
   { nome: "Associação de Moradores do Pereque-açu", tipo: "Comunidade", desc: "Integração e ações comunitárias" },
 ];
 
+// ── Componente de Doação ──────────────────────────────────────────────────────
+function SecaoDoacoes() {
+  const [selectedTier, setSelectedTier] = useState<string>("doe-100");
+  const [customValue, setCustomValue] = useState<string>("");
+  const [isCustom, setIsCustom] = useState(false);
+  const [donorName, setDonorName] = useState("");
+  const [donorEmail, setDonorEmail] = useState("");
+
+  const createCheckout = trpc.donation.createCheckout.useMutation({
+    onSuccess: ({ checkoutUrl }) => {
+      window.open(checkoutUrl, "_blank");
+      toast.success("Redirecionando para o pagamento seguro...");
+    },
+    onError: (err) => {
+      toast.error(err.message || "Erro ao processar doação. Tente novamente.");
+    },
+  });
+
+  const handleDonate = () => {
+    if (isCustom) {
+      const val = parseFloat(customValue.replace(",", "."));
+      if (!val || val < 5) {
+        toast.error("O valor mínimo para doação é R$ 5,00.");
+        return;
+      }
+      createCheckout.mutate({
+        customAmountBRL: Math.round(val * 100),
+        donorName: donorName || undefined,
+        donorEmail: donorEmail || undefined,
+        origin: window.location.origin,
+      });
+    } else {
+      createCheckout.mutate({
+        tierId: selectedTier,
+        donorName: donorName || undefined,
+        donorEmail: donorEmail || undefined,
+        origin: window.location.origin,
+      });
+    }
+  };
+
+  const selectedTierData = DONATION_TIERS.find((t) => t.id === selectedTier);
+
+  return (
+    <section id="doacoes" className="section-padding bg-gradient-to-b from-forest-dark to-forest">
+      <div className="container">
+        <div className="text-center mb-14">
+          <span className="section-label block mb-4 text-white/50">Faça a diferença</span>
+          <h2 className="font-serif text-4xl md:text-5xl font-medium text-white mb-4">
+            Faça uma Doação
+          </h2>
+          <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
+            Cada real doado vai diretamente para os programas que transformam vidas em Ubatuba.
+            Pagamento 100% seguro via Stripe.
+          </p>
+        </div>
+
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header do card */}
+            <div className="bg-forest/5 border-b border-border/40 px-8 py-5 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-forest/10 flex items-center justify-center">
+                <Heart className="w-4 h-4 text-forest fill-forest/30" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground text-sm">Instituto Ubatuba Santuário Ecológico</h3>
+                <p className="text-xs text-muted-foreground">ODS 18 · Bem-estar Animal · Conservação Ecológica</p>
+              </div>
+              <div className="ml-auto flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Lock className="w-3 h-3" />
+                <span>Pagamento seguro</span>
+              </div>
+            </div>
+
+            <div className="p-8">
+              {/* Seleção de valor */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-foreground mb-3">
+                  Escolha o valor da sua doação
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+                  {DONATION_TIERS.map((tier) => (
+                    <button
+                      key={tier.id}
+                      onClick={() => { setSelectedTier(tier.id); setIsCustom(false); }}
+                      className={cn(
+                        "relative py-3 px-4 rounded-lg border-2 text-sm font-semibold transition-all duration-150 active:scale-[0.97]",
+                        !isCustom && selectedTier === tier.id
+                          ? "border-forest bg-forest text-white shadow-md shadow-forest/20"
+                          : "border-border text-foreground hover:border-forest/50 hover:bg-forest/5"
+                      )}
+                    >
+                      {tier.popular && (
+                        <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-earth text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
+                          Mais popular
+                        </span>
+                      )}
+                      {tier.label}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => { setIsCustom(true); setSelectedTier(""); }}
+                  className={cn(
+                    "w-full py-3 px-4 rounded-lg border-2 text-sm font-medium transition-all duration-150 text-left flex items-center gap-2",
+                    isCustom
+                      ? "border-forest bg-forest/5 text-forest"
+                      : "border-border text-muted-foreground hover:border-forest/50"
+                  )}
+                >
+                  <Gift className="w-4 h-4" />
+                  Outro valor (livre)
+                </button>
+                {isCustom && (
+                  <div className="mt-3">
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground">R$</span>
+                      <Input
+                        type="number"
+                        min="5"
+                        step="1"
+                        placeholder="0,00"
+                        value={customValue}
+                        onChange={(e) => setCustomValue(e.target.value)}
+                        className="pl-10 text-base font-semibold"
+                        autoFocus
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Valor mínimo: R$ 5,00</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Impacto do valor selecionado */}
+              {!isCustom && selectedTierData && (
+                <div className="mb-6 p-4 bg-forest/5 rounded-lg border border-forest/15">
+                  <div className="flex items-start gap-3">
+                    <Leaf className="w-4 h-4 text-forest mt-0.5 shrink-0" />
+                    <div>
+                      <span className="text-xs font-semibold text-forest uppercase tracking-wide block mb-1">
+                        {selectedTierData.description}
+                      </span>
+                      <p className="text-sm text-foreground/80">{selectedTierData.impact}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Dados opcionais do doador */}
+              <div className="mb-6 space-y-3">
+                <label className="block text-sm font-semibold text-foreground mb-1">
+                  Seus dados <span className="font-normal text-muted-foreground">(opcional — para recibo)</span>
+                </label>
+                <Input
+                  placeholder="Seu nome"
+                  value={donorName}
+                  onChange={(e) => setDonorName(e.target.value)}
+                />
+                <Input
+                  type="email"
+                  placeholder="Seu e-mail"
+                  value={donorEmail}
+                  onChange={(e) => setDonorEmail(e.target.value)}
+                />
+              </div>
+
+              {/* Botão de doação */}
+              <Button
+                onClick={handleDonate}
+                disabled={createCheckout.isPending}
+                className="w-full h-12 bg-forest hover:bg-forest-dark text-white font-semibold text-base gap-2 shadow-lg shadow-forest/25 active:scale-[0.98] transition-all"
+              >
+                {createCheckout.isPending ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Preparando pagamento...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="w-5 h-5" />
+                    Doar agora
+                    {!isCustom && selectedTierData && ` — ${selectedTierData.label}`}
+                    {isCustom && customValue && ` — R$ ${parseFloat(customValue || "0").toFixed(2)}`}
+                  </>
+                )}
+              </Button>
+
+              {/* Selos de segurança */}
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
+                <div className="flex items-center gap-1.5">
+                  <Lock className="w-3 h-3" />
+                  <span>Criptografia SSL</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CreditCard className="w-3 h-3" />
+                  <span>Powered by Stripe</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle className="w-3 h-3 text-forest" />
+                  <span>Transparência total</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Nota de transparência */}
+          <p className="text-center text-white/50 text-xs mt-6 max-w-lg mx-auto">
+            72% dos recursos são aplicados diretamente em programas socioambientais.
+            Consulte nosso{" "}
+            <Link href="/transparencia" className="text-white/70 underline hover:text-white transition-colors">
+              Relatório de Transparência
+            </Link>{" "}
+            para detalhes completos.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Página Principal ──────────────────────────────────────────────────────────
 export default function Apoie() {
   return (
     <div className="pt-20">
@@ -83,21 +328,34 @@ export default function Apoie() {
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
             Existem muitas formas de contribuir para a missão do Instituto Ubatuba. Encontre a que melhor se encaixa no seu perfil.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            <a href="#doacoes" className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-forest font-semibold rounded-sm hover:bg-white/90 transition-colors">
+              <Heart className="w-4 h-4" />
+              Fazer uma doação
+            </a>
+            <a href="#voluntariado" className="inline-flex items-center gap-2 px-8 py-3.5 border border-white/40 text-white font-semibold rounded-sm hover:bg-white/10 transition-colors">
+              Ser voluntário
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* ── Formas de Apoio ── */}
+      {/* ── Seção de Doações com Stripe ── */}
+      <SecaoDoacoes />
+
+      {/* ── Outras formas de apoio ── */}
       <section className="section-padding bg-background">
         <div className="container">
           <div className="text-center mb-16">
-            <span className="section-label block mb-4">Formas de Contribuição</span>
-            <h2 className="section-title mx-auto mb-4">Escolha como apoiar</h2>
+            <span className="section-label block mb-4">Outras Formas de Contribuição</span>
+            <h2 className="section-title mx-auto mb-4">Além das doações</h2>
             <p className="section-subtitle mx-auto">
-              Toda contribuição, grande ou pequena, fortalece nossa capacidade de preservar Ubatuba e transformar vidas.
+              Voluntariado e parcerias são igualmente essenciais para ampliar nosso impacto em Ubatuba.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {formasApoio.map((forma) => (
               <div key={forma.id} id={forma.id} className="card-elegant p-8 flex flex-col">
                 <div className={`w-14 h-14 rounded-full ${forma.iconBg} flex items-center justify-center mb-6`}>
@@ -121,9 +379,7 @@ export default function Apoie() {
                 <Link
                   href="/contato"
                   className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-sm text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
-                    forma.id === "doacoes"
-                      ? "bg-earth text-white hover:bg-earth/90"
-                      : forma.id === "voluntariado"
+                    forma.id === "voluntariado"
                       ? "bg-forest text-white hover:bg-forest-dark"
                       : "bg-ocean text-white hover:bg-ocean/90"
                   }`}
