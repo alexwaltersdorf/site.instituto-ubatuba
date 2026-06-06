@@ -74,3 +74,29 @@ export const contacts = mysqlTable("contacts", {
 
 export type Contact = typeof contacts.$inferSelect;
 export type InsertContact = typeof contacts.$inferInsert;
+
+/* ── Canal de Ética (denúncias anônimas) ── */
+export const ethicsReports = mysqlTable("ethics_reports", {
+  id: int("id").autoincrement().primaryKey(),
+  protocol: varchar("protocol", { length: 20 }).notNull().unique(), // Código de acompanhamento
+  category: mysqlEnum("category", [
+    "corrupcao",
+    "assedio",
+    "fraude",
+    "conflito_interesses",
+    "desvio_recursos",
+    "discriminacao",
+    "outros",
+  ]).notNull(),
+  description: text("description").notNull(),
+  evidence: text("evidence"), // URL ou descrição de evidências
+  anonymous: boolean("anonymous").default(true).notNull(),
+  contactEmail: varchar("contactEmail", { length: 320 }), // Opcional, se não anônimo
+  status: mysqlEnum("status", ["recebido", "em_analise", "concluido", "arquivado"]).default("recebido").notNull(),
+  read: boolean("read").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EthicsReport = typeof ethicsReports.$inferSelect;
+export type InsertEthicsReport = typeof ethicsReports.$inferInsert;

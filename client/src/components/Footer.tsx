@@ -50,6 +50,7 @@ export default function Footer() {
                 { href: "/programas", label: "Programas e Projetos" },
                 { href: "/galeria", label: "Galeria" },
                 { href: "/noticias", label: "Notícias" },
+                { href: "/transparencia", label: "Transparência" },
                 { href: "/contato", label: "Contato" },
               ].map((link) => (
                 <li key={link.href}>
@@ -115,9 +116,14 @@ export default function Footer() {
 
         {/* Linha divisória */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/40">
-            © {new Date().getFullYear()} Instituto Ubatuba Santuário Ecológico. Todos os direitos reservados.
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-xs text-white/40">
+              © {new Date().getFullYear()} Instituto Ubatuba Santuário Ecológico.
+            </p>
+            <Link href="/transparencia" className="text-xs text-white/40 hover:text-white/70 transition-colors underline underline-offset-2">
+              Compliance &amp; Transparência
+            </Link>
+          </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-white/40">Alinhado à</span>
             <span className="text-xs font-semibold text-earth/80 tracking-wide">ODS 18 — Bem-estar Animal</span>

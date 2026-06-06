@@ -50,6 +50,14 @@ vi.mock("./db", () => ({
   createGalleryItem: vi.fn().mockResolvedValue(undefined),
   createContact: vi.fn().mockResolvedValue(undefined),
   getContacts: vi.fn().mockResolvedValue([]),
+  createEthicsReport: vi.fn().mockResolvedValue(undefined),
+  getEthicsReportByProtocol: vi.fn().mockImplementation(async (protocol: string) => {
+    if (protocol === "IU2025999999") {
+      return { protocol: "IU2025999999", status: "recebido", createdAt: new Date(), category: "outros" };
+    }
+    return undefined;
+  }),
+  getEthicsReports: vi.fn().mockResolvedValue([]),
   upsertUser: vi.fn().mockResolvedValue(undefined),
   getUserByOpenId: vi.fn().mockResolvedValue(undefined),
 }));
@@ -174,5 +182,49 @@ describe("auth.me", () => {
     const result = await caller.auth.me();
     expect(result?.role).toBe("admin");
     expect(result?.email).toBe("admin@institutoubatuba.org");
+  });
+});
+
+describe("ethics.submit", () => {
+  it("registra denúncia anônima e retorna protocolo", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    const result = await caller.ethics.submit({
+      category: "outros",
+      description: "Descrição detalhada da ocorrência para teste do canal de ética.",
+      anonymous: true,
+    });
+    expect(result.success).toBe(true);
+    expect(result.protocol).toMatch(/^IU\d{10}$/);
+  });
+
+  it("rejeita denúncia com descrição muito curta", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    await expect(
+      caller.ethics.submit({
+        category: "fraude",
+        description: "Curta",
+        anonymous: true,
+      })
+    ).rejects.toThrow();
+  });
+});
+
+describe("ethics.checkStatus", () => {
+  it("retorna status de denúncia existente", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    const result = await caller.ethics.checkStatus({ protocol: "IU2025999999" });
+    expect(result.status).toBe("recebido");
+    expect(result.category).toBe("outros");
+  });
+
+  it("lança NOT_FOUND para protocolo inexistente", async () => {
+    const ctx = createPublicContext();
+    const caller = appRouter.createCaller(ctx);
+    await expect(
+      caller.ethics.checkStatus({ protocol: "INEXISTENTE" })
+    ).rejects.toThrow("Protocolo não encontrado.");
   });
 });

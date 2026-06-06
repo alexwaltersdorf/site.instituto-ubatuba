@@ -60,3 +60,20 @@
 ## Testes
 - [x] Vitest para routers de posts e contato (10 testes passando)
 - [x] Verificação de responsividade mobile
+
+## Compliance e Transparência
+
+- [x] Criar página /transparencia com seções: Governança, Documentos Públicos, Financeiro, Código de Conduta, Canal de Ética, Certificações
+- [x] Seção de Princípios de Governança (inspirado na Gates Foundation)
+- [x] Seção de Documentos Públicos para download (Estatuto, Relatórios, Demonstrações Financeiras)
+- [x] Seção de Programa de Integridade (Código de Conduta + Política Anticorrupção)
+- [x] Canal de Ética com formulário anônimo e protocolo de acompanhamento
+- [x] Seção de Certificações e Selos (Charity Navigator, GuideStar Platinum, TheDotGood, OSCIP)
+- [x] Painel de alocação de recursos financeiros (72% em programas)
+- [x] Seção de Igualdade Salarial (Lei nº 14.611/2023 + IN GM/MTE nº 6/2024)
+- [x] Seção de Convênios e Parcerias Públicas
+- [x] Seção de Normas Adotadas (LGPD, GRI, ODS, FASB/NBC)
+- [x] Integrar link de Transparência no Header e Footer
+- [x] Router tRPC para canal de ética (envio anônimo + consulta por protocolo)
+- [x] Notificar owner ao receber mensagem pelo canal de ética
+- [x] 14 testes Vitest passando (incluindo 4 novos para canal de ética)

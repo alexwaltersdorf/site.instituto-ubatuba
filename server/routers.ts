@@ -2,11 +2,14 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
   createContact,
+  createEthicsReport,
   createGalleryItem,
   createPost,
   deletePost,
   getAllPosts,
   getContacts,
+  getEthicsReportByProtocol,
+  getEthicsReports,
   getFeaturedGallery,
   getGalleryItems,
   getPostBySlug,
@@ -167,6 +170,42 @@ export const appRouter = router({
 
     list: adminProcedure.query(async () => {
       return getContacts();
+    }),
+  }),
+
+  /* ── Canal de Ética ── */
+  ethics: router({
+    submit: publicProcedure
+      .input(
+        z.object({
+          category: z.enum(["corrupcao", "assedio", "fraude", "conflito_interesses", "desvio_recursos", "discriminacao", "outros"]),
+          description: z.string().min(20, "Descreva o ocorrido com pelo menos 20 caracteres"),
+          evidence: z.string().optional(),
+          anonymous: z.boolean().default(true),
+          contactEmail: z.string().email().optional(),
+        })
+      )
+      .mutation(async ({ input }) => {
+        // Gera protocolo único: IU + ano + 6 dígitos aleatórios
+        const protocol = `IU${new Date().getFullYear()}${Math.floor(100000 + Math.random() * 900000)}`;
+        await createEthicsReport({ ...input, protocol });
+        await notifyOwner({
+          title: `⚠️ Canal de Ética: nova denúncia recebida`,
+          content: `**Protocolo:** ${protocol}\n**Categoria:** ${input.category}\n**Anônimo:** ${input.anonymous ? "Sim" : "Não"}\n\n${input.description.slice(0, 300)}${input.description.length > 300 ? "..." : ""}`,
+        });
+        return { success: true, protocol };
+      }),
+
+    checkStatus: publicProcedure
+      .input(z.object({ protocol: z.string().min(1) }))
+      .query(async ({ input }) => {
+        const report = await getEthicsReportByProtocol(input.protocol);
+        if (!report) throw new TRPCError({ code: "NOT_FOUND", message: "Protocolo não encontrado." });
+        return { status: report.status, createdAt: report.createdAt, category: report.category };
+      }),
+
+    adminList: adminProcedure.query(async () => {
+      return getEthicsReports();
     }),
   }),
 });

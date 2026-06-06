@@ -1,6 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { contacts, gallery, InsertContact, InsertGalleryItem, InsertPost, InsertUser, posts, users } from "../drizzle/schema";
+import { contacts, ethicsReports, gallery, InsertContact, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertUser, posts, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -134,4 +134,24 @@ export async function getContacts(limit = 50) {
   const db = await getDb();
   if (!db) return [];
   return db.select().from(contacts).orderBy(desc(contacts.createdAt)).limit(limit);
+}
+
+/* ── Canal de Ética ── */
+export async function createEthicsReport(data: InsertEthicsReport) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(ethicsReports).values(data);
+}
+
+export async function getEthicsReportByProtocol(protocol: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(ethicsReports).where(eq(ethicsReports.protocol, protocol)).limit(1);
+  return result[0];
+}
+
+export async function getEthicsReports(limit = 50) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(ethicsReports).orderBy(desc(ethicsReports.createdAt)).limit(limit);
 }
