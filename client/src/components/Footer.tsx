@@ -56,7 +56,7 @@ export default function Footer() {
                 </Link>
                 <ul className="mt-2.5 space-y-2.5 pl-3 border-l border-white/10">
                   {[
-                    { href: "/programas", label: "Programas e Projetos" },
+                    { href: "/programas", label: "Ações e Projetos" },
                     { href: "/galeria", label: "Galeria" },
                     { href: "/noticias", label: "Notícias" },
                     { href: "/contato", label: "Contato" },

@@ -151,13 +151,13 @@ export default function Programas() {
       {/* ── Hero ── */}
       <section className="relative py-28 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={HERO_IMAGE} alt="Programas" className="w-full h-full object-cover" />
+          <img src={HERO_IMAGE} alt="Ações e Projetos" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-forest-dark/80" />
         </div>
         <div className="relative container text-center text-white">
           <span className="section-label block mb-4 text-white/60">O que fazemos</span>
           <h1 className="font-serif text-5xl md:text-6xl font-medium text-white mb-6">
-            Programas e Projetos
+            Ações e Projetos
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
             Iniciativas integradas que unem conservação ambiental, esporte, saúde e cultura para o desenvolvimento sustentável de Ubatuba e região.

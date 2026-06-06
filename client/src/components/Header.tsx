@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const subItems = [
   { href: "/sobre", label: "Sobre Nós" },
-  { href: "/programas", label: "Programas" },
+  { href: "/programas", label: "Ações" },
   { href: "/galeria", label: "Galeria" },
   { href: "/noticias", label: "Notícias" },
   { href: "/contato", label: "Contato" },

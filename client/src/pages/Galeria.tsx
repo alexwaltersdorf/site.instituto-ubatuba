@@ -53,7 +53,7 @@ const galeriaDemo = [
     id: 7,
     imageUrl: "/manus-storage/ubatuba-praia_8ed0b366.jpg",
     title: "Escolinha de Surfe",
-    category: "Programas",
+    category: "Ações",
     description: "160 crianças atendidas pela Escolinha de Surfe Social do instituto",
   },
   {
@@ -65,7 +65,7 @@ const galeriaDemo = [
   },
 ];
 
-const categorias = ["Todos", "Eventos", "Saúde", "Institucional", "Natureza", "Programas"];
+const categorias = ["Todos", "Eventos", "Saúde", "Institucional", "Natureza", "Ações"];
 
 export default function Galeria() {
   const [categoriaAtiva, setCategoriaAtiva] = useState("Todos");

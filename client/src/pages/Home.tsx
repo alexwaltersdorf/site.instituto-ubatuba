@@ -82,7 +82,7 @@ const postsDestaque = [
     title: "Escolinhas esportivas atingem 360 crianças atendidas em Ubatuba",
     excerpt: "As escolinhas de surfe (160), futebol (120) e futevôlei (80) alcançaram a marca de 360 crianças atendidas, consolidando o programa como referência em inclusão social.",
     coverImage: "/manus-storage/ubatuba-praia_8ed0b366.jpg",
-    category: "Programas",
+    category: "Ações",
     publishedAt: new Date("2025-07-10"),
   },
 ];
@@ -232,7 +232,7 @@ export default function Home() {
       <section className="section-padding bg-sand">
         <div className="container">
           <div className="text-center mb-16">
-            <span className="section-label block mb-4">Programas e Projetos</span>
+            <span className="section-label block mb-4">Ações e Projetos</span>
             <h2 className="section-title mx-auto mb-4">Ações que transformam</h2>
             <p className="section-subtitle mx-auto">
               Iniciativas integradas que unem conservação ambiental, esporte, saúde e cultura para o desenvolvimento sustentável de Ubatuba.
