@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Leaf, Mail, MapPin, Phone, Instagram, Facebook, Youtube } from "lucide-react";
+import { Leaf, Mail, MapPin, Phone, Instagram, Facebook, Shield, ArrowRight, Heart } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -24,60 +24,89 @@ export default function Footer() {
               Promovendo a conservação socioambiental de Ubatuba por meio de parcerias, educação e inclusão social, alinhados à Agenda 2030.
             </p>
             {/* Redes sociais */}
-            <div className="flex items-center gap-3">
-              <a href="https://www.instagram.com/instituto.ubatuba" target="_blank" rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 hover:border-white/40 transition-all">
-                <Instagram className="w-4 h-4" />
-              </a>
-              <a href="https://www.facebook.com/institutoubatuba" target="_blank" rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 hover:border-white/40 transition-all">
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a href="https://www.facebook.com/institutoubatuba/reels_tab" target="_blank" rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 hover:border-white/40 transition-all">
-                <Youtube className="w-4 h-4" />
-              </a>
+            <div>
+              <span className="block text-xs tracking-[0.12em] uppercase text-white/40 mb-3">Siga-nos</span>
+              <div className="flex items-center gap-3">
+                <a href="https://www.instagram.com/instituto.ubatuba" target="_blank" rel="noopener noreferrer"
+                  aria-label="Instagram do Instituto Ubatuba"
+                  className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 hover:border-white/40 transition-all">
+                  <Instagram className="w-4 h-4" />
+                </a>
+                <a href="https://www.facebook.com/institutoubatuba" target="_blank" rel="noopener noreferrer"
+                  aria-label="Facebook do Instituto Ubatuba"
+                  className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 hover:border-white/40 transition-all">
+                  <Facebook className="w-4 h-4" />
+                </a>
+              </div>
             </div>
           </div>
 
-          {/* Coluna 2 — Navegação */}
+          {/* Coluna 2 — Navegação (reflete a estrutura do menu) */}
           <div>
             <h4 className="text-white font-semibold text-sm tracking-[0.12em] uppercase mb-5">Navegação</h4>
             <ul className="space-y-3">
-              {[
-                { href: "/", label: "Início" },
-                { href: "/sobre", label: "Sobre Nós" },
-                { href: "/programas", label: "Programas e Projetos" },
-                { href: "/galeria", label: "Galeria" },
-                { href: "/noticias", label: "Notícias" },
-                { href: "/transparencia", label: "Transparência" },
-                { href: "/contato", label: "Contato" },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-white/60 hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link href="/" className="text-sm text-white/60 hover:text-white transition-colors">
+                  Início
+                </Link>
+              </li>
+              <li className="pt-1">
+                <Link href="/sobre" className="text-sm font-medium text-white/75 hover:text-white transition-colors">
+                  Sobre Nós
+                </Link>
+                <ul className="mt-2.5 space-y-2.5 pl-3 border-l border-white/10">
+                  {[
+                    { href: "/programas", label: "Programas e Projetos" },
+                    { href: "/galeria", label: "Galeria" },
+                    { href: "/noticias", label: "Notícias" },
+                    { href: "/contato", label: "Contato" },
+                  ].map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="text-sm text-white/55 hover:text-white transition-colors">
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+              <li className="pt-1">
+                <Link href="/transparencia" className="text-sm text-white/60 hover:text-white transition-colors">
+                  Transparência
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Coluna 3 — Apoio */}
+          {/* Coluna 3 — Links Rápidos */}
           <div>
-            <h4 className="text-white font-semibold text-sm tracking-[0.12em] uppercase mb-5">Como Apoiar</h4>
+            <h4 className="text-white font-semibold text-sm tracking-[0.12em] uppercase mb-5">Links Rápidos</h4>
             <ul className="space-y-3">
-              {[
-                { href: "/apoie#voluntariado", label: "Voluntariado" },
-                { href: "/apoie#doacoes", label: "Doações" },
-                { href: "/apoie#parcerias", label: "Parcerias" },
-                { href: "/apoie#empresas", label: "Empresas Parceiras" },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-white/60 hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link href="/apoie" className="group flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors">
+                  <Heart className="w-4 h-4 text-earth shrink-0" />
+                  Apoie o Instituto
+                </Link>
+              </li>
+              <li>
+                <Link href="/transparencia" className="group flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors">
+                  <Shield className="w-4 h-4 text-earth shrink-0" />
+                  Compliance &amp; Transparência
+                </Link>
+              </li>
+              <li>
+                <a href="https://www.instagram.com/instituto.ubatuba" target="_blank" rel="noopener noreferrer"
+                  className="group flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors">
+                  <Instagram className="w-4 h-4 text-earth shrink-0" />
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a href="https://www.facebook.com/institutoubatuba" target="_blank" rel="noopener noreferrer"
+                  className="group flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors">
+                  <Facebook className="w-4 h-4 text-earth shrink-0" />
+                  Facebook
+                </a>
+              </li>
             </ul>
             <div className="mt-6">
               <Link
@@ -85,6 +114,7 @@ export default function Footer() {
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-earth/80 text-white text-sm font-semibold rounded-sm hover:bg-earth transition-colors"
               >
                 Faça uma Doação
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
