@@ -44,6 +44,17 @@ const impactNumbers = [
   { value: "3", label: "Bolsas de estudo concedidas", icon: GraduationCap },
 ];
 
+const esporteImages = [
+  { src: "/manus-storage/esporte_futebol_01_eab01f3c.jpg", alt: "Escolinha de Futebol — crianças treinando em campo" },
+  { src: "/manus-storage/esporte_futevolei_01_075b0952.jpg", alt: "Escolinha de Futevôlei — jovens praticando na praia" },
+  { src: "/manus-storage/esporte_skate_01_bdaf9970.jpg", alt: "Escolinha de Skate — inclusão pelo esporte radical" },
+  { src: "/manus-storage/esporte_surfe_01_4756749a.jpg", alt: "Escolinha de Surfe — aulas no mar de Ubatuba" },
+  { src: "/manus-storage/esporte_surfe_02_dcda585e.jpg", alt: "Surfe — jovens conectados com o oceano" },
+  { src: "/manus-storage/esporte_futebol_02_aa55a128.jpg", alt: "Futebol — formação de cidadania pelo esporte" },
+  { src: "/manus-storage/esporte_radical_01_744eeafa.webp", alt: "Esportes radicais — aventura e superação" },
+  { src: "/manus-storage/esporte_guardioes_01_8ddcf9ac.webp", alt: "Guardiões do Litoral — jovens protetores da natureza" },
+];
+
 const causasData = [
   {
     id: "esporte",
@@ -53,6 +64,7 @@ const causasData = [
     description: "Por meio das escolinhas de surfe (160 crianças), futebol (120 crianças) e futevôlei (80 crianças), promovemos saúde, disciplina e conexão com o oceano para jovens da comunidade de Ubatuba. O esporte é uma ferramenta de transformação social que abre portas e constrói cidadania.",
     image: PRAIA_IMAGE,
     link: "/programas",
+    gallery: esporteImages,
   },
   {
     id: "conservacao",
@@ -121,6 +133,94 @@ const postsDestaque = [
     publishedAt: new Date("2025-07-10"),
   },
 ];
+
+/* ── Componente: Galeria Esporte com Carrossel ── */
+
+function EsporteGalleryTab({ causa }: { causa: typeof causasData[0] }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const gallery = causa.gallery!;
+
+  const next = useCallback(() => {
+    setActiveIdx((prev) => (prev + 1) % gallery.length);
+  }, [gallery.length]);
+
+  const prev = useCallback(() => {
+    setActiveIdx((prev) => (prev - 1 + gallery.length) % gallery.length);
+  }, [gallery.length]);
+
+  // Auto-advance every 4s
+  useEffect(() => {
+    const timer = setInterval(next, 4000);
+    return () => clearInterval(timer);
+  }, [next]);
+
+  return (
+    <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* Carrossel de fotos */}
+      <div className="space-y-4">
+        <div className="relative rounded-xl overflow-hidden shadow-xl group">
+          <div className="relative h-[320px] md:h-[380px]">
+            {gallery.map((img, i) => (
+              <img
+                key={i}
+                src={img.src}
+                alt={img.alt}
+                className={cn(
+                  "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+                  i === activeIdx ? "opacity-100" : "opacity-0"
+                )}
+              />
+            ))}
+          </div>
+          {/* Controles */}
+          <button
+            onClick={prev}
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60"
+            aria-label="Foto anterior"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={next}
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60"
+            aria-label="Próxima foto"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+          {/* Legenda */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
+            <p className="text-white text-sm font-medium">{gallery[activeIdx].alt}</p>
+          </div>
+        </div>
+        {/* Thumbnails */}
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {gallery.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIdx(i)}
+              className={cn(
+                "flex-shrink-0 w-16 h-12 rounded-md overflow-hidden border-2 transition-all",
+                i === activeIdx
+                  ? "border-forest ring-2 ring-forest/30 scale-105"
+                  : "border-transparent opacity-60 hover:opacity-100"
+              )}
+            >
+              <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
+      </div>
+      {/* Texto descritivo */}
+      <div>
+        <h3 className="font-serif text-3xl font-medium text-foreground mb-4">{causa.title}</h3>
+        <p className="text-muted-foreground leading-relaxed text-lg mb-6">{causa.description}</p>
+        <Link href={causa.link} className="btn-primary">
+          Saiba Mais <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+    </div>
+  );
+}
 
 /* ── Componente Principal ── */
 
@@ -293,18 +393,22 @@ export default function Home() {
 
             {causasData.map((causa) => (
               <TabsContent key={causa.id} value={causa.id}>
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                  <div className="rounded-xl overflow-hidden shadow-xl">
-                    <img src={causa.image} alt={causa.title} className="w-full h-[320px] object-cover" />
+                {causa.gallery ? (
+                  <EsporteGalleryTab causa={causa} />
+                ) : (
+                  <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    <div className="rounded-xl overflow-hidden shadow-xl">
+                      <img src={causa.image} alt={causa.title} className="w-full h-[320px] object-cover" />
+                    </div>
+                    <div>
+                      <h3 className="font-serif text-3xl font-medium text-foreground mb-4">{causa.title}</h3>
+                      <p className="text-muted-foreground leading-relaxed text-lg mb-6">{causa.description}</p>
+                      <Link href={causa.link} className="btn-primary">
+                        Saiba Mais <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-serif text-3xl font-medium text-foreground mb-4">{causa.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed text-lg mb-6">{causa.description}</p>
-                    <Link href={causa.link} className="btn-primary">
-                      Saiba Mais <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-                </div>
+                )}
               </TabsContent>
             ))}
           </Tabs>

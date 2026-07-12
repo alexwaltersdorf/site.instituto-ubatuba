@@ -98,3 +98,12 @@
 - [x] Melhorar seção de números de impacto com ícones line-art e fundo colorido
 - [x] Transformar hero em carrossel de notícias/destaques com auto-advance
 - [x] Adicionar seção "Fique por dentro" com grid de notícias/artigos
+
+## Galeria de Fotos Reais na Tab Esporte
+
+- [x] Upload de 8 fotos reais de esporte para o storage (futebol, futevôlei, skate, surfe, esporte radical, guardiões)
+- [x] Criar componente EsporteGalleryTab com carrossel de fotos + thumbnails + legendas
+- [x] Integrar carrossel na tab "Esporte e Inclusão Social" da Home (substituindo imagem estática)
+- [x] Auto-advance do carrossel a cada 4 segundos
+- [x] Controles de navegação (setas + thumbnails clicáveis)
+- [x] 18 testes Vitest passando
