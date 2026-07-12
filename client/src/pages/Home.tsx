@@ -783,7 +783,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════
           ÁREAS DE ATUAÇÃO — 3 COLUNAS COM CARROSSEL
       ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-cream section-padding -mt-1">
+      <section className="bg-cream py-10 md:py-14 -mt-1">
         <div className="container">
           <div className="text-center mb-12">
             <span className="section-label block mb-4">Nossas Causas</span>
@@ -797,9 +797,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Wave divider invertido */}
-      <WaveDivider color="var(--color-cream)" flip className="-mt-1" />
 
       {/* ══════════════════════════════════════════════════════════════
           AÇÕES E PROJETOS (integrado da página Programas)
