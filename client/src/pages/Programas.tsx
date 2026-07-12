@@ -1,4 +1,5 @@
-import { Waves, Users, Heart, BookOpen, Fish, Leaf, Trophy, Stethoscope, Music, ArrowRight } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Waves, Users, Heart, BookOpen, Fish, Leaf, Trophy, Stethoscope, Music, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
 
@@ -109,6 +110,14 @@ const programas = [
     color: "text-earth",
     bg: "bg-earth/10",
     border: "border-earth/20",
+    images: [
+      { src: "/manus-storage/saude_equipe_outubro_rosa_30c65acf.webp", alt: "Equipe de saúde no Outubro Rosa" },
+      { src: "/manus-storage/saude_palestra_comunitaria_087af887.webp", alt: "Palestra de saúde comunitária" },
+      { src: "/manus-storage/saude_grupo_mulheres_ff963075.webp", alt: "Grupo de mulheres em ação de saúde" },
+      { src: "/manus-storage/saude_evento_rosa_e8d42020.JPEG", alt: "Evento Outubro Rosa com comunidade" },
+      { src: "/manus-storage/saude_ultrassom_85631ea7.webp", alt: "Exame de ultrassom gratuito" },
+      { src: "/manus-storage/saude_consulta_medica_8b0bf6d6.webp", alt: "Consulta médica comunitária" },
+    ],
   },
   {
     id: "educacao",
@@ -147,6 +156,72 @@ const programas = [
 ];
 
 const categorias = ["Todos", "Esporte e Inclusão", "Conservação Ambiental", "Saúde Comunitária", "Educação e Cultura"];
+
+function ImageCarouselCard({ images, titulo, impacto }: { images: { src: string; alt: string }[]; titulo: string; impacto: string }) {
+  const [current, setCurrent] = useState(0);
+
+  const next = useCallback(() => setCurrent((c) => (c + 1) % images.length), [images.length]);
+  const prev = useCallback(() => setCurrent((c) => (c - 1 + images.length) % images.length), [images.length]);
+
+  useEffect(() => {
+    const timer = setInterval(next, 4000);
+    return () => clearInterval(timer);
+  }, [next]);
+
+  return (
+    <div className="relative h-[320px] md:h-[380px]">
+      {/* Images */}
+      {images.map((img, idx) => (
+        <img
+          key={img.src}
+          src={img.src}
+          alt={img.alt}
+          className={cn(
+            "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+            idx === current ? "opacity-100" : "opacity-0"
+          )}
+        />
+      ))}
+
+      {/* Overlay */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+        <h3 className="font-serif text-xl font-medium text-white mb-1">{titulo}</h3>
+        <p className="text-white/80 text-sm">{images[current].alt}</p>
+      </div>
+
+      {/* Controls */}
+      <button
+        onClick={prev}
+        className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white transition-colors"
+        aria-label="Foto anterior"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white transition-colors"
+        aria-label="Próxima foto"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+
+      {/* Dots */}
+      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1.5">
+        {images.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrent(idx)}
+            className={cn(
+              "w-2 h-2 rounded-full transition-all",
+              idx === current ? "bg-white w-4" : "bg-white/50"
+            )}
+            aria-label={`Foto ${idx + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Programas() {
   return (
@@ -254,7 +329,9 @@ export default function Programas() {
 
                 {/* Card visual */}
                 <div className={cn("rounded-xl overflow-hidden shadow-xl", i % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : "")}>
-                  {prog.image ? (
+                  {prog.images ? (
+                    <ImageCarouselCard images={prog.images} titulo={prog.titulo} impacto={prog.impacto} />
+                  ) : prog.image ? (
                     <div className="relative">
                       <img
                         src={prog.image}

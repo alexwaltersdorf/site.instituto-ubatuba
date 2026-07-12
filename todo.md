@@ -112,3 +112,4 @@
 
 - [x] Substituir cards com ícones por fotos reais nos projetos de Surfe, Futebol e Futevôlei
 - [x] Manter layout alternado (texto à esquerda/direita) com imagens reais
+- [x] Adicionar carrossel de 6 fotos reais no card "Ações de Saúde" (Outubro Rosa, palestra, ultrassom, consulta)
