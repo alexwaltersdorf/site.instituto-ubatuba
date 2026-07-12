@@ -176,6 +176,21 @@ const programas = [
     color: "text-earth",
     bg: "bg-earth/10",
     border: "border-earth/20",
+    images: [
+      { src: "/manus-storage/festival_pipas_praia_a67c2a3e.webp", alt: "Pai e filho empinando pipa na praia" },
+      { src: "/manus-storage/festival_pipas_bandeira_50bc9892.webp", alt: "Pipa com bandeira de Ubatuba" },
+      { src: "/manus-storage/festival_tenda_equipe_47c337af.webp", alt: "Equipe do Instituto na tenda do festival" },
+      { src: "/manus-storage/festival_oficina_pipas_e69d60d0.webp", alt: "Oficina de construção de pipas" },
+      { src: "/manus-storage/festival_tenda_publico_f81c00a5.webp", alt: "Público no festival com tenda do Instituto" },
+      { src: "/manus-storage/festival_escultura_criancas_6d9d4675.webp", alt: "Crianças esculpindo na areia" },
+      { src: "/manus-storage/festival_escultura_roda_0d35331f.webp", alt: "Escultura de roda na areia" },
+      { src: "/manus-storage/festival_escultura_artista_c4b77740.webp", alt: "Artista criando escultura de tartaruga" },
+      { src: "/manus-storage/festival_escultura_sereia_6bbe8b40.webp", alt: "Escultura de sereia na areia" },
+      { src: "/manus-storage/festival_escultura_pessoa_0e51b2d2.webp", alt: "Escultura de figura humana na areia" },
+      { src: "/manus-storage/festival_escultura_caranguejo_6e7c0afa.webp", alt: "Escultura de caranguejo na areia" },
+      { src: "/manus-storage/festival_escultura_elefante_fe7aba55.webp", alt: "Escultura de elefante na areia" },
+      { src: "/manus-storage/festival_comunidade_tenda_c7c9efa8.webp", alt: "Comunidade reunida na tenda do Instituto" },
+    ],
   },
 ];
 

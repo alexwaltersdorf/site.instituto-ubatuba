@@ -116,3 +116,4 @@
 - [x] Adicionar carrossel de 4 fotos reais no card "Projeto Itaguá Azul" (voluntários, limpeza de praia, canoa)
 - [x] Adicionar carrossel de 4 fotos reais no card "Bituqueira Ecológica" (flyer, ponto de coleta, bitucas arte, coletor em árvore)
 - [x] Adicionar carrossel de 10 fotos reais no card "Feira Literária" (crianças, palco, leitura, banner, teatro, apresentação, alunos, grupo, plateia, encenação)
+- [x] Adicionar carrossel de 13 fotos reais no card "Festivais Culturais" (Festival de Pipas e Festival de Escultura na Areia)
