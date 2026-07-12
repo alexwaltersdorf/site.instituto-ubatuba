@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Leaf, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const subItems = [
@@ -61,12 +61,11 @@ export default function Header() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className={cn(
-              "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300",
-              isLight ? "bg-forest" : "bg-white/20 border border-white/40"
-            )}>
-              <Leaf className="w-5 h-5 text-white transition-colors" />
-            </div>
+            <img
+              src="/manus-storage/LOGOTIPOINSTITUTOUBATUBA_eca5453d.png"
+              alt="Instituto Ubatuba Santuário Ecológico"
+              className="w-12 h-12 rounded-lg object-cover transition-all duration-300 group-hover:scale-105"
+            />
             <div className="leading-tight">
               <span className={cn(
                 "block font-extrabold text-base tracking-tight transition-colors",
