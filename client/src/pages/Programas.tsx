@@ -99,6 +99,12 @@ const programas = [
     color: "text-forest",
     bg: "bg-forest/10",
     border: "border-forest/20",
+    images: [
+      { src: "/manus-storage/bituqueira_flyer_6acac4ec.jpg", alt: "Flyer do projeto BitucAqui com coletor" },
+      { src: "/manus-storage/bituqueira_ponto_coleta_961501c5.jpg", alt: "Ponto de coleta de bitucas instalado" },
+      { src: "/manus-storage/bituqueira_bitucas_arte_71330acd.jpg", alt: "Bitucas coletadas em instalação artística" },
+      { src: "/manus-storage/bituqueira_coletor_arvore_6c62721b.jpg", alt: "Coletor de bitucas fixado em árvore na praia" },
+    ],
   },
   {
     id: "saude",

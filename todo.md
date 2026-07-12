@@ -114,3 +114,4 @@
 - [x] Manter layout alternado (texto à esquerda/direita) com imagens reais
 - [x] Adicionar carrossel de 6 fotos reais no card "Ações de Saúde" (Outubro Rosa, palestra, ultrassom, consulta)
 - [x] Adicionar carrossel de 4 fotos reais no card "Projeto Itaguá Azul" (voluntários, limpeza de praia, canoa)
+- [x] Adicionar carrossel de 4 fotos reais no card "Bituqueira Ecológica" (flyer, ponto de coleta, bitucas arte, coletor em árvore)
