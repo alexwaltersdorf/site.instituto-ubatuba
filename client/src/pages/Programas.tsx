@@ -76,6 +76,12 @@ const programas = [
     color: "text-ocean",
     bg: "bg-ocean/10",
     border: "border-ocean/20",
+    images: [
+      { src: "/manus-storage/itaguaazul_voluntarios_praia_f3eed109.jpg", alt: "Voluntários do Itaguá Azul na praia" },
+      { src: "/manus-storage/itaguaazul_grupo_limpeza_734d6de7.jpg", alt: "Grupo de voluntários em ação de limpeza" },
+      { src: "/manus-storage/itaguaazul_limpeza_praia_8b82609f.jpg", alt: "Limpeza da praia de Ubatuba" },
+      { src: "/manus-storage/itaguaazul_canoa_bc570881.jpg", alt: "Voluntárias com canoa na praia" },
+    ],
   },
   {
     id: "bituqueira",
