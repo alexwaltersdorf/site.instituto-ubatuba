@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { ArrowRight, Leaf, Users, Heart, BookOpen, Fish, TreePine, Waves, ChevronDown, ChevronLeft, ChevronRight, Droplets, GraduationCap, Stethoscope, Trophy, Music } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { cn } from "@/lib/utils";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import WaveDivider from "@/components/WaveDivider";
 import FloatingSidebar from "@/components/FloatingSidebar";
@@ -141,6 +141,56 @@ const postsDestaque = [
     publishedAt: new Date("2025-07-10"),
   },
 ];
+
+/* ── Componente: Contador de Impacto com animação count-up ── */
+
+function ImpactCounter({ item, delay }: { item: { value: string; label: string; icon: any }; delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [count, setCount] = useState(0);
+  const numericValue = parseInt(item.value.replace(/[^0-9]/g, ''), 10) || 0;
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.3 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+    const timeout = setTimeout(() => {
+      const duration = 1500;
+      const steps = 40;
+      const increment = numericValue / steps;
+      let current = 0;
+      let step = 0;
+      const interval = setInterval(() => {
+        step++;
+        current = Math.min(Math.round(increment * step), numericValue);
+        setCount(current);
+        if (step >= steps) clearInterval(interval);
+      }, duration / steps);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [visible, numericValue, delay]);
+
+  const displayValue = visible
+    ? (item.value.includes('+') ? count.toLocaleString('pt-BR') + '+' : count.toLocaleString('pt-BR'))
+    : '0';
+
+  return (
+    <div ref={ref} className="text-center text-white">
+      <div className="w-11 h-11 mx-auto mb-2 rounded-full border-2 border-white/20 flex items-center justify-center">
+        <item.icon className="w-5 h-5 text-earth" />
+      </div>
+      <div className="text-3xl md:text-4xl font-extrabold text-white mb-1">{displayValue}</div>
+      <div className="text-xs text-white/60 leading-snug">{item.label}</div>
+    </div>
+  );
+}
 
 /* ── Componente: Card de Área de Atuação com Carrossel ── */
 
@@ -761,17 +811,11 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════
           NÚMEROS DE IMPACTO (estilo SOS — fundo colorido + ícones)
       ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-forest relative py-16 md:py-20">
+      <section className="bg-forest relative py-8 md:py-10 overflow-hidden">
         <div className="container">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {impactNumbers.map((item, i) => (
-              <div key={i} className="text-center text-white">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full border-2 border-white/20 flex items-center justify-center">
-                  <item.icon className="w-6 h-6 text-earth" />
-                </div>
-                <div className="text-4xl md:text-5xl font-extrabold text-white mb-2">{item.value}</div>
-                <div className="text-sm text-white/60 leading-snug">{item.label}</div>
-              </div>
+              <ImpactCounter key={i} item={item} delay={i * 150} />
             ))}
           </div>
         </div>
