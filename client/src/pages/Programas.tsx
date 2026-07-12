@@ -147,6 +147,18 @@ const programas = [
     color: "text-forest-light",
     bg: "bg-forest-light/10",
     border: "border-forest-light/20",
+    images: [
+      { src: "/manus-storage/feira_literaria_criancas_db3322cc.jpg", alt: "Crianças participando da Feira Literária" },
+      { src: "/manus-storage/feira_literaria_palco_4a670986.JPEG", alt: "Apresentação no palco da Feira Literária" },
+      { src: "/manus-storage/feira_literaria_leitura_b1803c62.jpg", alt: "Momento de leitura com alunos" },
+      { src: "/manus-storage/feira_literaria_banner_e3e5de01.webp", alt: "Banner da Feira Literária" },
+      { src: "/manus-storage/feira_literaria_teatro_7517dc4d.webp", alt: "Encenação teatral dos alunos" },
+      { src: "/manus-storage/feira_literaria_apresentacao_8d9d2a86.webp", alt: "Apresentação cultural dos estudantes" },
+      { src: "/manus-storage/feira_literaria_alunos_2d34f79e.webp", alt: "Alunos reunidos na Feira Literária" },
+      { src: "/manus-storage/feira_literaria_grupo_f4ce68a5.webp", alt: "Grupo de alunos em atividade literária" },
+      { src: "/manus-storage/feira_literaria_plateia_473b972d.webp", alt: "Plateia assistindo à apresentação" },
+      { src: "/manus-storage/feira_literaria_encenacao_9d5acc6f.webp", alt: "Encenação literária dos estudantes" },
+    ],
   },
   {
     id: "cultura",
