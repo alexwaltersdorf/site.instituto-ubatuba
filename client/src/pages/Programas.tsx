@@ -224,7 +224,7 @@ function ImageCarouselCard({ images, titulo, impacto }: { images: { src: string;
 
       {/* Overlay */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-        <h3 className="font-serif text-xl font-medium text-white mb-1">{titulo}</h3>
+        <h3 className="text-xl font-extrabold text-white mb-1">{titulo}</h3>
         <p className="text-white/80 text-sm">{images[current].alt}</p>
       </div>
 
@@ -273,7 +273,7 @@ export default function Programas() {
         </div>
         <div className="relative container text-center text-white">
           <span className="section-label block mb-4 text-white/60">O que fazemos</span>
-          <h1 className="font-serif text-5xl md:text-6xl font-medium text-white mb-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
             Ações e Projetos
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -287,19 +287,19 @@ export default function Programas() {
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
             <div>
-              <div className="font-serif text-5xl font-semibold mb-2">360+</div>
+              <div className="text-5xl font-extrabold mb-2">360+</div>
               <div className="text-sm text-white/60">Crianças nas Escolinhas</div>
             </div>
             <div>
-              <div className="font-serif text-5xl font-semibold mb-2">781</div>
+              <div className="text-5xl font-extrabold mb-2">781</div>
               <div className="text-sm text-white/60">Exames e Consultas</div>
             </div>
             <div>
-              <div className="font-serif text-5xl font-semibold mb-2">3</div>
+              <div className="text-5xl font-extrabold mb-2">3</div>
               <div className="text-sm text-white/60">Bolsas de Estudo</div>
             </div>
             <div>
-              <div className="font-serif text-5xl font-semibold mb-2">8+</div>
+              <div className="text-5xl font-extrabold mb-2">8+</div>
               <div className="text-sm text-white/60">Projetos Ativos</div>
             </div>
           </div>
@@ -346,7 +346,7 @@ export default function Programas() {
                       {prog.categoria}
                     </span>
                   </div>
-                  <h2 className="font-serif text-3xl font-medium text-foreground mb-4">{prog.titulo}</h2>
+                  <h2 className="text-3xl font-extrabold text-foreground mb-4">{prog.titulo}</h2>
                   <p className="text-muted-foreground leading-relaxed mb-6">{prog.descricao}</p>
 
                   {/* Detalhes */}
@@ -378,7 +378,7 @@ export default function Programas() {
                         className="w-full h-[320px] md:h-[380px] object-cover"
                       />
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                        <h3 className="font-serif text-xl font-medium text-white mb-1">{prog.titulo}</h3>
+                        <h3 className="text-xl font-extrabold text-white mb-1">{prog.titulo}</h3>
                         <p className="text-white/80 text-sm">{prog.impacto.split("·")[0].trim()}</p>
                       </div>
                     </div>
@@ -387,8 +387,8 @@ export default function Programas() {
                       <div className={cn("w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center", prog.bg)}>
                         <prog.icon className={cn("w-10 h-10", prog.color)} />
                       </div>
-                      <h3 className="font-serif text-2xl font-medium text-foreground mb-3">{prog.titulo}</h3>
-                      <p className={cn("text-3xl font-serif font-semibold mb-2", prog.color)}>
+                      <h3 className="text-2xl font-extrabold text-foreground mb-3">{prog.titulo}</h3>
+                      <p className={cn("text-3xl font-extrabold mb-2", prog.color)}>
                         {prog.impacto.split("·")[0].trim()}
                       </p>
                       <p className="text-sm text-muted-foreground">{prog.categoria}</p>
@@ -404,7 +404,7 @@ export default function Programas() {
       {/* ── CTA ── */}
       <section className="py-20 bg-forest text-white text-center">
         <div className="container">
-          <h2 className="font-serif text-4xl font-medium mb-4">Quer apoiar nossos programas?</h2>
+          <h2 className="text-4xl font-extrabold mb-4">Quer apoiar nossos programas?</h2>
           <p className="text-white/70 text-lg max-w-xl mx-auto mb-8">
             Cada contribuição, seja de tempo, recursos ou conhecimento, amplifica o impacto do instituto em Ubatuba.
           </p>

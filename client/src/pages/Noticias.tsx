@@ -85,7 +85,7 @@ const postsDemo = [
     id: 6,
     slug: "bituqueira-ecologica-e-projeto-itaguaa-azul-em-acao",
     title: "Bituqueira Ecológica e Projeto Itaguá Azul avançam na conservação das praias",
-    excerpt: "O Instituto Ubatuba intensifica as ações da Bituqueira Ecológica e do Projeto Itaguá Azul, iniciativas que combatem a poluição nas praias de Ubatuba e promovem a conservação dos ecossistemas costeiros, alinhadas à ODS 18 de bem-estar animal e conservação ecológica.",
+    excerpt: "O Instituto Ubatuba intensifica as ações da Bituqueira Ecológica e do Projeto Itaguá Azul, iniciativas que combatem a poluição nas praias de Ubatuba e promovem a conservação dos ecossistemas costeiros, alinhadas à ODS 17 de parcerias para o desenvolvimento sustentável.",
     coverImage: "/manus-storage/ubatuba-natureza_083c332c.png",
     category: "Meio Ambiente",
     publishedAt: new Date("2025-05-22"),
@@ -117,7 +117,7 @@ export default function Noticias() {
         </div>
         <div className="relative container text-center text-white">
           <span className="section-label block mb-4 text-white/60">Blog e Notícias</span>
-          <h1 className="font-serif text-5xl md:text-6xl font-medium text-white mb-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
             Notícias
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -170,7 +170,7 @@ export default function Noticias() {
                       )}
                       <span className="text-xs text-muted-foreground">Destaque</span>
                     </div>
-                    <h2 className="font-serif text-3xl font-medium text-foreground mb-4 group-hover:text-forest transition-colors leading-snug">
+                    <h2 className="text-3xl font-extrabold text-foreground mb-4 group-hover:text-forest transition-colors leading-snug">
                       {itens[0].title}
                     </h2>
                     {itens[0].excerpt && (
@@ -214,7 +214,7 @@ export default function Noticias() {
                           <span className="text-xs font-semibold tracking-widest uppercase text-earth">{post.category}</span>
                         )}
                       </div>
-                      <h3 className="font-serif text-xl font-medium text-foreground mb-3 group-hover:text-forest transition-colors line-clamp-2 leading-snug">
+                      <h3 className="text-xl font-extrabold text-foreground mb-3 group-hover:text-forest transition-colors line-clamp-2 leading-snug">
                         {post.title}
                       </h3>
                       {post.excerpt && (
@@ -239,7 +239,7 @@ export default function Noticias() {
           ) : (
             <div className="text-center py-20 text-muted-foreground">
               <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-30" />
-              <p className="font-serif text-xl">Nenhuma notícia publicada ainda</p>
+              <p className="text-xl font-semibold">Nenhuma notícia publicada ainda</p>
               <p className="text-sm mt-2">Em breve, novidades do instituto</p>
             </div>
           )}

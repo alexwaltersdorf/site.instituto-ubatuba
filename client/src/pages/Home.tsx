@@ -15,23 +15,23 @@ const NATUREZA_IMAGE = "/manus-storage/ubatuba-natureza_083c332c.png";
 
 const heroSlides = [
   {
-    title: "Preservar a natureza é preservar a vida",
-    subtitle: "O Instituto Ubatuba Santuário Ecológico promove a conservação socioambiental por meio de parcerias, educação e inclusão social.",
-    cta: "Conheça nossas ações",
+    title: "Um santuário que cuida de gente e de natureza.",
+    subtitle: "Saúde, esporte e meio ambiente para as comunidades de Ubatuba. Some com a gente e faça parte da rede.",
+    cta: "Conhecer as ações",
     ctaHref: "/programas",
     image: HERO_IMAGE,
   },
   {
-    title: "360 crianças transformadas pelo esporte",
-    subtitle: "Nossas escolinhas de surfe, futebol e futevôlei oferecem oportunidades reais para jovens da comunidade de Ubatuba.",
+    title: "Cada criança que entra na quadra encontra um caminho.",
+    subtitle: "360 crianças nas escolinhas de surfe, futebol e futevôlei — oportunidades reais para jovens de Ubatuba.",
     cta: "Veja nosso impacto",
     ctaHref: "/programas",
     image: PRAIA_IMAGE,
   },
   {
-    title: "Apoie o trabalho do Instituto Ubatuba",
-    subtitle: "Veja como é simples e rápido ajudar a preservar os ecossistemas e transformar vidas no litoral norte de São Paulo.",
-    cta: "Doe agora",
+    title: "Ubatuba cresce com cuidado.",
+    subtitle: "Parcerias entre poder público, institutos e comunidade. Sua contribuição preserva ecossistemas e transforma vidas.",
+    cta: "Quero ser voluntário",
     ctaHref: "/apoie",
     image: NATUREZA_IMAGE,
   },
@@ -57,40 +57,31 @@ const esporteImages = [
 
 const causasData = [
   {
+    id: "saude",
+    label: "Saúde",
+    icon: Stethoscope,
+    title: "Saúde",
+    description: "Mutirões e exames gratuitos com clínicas parceiras. Já realizamos 781 exames e consultas para a comunidade em parceria com a Total Quality Medicina Diagnóstica. Prevenção e políticas públicas que cuidam de quem mais precisa.",
+    image: HERO_IMAGE,
+    link: "/programas",
+  },
+  {
     id: "esporte",
-    label: "Esporte",
+    label: "Esporte Social",
     icon: Waves,
-    title: "Esporte e Inclusão Social",
-    description: "Por meio das escolinhas de surfe (160 crianças), futebol (120 crianças) e futevôlei (80 crianças), promovemos saúde, disciplina e conexão com o oceano para jovens da comunidade de Ubatuba. O esporte é uma ferramenta de transformação social que abre portas e constrói cidadania.",
+    title: "Esporte Social",
+    description: "Surfe, futebol, jiu-jitsu, futevôlei, skate e natação para crianças em vulnerabilidade. 360 crianças nas escolinhas encontram disciplina, saúde e conexão com o oceano. O esporte abre portas e constrói cidadania.",
     image: PRAIA_IMAGE,
     link: "/programas",
     gallery: esporteImages,
   },
   {
-    id: "conservacao",
-    label: "Conservação",
+    id: "meioambiente",
+    label: "Meio Ambiente",
     icon: Fish,
-    title: "Conservação Ambiental",
-    description: "Com o projeto Bituqueira Ecológica e a parceria com o Itaguá Azul, trabalhamos pela preservação dos ecossistemas marinhos e terrestres de Ubatuba. Realizamos limpeza de praias, monitoramento ambiental e educação ecológica nas escolas locais.",
+    title: "Meio Ambiente",
+    description: "Limpeza de praias, reflorestamento da Mata Atlântica e a Bituqueira Ecológica. Com o Projeto Itaguá Azul, protegemos os ecossistemas marinhos e terrestres de Ubatuba para as próximas gerações.",
     image: NATUREZA_IMAGE,
-    link: "/programas",
-  },
-  {
-    id: "saude",
-    label: "Saúde",
-    icon: Stethoscope,
-    title: "Saúde Comunitária",
-    description: "Em parceria com a Total Quality Medicina Diagnóstica, já realizamos 781 exames e consultas gratuitas para a comunidade. Além disso, concedemos 3 bolsas de estudo para jovens que desejam seguir carreira na área da saúde.",
-    image: HERO_IMAGE,
-    link: "/programas",
-  },
-  {
-    id: "educacao",
-    label: "Educação",
-    icon: GraduationCap,
-    title: "Educação e Cultura",
-    description: "Apoiamos a Feira Literária com a Escola Marina Nepomuceno do Amaral, o Festival de Pipas e o Festival de Escultura na Areia. Essas iniciativas fortalecem a identidade cultural de Ubatuba e promovem o acesso à arte e ao conhecimento.",
-    image: PRAIA_IMAGE,
     link: "/programas",
   },
 ];
@@ -212,7 +203,7 @@ function EsporteGalleryTab({ causa }: { causa: typeof causasData[0] }) {
       </div>
       {/* Texto descritivo */}
       <div>
-        <h3 className="font-serif text-3xl font-medium text-foreground mb-4">{causa.title}</h3>
+        <h3 className="text-3xl font-extrabold text-foreground mb-4">{causa.title}</h3>
         <p className="text-muted-foreground leading-relaxed text-lg mb-6">{causa.description}</p>
         <Link href={causa.link} className="btn-primary">
           Saiba Mais <ArrowRight className="w-4 h-4" />
@@ -279,13 +270,13 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm mb-8 animate-fade-in">
               <Leaf className="w-3.5 h-3.5 text-white/80" />
               <span className="text-xs font-medium tracking-[0.15em] uppercase text-white/80">
-                Ubatuba, São Paulo · ODS 18
+                Ubatuba, São Paulo · ODS 17 — Parcerias
               </span>
             </div>
 
             <h1
               key={`title-${currentSlide}`}
-              className="font-serif text-4xl sm:text-5xl md:text-7xl font-medium leading-[1.1] mb-6 animate-fade-up"
+              className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] mb-6 animate-fade-up tracking-tight"
             >
               {heroSlides[currentSlide].title}
             </h1>
@@ -356,7 +347,7 @@ export default function Home() {
                 <div className="w-14 h-14 mx-auto mb-4 rounded-full border-2 border-white/20 flex items-center justify-center">
                   <item.icon className="w-6 h-6 text-earth" />
                 </div>
-                <div className="font-serif text-4xl md:text-5xl font-semibold text-white mb-2">{item.value}</div>
+                <div className="text-4xl md:text-5xl font-extrabold text-white mb-2">{item.value}</div>
                 <div className="text-sm text-white/60 leading-snug">{item.label}</div>
               </div>
             ))}
@@ -374,11 +365,11 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-12">
             <span className="section-label block mb-4">Nossas Causas</span>
-            <h2 className="section-title mx-auto">Áreas de atuação</h2>
+            <h2 className="section-title mx-auto">Áreas de <span className="text-azul-oceano">atuação</span></h2>
           </div>
 
-          <Tabs defaultValue="esporte" className="w-full">
-            <TabsList className="w-full max-w-2xl mx-auto grid grid-cols-2 md:grid-cols-4 h-auto gap-2 bg-transparent p-0 mb-12">
+          <Tabs defaultValue="saude" className="w-full">
+            <TabsList className="w-full max-w-2xl mx-auto grid grid-cols-3 h-auto gap-2 bg-transparent p-0 mb-12">
               {causasData.map((causa) => (
                 <TabsTrigger
                   key={causa.id}
@@ -401,7 +392,7 @@ export default function Home() {
                       <img src={causa.image} alt={causa.title} className="w-full h-[320px] object-cover" />
                     </div>
                     <div>
-                      <h3 className="font-serif text-3xl font-medium text-foreground mb-4">{causa.title}</h3>
+                      <h3 className="text-3xl font-extrabold text-foreground mb-4">{causa.title}</h3>
                       <p className="text-muted-foreground leading-relaxed text-lg mb-6">{causa.description}</p>
                       <Link href={causa.link} className="btn-primary">
                         Saiba Mais <ArrowRight className="w-4 h-4" />
@@ -425,8 +416,8 @@ export default function Home() {
         <div className="container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
-              <h2 className="font-serif text-3xl md:text-4xl font-medium text-white mb-2">
-                Contribua para nossas causas.
+              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2">
+                Some com a gente.
               </h2>
               <p className="text-white/80 text-lg">
                 Sua doação transforma vidas e preserva a natureza em Ubatuba.
@@ -450,7 +441,7 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-14">
             <span className="section-label block mb-4">Blog e Notícias</span>
-            <h2 className="section-title mx-auto">Fique por dentro</h2>
+            <h2 className="section-title mx-auto">Fique por <span className="text-azul-oceano">dentro</span></h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -469,7 +460,7 @@ export default function Home() {
                   {post.category && (
                     <span className="inline-block px-3 py-1 text-xs font-semibold tracking-widest uppercase bg-forest/10 text-forest rounded-full mb-3">{post.category}</span>
                   )}
-                  <h3 className={cn("font-serif font-medium text-foreground mb-3 group-hover:text-forest transition-colors line-clamp-2", i === 0 ? "text-2xl" : "text-lg")}>
+                  <h3 className={cn("font-bold text-foreground mb-3 group-hover:text-forest transition-colors line-clamp-2", i === 0 ? "text-2xl" : "text-lg")}>
                     {post.title}
                   </h3>
                   {post.excerpt && (
@@ -498,7 +489,7 @@ export default function Home() {
         <div className="container">
           <div className="text-center mb-12">
             <span className="section-label block mb-4">Rede de Apoio</span>
-            <h2 className="section-title mx-auto mb-4">Parceiros</h2>
+            <h2 className="section-title mx-auto mb-4"><span className="text-azul-oceano">Parceiros</span></h2>
             <p className="section-subtitle mx-auto">
               As causas do Instituto Ubatuba são fortalecidas graças ao apoio de parceiros, patrocinadores e doadores. Uma verdadeira rede em torno da sustentabilidade.
             </p>
@@ -533,8 +524,8 @@ export default function Home() {
         </div>
         <div className="relative container text-center text-white">
           <span className="section-label block mb-4 text-white/60">Faça parte</span>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium mb-6 text-white">
-            Juntos, preservamos mais
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-white">
+            Parcerias entre poder público, institutos e comunidade.
           </h2>
           <p className="text-white/70 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
             Seja como voluntário, doador ou parceiro institucional — sua contribuição é fundamental para ampliar nosso impacto em Ubatuba e região.

@@ -39,7 +39,7 @@ export default function NoticiaDetalhe({ slug }: Props) {
       <div className="pt-20 min-h-screen">
         <div className="container py-20 text-center">
           <BookOpen className="w-16 h-16 text-muted-foreground/30 mx-auto mb-6" />
-          <h1 className="font-serif text-3xl font-medium text-foreground mb-4">Post não encontrado</h1>
+          <h1 className="text-3xl font-extrabold text-foreground mb-4">Post não encontrado</h1>
           <p className="text-muted-foreground mb-8">O conteúdo que você está procurando não está disponível.</p>
           <Link href="/noticias" className="btn-outline">
             <ArrowLeft className="w-4 h-4" />
@@ -68,7 +68,7 @@ export default function NoticiaDetalhe({ slug }: Props) {
                 {post.category}
               </span>
             )}
-            <h1 className="font-serif text-4xl md:text-5xl font-medium text-white max-w-3xl leading-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-white max-w-3xl leading-tight">
               {post.title}
             </h1>
           </div>
@@ -98,7 +98,7 @@ export default function NoticiaDetalhe({ slug }: Props) {
                     {post.category}
                   </span>
                 )}
-                <h1 className="font-serif text-4xl md:text-5xl font-medium text-foreground mb-6 leading-tight">
+                <h1 className="text-4xl md:text-5xl font-extrabold text-foreground mb-6 leading-tight">
                   {post.title}
                 </h1>
               </>

@@ -50,4 +50,4 @@ export const DONATION_TIERS: DonationTier[] = [
 export const DONATION_CURRENCY = "brl";
 export const DONATION_PRODUCT_NAME = "Doação — Instituto Ubatuba Santuário Ecológico";
 export const DONATION_PRODUCT_DESCRIPTION =
-  "Sua doação apoia programas socioambientais em Ubatuba: escolinhas esportivas, ações de saúde, conservação ecológica e bem-estar animal — alinhados à ODS 18 e à Agenda 2030.";
+  "Sua doação apoia programas socioambientais em Ubatuba: escolinhas esportivas, ações de saúde e conservação ambiental — alinhados à ODS 17 (Parcerias) e à Agenda 2030.";

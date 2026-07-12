@@ -69,7 +69,7 @@ export default function Header() {
             </div>
             <div className="leading-tight">
               <span className={cn(
-                "block font-serif font-semibold text-base tracking-tight transition-colors",
+                "block font-extrabold text-base tracking-tight transition-colors",
                 isLight ? "text-forest-dark" : "text-white"
               )}>
                 Instituto Ubatuba

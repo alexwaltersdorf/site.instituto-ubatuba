@@ -58,7 +58,7 @@ export default function Contato() {
         </div>
         <div className="relative container text-center text-white">
           <span className="section-label block mb-4 text-white/60">Fale Conosco</span>
-          <h1 className="font-serif text-5xl md:text-6xl font-medium text-white mb-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
             Contato
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -74,7 +74,7 @@ export default function Contato() {
             {/* Coluna de informações */}
             <div className="lg:col-span-2">
               <span className="section-label block mb-4">Onde estamos</span>
-              <h2 className="font-serif text-3xl font-medium text-foreground mb-8">
+              <h2 className="text-3xl font-extrabold text-foreground mb-8">
                 Instituto Ubatuba<br />Santuário Ecológico
               </h2>
 
@@ -132,7 +132,7 @@ export default function Contato() {
               <div className="mt-10 p-5 rounded-lg bg-forest/5 border border-forest/20">
                 <p className="text-xs font-semibold tracking-widest uppercase text-forest mb-2">Alinhamento</p>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Instituto Ubatuba Santuário Ecológico — alinhado à <strong className="text-forest">ODS 18</strong> e à <strong className="text-forest">Agenda 2030</strong>.
+                  Instituto Ubatuba Santuário Ecológico — alinhado à <strong className="text-forest">ODS 17 — Parcerias</strong> e à <strong className="text-forest">Agenda 2030</strong>.
                 </p>
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function Contato() {
                   <div className="w-16 h-16 rounded-full bg-forest/10 flex items-center justify-center mx-auto mb-6">
                     <CheckCircle className="w-8 h-8 text-forest" />
                   </div>
-                  <h3 className="font-serif text-2xl font-medium text-foreground mb-3">Mensagem enviada!</h3>
+                  <h3 className="text-2xl font-extrabold text-foreground mb-3">Mensagem enviada!</h3>
                   <p className="text-muted-foreground mb-6">Obrigado pelo contato. Retornaremos em breve.</p>
                   <button
                     onClick={() => setEnviado(false)}
@@ -156,7 +156,7 @@ export default function Contato() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <h3 className="font-serif text-2xl font-medium text-foreground mb-2">Envie uma mensagem</h3>
+                    <h3 className="text-2xl font-extrabold text-foreground mb-2">Envie uma mensagem</h3>
                     <p className="text-sm text-muted-foreground">Campos marcados com * são obrigatórios.</p>
                   </div>
 
@@ -267,7 +267,7 @@ export default function Contato() {
         <div className="container py-16">
           <div className="text-center mb-10">
             <span className="section-label block mb-3">Localização</span>
-            <h2 className="font-serif text-3xl font-medium text-foreground">
+            <h2 className="text-3xl font-extrabold text-foreground">
               Estamos em Ubatuba, SP
             </h2>
           </div>

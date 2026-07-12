@@ -31,7 +31,7 @@ export default function Sobre() {
         </div>
         <div className="relative container text-center text-white">
           <span className="section-label block mb-4 text-white/60">Quem Somos</span>
-          <h1 className="font-serif text-5xl md:text-6xl font-medium text-white mb-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
             Sobre o Instituto
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -56,7 +56,7 @@ export default function Sobre() {
                 Fundado com o propósito de articular diferentes setores da sociedade — poder público, iniciativa privada, academia e comunidade —, o instituto rapidamente se tornou um ponto de convergência para iniciativas socioambientais no litoral norte paulista.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Hoje, com programas que atendem centenas de crianças, jovens e famílias, o instituto consolida sua atuação como referência em conservação ecológica e inclusão social, sempre guiado pelos princípios da <strong className="text-forest">Agenda 2030</strong> e da <strong className="text-forest">ODS 18</strong>.
+                Hoje, com programas que atendem centenas de crianças, jovens e famílias, o instituto consolida sua atuação como referência em conservação ecológica e inclusão social, sempre guiado pelos princípios da <strong className="text-forest">Agenda 2030</strong> e da <strong className="text-forest">ODS 17 — Parcerias</strong>.
               </p>
             </div>
             <div className="relative">
@@ -66,7 +66,7 @@ export default function Sobre() {
                 className="rounded-lg shadow-2xl w-full h-[450px] object-cover"
               />
               <div className="absolute -top-6 -right-6 bg-forest rounded-lg p-6 text-white shadow-xl">
-                <div className="font-serif text-3xl font-semibold">2020</div>
+                <div className="text-3xl font-extrabold">2020</div>
                 <div className="text-xs text-white/70 mt-1">Ano de fundação</div>
               </div>
             </div>
@@ -74,12 +74,12 @@ export default function Sobre() {
         </div>
       </section>
 
-      {/* ── Missão, Visão e ODS 18 ── */}
+      {/* ── Missão, Visão e ODS 17 ── */}
       <section className="section-padding bg-background">
         <div className="container">
           <div className="text-center mb-16">
             <span className="section-label block mb-4">Propósito e Direção</span>
-            <h2 className="section-title mx-auto">Missão, Visão e ODS 18</h2>
+            <h2 className="section-title mx-auto">Missão, Visão e ODS 17</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
@@ -88,7 +88,7 @@ export default function Sobre() {
               <div className="w-14 h-14 rounded-full bg-forest/10 flex items-center justify-center mb-6">
                 <Target className="w-6 h-6 text-forest" />
               </div>
-              <h3 className="font-serif text-2xl font-medium text-foreground mb-4">Missão</h3>
+              <h3 className="text-2xl font-extrabold text-foreground mb-4">Missão</h3>
               <p className="text-muted-foreground leading-relaxed text-sm">
                 Promover a conservação socioambiental de Ubatuba e região por meio de parcerias multissetoriais que mobilizem conhecimentos científicos, recursos financeiros, tecnologia e participação comunitária, assegurando desenvolvimento sustentável e inclusão social alinhados à Agenda 2030.
               </p>
@@ -99,23 +99,23 @@ export default function Sobre() {
               <div className="w-14 h-14 rounded-full bg-ocean/10 flex items-center justify-center mb-6">
                 <Eye className="w-6 h-6 text-ocean" />
               </div>
-              <h3 className="font-serif text-2xl font-medium text-foreground mb-4">Visão</h3>
+              <h3 className="text-2xl font-extrabold text-foreground mb-4">Visão</h3>
               <p className="text-muted-foreground leading-relaxed text-sm">
                 Até 2030, ser reconhecido na região em desenvolvimento sustentável, articulando redes locais e globais capazes de cocriar soluções inovadoras para preservar ecossistemas marinhos e terrestres, reduzir desigualdades sociais e inspirar políticas públicas fundamentadas na cooperação.
               </p>
             </div>
 
-            {/* ODS 18 */}
+            {/* ODS 17 */}
             <div className="card-elegant p-8 border-forest/30 bg-forest/5">
               <div className="w-14 h-14 rounded-full bg-forest flex items-center justify-center mb-6">
                 <Star className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-serif text-2xl font-medium text-forest mb-4">ODS 18</h3>
+              <h3 className="text-2xl font-extrabold text-forest mb-4">ODS 17</h3>
               <p className="text-muted-foreground leading-relaxed text-sm mb-4">
-                O Instituto Ubatuba está explicitamente alinhado à <strong className="text-forest">ODS 18 — Bem-estar Animal e Conservação Ecológica</strong>, um objetivo complementar à Agenda 2030 que reconhece a interdependência entre o bem-estar dos animais, a saúde dos ecossistemas e o desenvolvimento humano sustentável.
+                O Instituto Ubatuba tem como base estratégica a <strong className="text-forest">ODS 17 — Parcerias e Meios de Implementação</strong>, fortalecendo os meios de implementação e revitalizando a parceria global para o desenvolvimento sustentável.
               </p>
               <p className="text-muted-foreground leading-relaxed text-sm">
-                Nossas ações de proteção da fauna marinha, conservação da Mata Atlântica e educação ambiental são expressões concretas desse compromisso.
+                Nossas ações de saúde, esporte social e meio ambiente são viabilizadas por parcerias entre poder público, institutos e comunidade — expressões concretas desse compromisso.
               </p>
             </div>
           </div>
@@ -169,7 +169,7 @@ export default function Sobre() {
                 <div className="w-16 h-16 rounded-full bg-forest/10 border-2 border-forest/20 flex items-center justify-center mx-auto mb-5">
                   <Users className="w-7 h-7 text-forest" />
                 </div>
-                <h3 className="font-serif text-lg font-medium text-foreground mb-1">{membro.nome}</h3>
+                <h3 className="text-lg font-bold text-foreground mb-1">{membro.nome}</h3>
                 <span className="text-xs font-semibold tracking-wide uppercase text-earth block mb-3">{membro.cargo}</span>
                 <p className="text-sm text-muted-foreground leading-relaxed">{membro.desc}</p>
               </div>

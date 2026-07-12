@@ -138,7 +138,7 @@ function SecaoDoacoes() {
       <div className="container">
         <div className="text-center mb-14">
           <span className="section-label block mb-4 text-white/50">Faça a diferença</span>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium text-white mb-4">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
             Faça uma Doação
           </h2>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -156,7 +156,7 @@ function SecaoDoacoes() {
               </div>
               <div>
                 <h3 className="font-semibold text-foreground text-sm">Instituto Ubatuba Santuário Ecológico</h3>
-                <p className="text-xs text-muted-foreground">ODS 18 · Bem-estar Animal · Conservação Ecológica</p>
+                <p className="text-xs text-muted-foreground">ODS 17 · Parcerias · Saúde, Esporte e Meio Ambiente</p>
               </div>
               <div className="ml-auto flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Lock className="w-3 h-3" />
@@ -322,7 +322,7 @@ export default function Apoie() {
         </div>
         <div className="relative container text-center text-white">
           <span className="section-label block mb-4 text-white/60">Faça parte</span>
-          <h1 className="font-serif text-5xl md:text-6xl font-medium text-white mb-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
             Como Apoiar
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -364,7 +364,7 @@ export default function Apoie() {
                 <span className={`text-xs font-semibold tracking-widest uppercase mb-2 block ${forma.color}`}>
                   {forma.subtitulo}
                 </span>
-                <h3 className="font-serif text-2xl font-medium text-foreground mb-4">{forma.titulo}</h3>
+                <h3 className="text-2xl font-extrabold text-foreground mb-4">{forma.titulo}</h3>
                 <p className="text-muted-foreground leading-relaxed text-sm mb-6">{forma.descricao}</p>
 
                 <ul className="space-y-3 mb-8 flex-1">
@@ -413,7 +413,7 @@ export default function Apoie() {
                   { num: "3", label: "Bolsas de estudo" },
                 ].map((stat, i) => (
                   <div key={i} className="text-center p-5 bg-white rounded-lg border border-border/60">
-                    <div className="font-serif text-3xl font-semibold text-forest mb-1">{stat.num}</div>
+                    <div className="text-3xl font-extrabold text-forest mb-1">{stat.num}</div>
                     <div className="text-xs text-muted-foreground">{stat.label}</div>
                   </div>
                 ))}
@@ -426,7 +426,7 @@ export default function Apoie() {
               {[
                 { titulo: "Transparência total", desc: "Publicamos relatórios periódicos com a aplicação de todos os recursos recebidos." },
                 { titulo: "Impacto mensurável", desc: "Monitoramos e comunicamos os resultados de cada programa com dados concretos." },
-                { titulo: "Alinhamento com ODS", desc: "Nossas ações estão alinhadas à Agenda 2030 e à ODS 18 — Bem-estar Animal." },
+                { titulo: "Alinhamento com ODS", desc: "Nossas ações estão alinhadas à Agenda 2030 e à ODS 17 — Parcerias e Meios de Implementação." },
                 { titulo: "Comunidade local", desc: "100% dos beneficiários são moradores de Ubatuba e região, gerando impacto local." },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4 p-5 bg-white rounded-lg border border-border/60">
@@ -461,7 +461,7 @@ export default function Apoie() {
                   <Building2 className="w-5 h-5 text-forest" />
                 </div>
                 <span className="text-xs font-semibold tracking-widest uppercase text-earth block mb-2">{p.tipo}</span>
-                <h4 className="font-serif text-base font-medium text-foreground mb-2">{p.nome}</h4>
+                <h4 className="text-base font-extrabold text-foreground mb-2">{p.nome}</h4>
                 <p className="text-xs text-muted-foreground">{p.desc}</p>
               </div>
             ))}
@@ -470,7 +470,7 @@ export default function Apoie() {
           {/* CTA para novas parcerias */}
           <div className="text-center p-10 rounded-xl bg-forest/5 border border-forest/20 max-w-2xl mx-auto">
             <Leaf className="w-10 h-10 text-forest mx-auto mb-4" />
-            <h3 className="font-serif text-2xl font-medium text-foreground mb-3">
+            <h3 className="text-2xl font-extrabold text-foreground mb-3">
               Seja um parceiro do Instituto Ubatuba
             </h3>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">

@@ -14,7 +14,7 @@ export default function Obrigado() {
   }, []);
 
   const handleShare = async () => {
-    const text = "Acabei de apoiar o Instituto Ubatuba Santuário Ecológico! 🌿 Juntos pela conservação socioambiental de Ubatuba e pela ODS 18.";
+    const text = "Acabei de apoiar o Instituto Ubatuba Santuário Ecológico! 🌿 Juntos pela conservação socioambiental de Ubatuba e pela ODS 17 — Parcerias.";
     if (navigator.share) {
       await navigator.share({ text, url: "https://institutoubatuba.org" });
     } else {
@@ -49,7 +49,7 @@ export default function Obrigado() {
           </div>
 
           {/* Título */}
-          <h1 className="font-serif text-4xl font-semibold text-forest-dark mb-4">
+          <h1 className="text-4xl font-extrabold text-forest-dark mb-4">
             Muito obrigado!
           </h1>
           <p className="text-lg text-muted-foreground mb-2">
@@ -81,7 +81,7 @@ export default function Obrigado() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-forest mt-0.5">•</span>
-                <span>Fortalece a ODS 18 — Bem-estar Animal e Conservação Ecológica</span>
+                <span>Fortalece a ODS 17 — Parcerias e Meios de Implementação</span>
               </li>
             </ul>
           </div>

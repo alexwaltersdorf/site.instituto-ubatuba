@@ -5,10 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* ── Tipografia ── */
-  --font-serif: "Playfair Display", Georgia, serif;
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  /* ── Tipografia (Manual de Marca v1.0) ── */
+  --font-sans: "Poppins", system-ui, sans-serif;
+  --font-display: "Poppins", system-ui, sans-serif;
+  --font-serif: "Poppins", system-ui, sans-serif;
 
   /* ── Raios ── */
   --radius-sm: 0.25rem;
@@ -17,78 +17,92 @@
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
 
-  /* ── Cores base (light theme) ── */
-  --color-background: oklch(0.98 0.005 130);
-  --color-foreground: oklch(0.18 0.02 130);
+  /* ── Paleta Oficial (Manual de Marca v1.0) ── */
+  /* Verde Serra #2A502B — Primária */
+  --color-verde-serra: oklch(0.392 0.075 144.5);
+  /* Azul Oceano #008CBF — Secundária */
+  --color-azul-oceano: oklch(0.602 0.1248 233.2);
+  /* Amarelo Sol #F4C42E — Acento */
+  --color-amarelo-sol: oklch(0.840 0.1607 89.3);
+  /* Laranja Praia #EC9939 — Terciária */
+  --color-laranja-praia: oklch(0.751 0.1456 65.5);
+  /* Areia #F6F1E7 — Fundo */
+  --color-areia: oklch(0.959 0.0143 84.6);
+  /* Tinta #122019 — Texto */
+  --color-tinta: oklch(0.228 0.0238 162.0);
 
-  --color-card: oklch(1 0 0);
-  --color-card-foreground: oklch(0.18 0.02 130);
+  /* ── Cores semânticas (light theme) ── */
+  --color-background: oklch(0.959 0.0143 84.6);
+  --color-foreground: oklch(0.228 0.0238 162.0);
 
-  --color-popover: oklch(1 0 0);
-  --color-popover-foreground: oklch(0.18 0.02 130);
+  --color-card: oklch(0.99 0.005 84.6);
+  --color-card-foreground: oklch(0.228 0.0238 162.0);
 
-  /* Verde floresta — cor principal */
-  --color-primary: oklch(0.38 0.09 145);
-  --color-primary-foreground: oklch(0.98 0.005 130);
+  --color-popover: oklch(0.99 0.005 84.6);
+  --color-popover-foreground: oklch(0.228 0.0238 162.0);
 
-  /* Dourado terroso — cor secundária */
-  --color-secondary: oklch(0.72 0.07 75);
-  --color-secondary-foreground: oklch(0.18 0.02 130);
+  /* Verde Serra como primária */
+  --color-primary: oklch(0.392 0.075 144.5);
+  --color-primary-foreground: oklch(0.98 0.005 84.6);
 
-  --color-muted: oklch(0.94 0.01 130);
-  --color-muted-foreground: oklch(0.48 0.02 130);
+  /* Azul Oceano como secundária */
+  --color-secondary: oklch(0.602 0.1248 233.2);
+  --color-secondary-foreground: oklch(0.98 0.005 84.6);
 
-  --color-accent: oklch(0.88 0.04 145);
-  --color-accent-foreground: oklch(0.28 0.06 145);
+  --color-muted: oklch(0.93 0.01 84.6);
+  --color-muted-foreground: oklch(0.45 0.02 144.5);
+
+  --color-accent: oklch(0.840 0.1607 89.3);
+  --color-accent-foreground: oklch(0.228 0.0238 162.0);
 
   --color-destructive: oklch(0.55 0.2 25);
   --color-destructive-foreground: oklch(0.98 0 0);
 
-  --color-border: oklch(0.88 0.01 130);
-  --color-input: oklch(0.88 0.01 130);
-  --color-ring: oklch(0.38 0.09 145);
+  --color-border: oklch(0.90 0.01 84.6);
+  --color-input: oklch(0.90 0.01 84.6);
+  --color-ring: oklch(0.392 0.075 144.5);
 
-  /* Cores customizadas do instituto */
-  --color-forest: oklch(0.38 0.09 145);
-  --color-forest-light: oklch(0.55 0.08 145);
-  --color-forest-dark: oklch(0.26 0.07 145);
-  --color-earth: oklch(0.62 0.07 65);
-  --color-sand: oklch(0.91 0.04 85);
-  --color-ocean: oklch(0.52 0.09 220);
-  --color-cream: oklch(0.97 0.01 95);
+  /* Cores customizadas do instituto (mapeamento legado) */
+  --color-forest: oklch(0.392 0.075 144.5);
+  --color-forest-light: oklch(0.50 0.07 144.5);
+  --color-forest-dark: oklch(0.30 0.06 144.5);
+  --color-earth: oklch(0.751 0.1456 65.5);
+  --color-sand: oklch(0.93 0.02 84.6);
+  --color-ocean: oklch(0.602 0.1248 233.2);
+  --color-cream: oklch(0.959 0.0143 84.6);
 
   /* Sidebar */
-  --color-sidebar: oklch(0.96 0.008 130);
-  --color-sidebar-foreground: oklch(0.18 0.02 130);
-  --color-sidebar-primary: oklch(0.38 0.09 145);
-  --color-sidebar-primary-foreground: oklch(0.98 0.005 130);
-  --color-sidebar-accent: oklch(0.88 0.04 145);
-  --color-sidebar-accent-foreground: oklch(0.28 0.06 145);
-  --color-sidebar-border: oklch(0.88 0.01 130);
-  --color-sidebar-ring: oklch(0.38 0.09 145);
+  --color-sidebar: oklch(0.95 0.008 84.6);
+  --color-sidebar-foreground: oklch(0.228 0.0238 162.0);
+  --color-sidebar-primary: oklch(0.392 0.075 144.5);
+  --color-sidebar-primary-foreground: oklch(0.98 0.005 84.6);
+  --color-sidebar-accent: oklch(0.840 0.1607 89.3);
+  --color-sidebar-accent-foreground: oklch(0.228 0.0238 162.0);
+  --color-sidebar-border: oklch(0.90 0.01 84.6);
+  --color-sidebar-ring: oklch(0.392 0.075 144.5);
 }
 
 /* ── Tema escuro ── */
 .dark {
-  --color-background: oklch(0.12 0.015 145);
-  --color-foreground: oklch(0.94 0.008 130);
-  --color-card: oklch(0.16 0.015 145);
-  --color-card-foreground: oklch(0.94 0.008 130);
-  --color-popover: oklch(0.16 0.015 145);
-  --color-popover-foreground: oklch(0.94 0.008 130);
-  --color-primary: oklch(0.62 0.1 145);
-  --color-primary-foreground: oklch(0.12 0.015 145);
-  --color-secondary: oklch(0.28 0.02 145);
-  --color-secondary-foreground: oklch(0.94 0.008 130);
-  --color-muted: oklch(0.22 0.015 145);
-  --color-muted-foreground: oklch(0.62 0.02 130);
-  --color-accent: oklch(0.28 0.04 145);
-  --color-accent-foreground: oklch(0.88 0.04 145);
+  --color-background: oklch(0.15 0.02 144.5);
+  --color-foreground: oklch(0.94 0.008 84.6);
+  --color-card: oklch(0.18 0.02 144.5);
+  --color-card-foreground: oklch(0.94 0.008 84.6);
+  --color-popover: oklch(0.18 0.02 144.5);
+  --color-popover-foreground: oklch(0.94 0.008 84.6);
+  --color-primary: oklch(0.50 0.08 144.5);
+  --color-primary-foreground: oklch(0.12 0.015 144.5);
+  --color-secondary: oklch(0.55 0.10 233.2);
+  --color-secondary-foreground: oklch(0.94 0.008 84.6);
+  --color-muted: oklch(0.22 0.015 144.5);
+  --color-muted-foreground: oklch(0.62 0.02 84.6);
+  --color-accent: oklch(0.75 0.12 89.3);
+  --color-accent-foreground: oklch(0.12 0.015 144.5);
   --color-destructive: oklch(0.65 0.22 25);
   --color-destructive-foreground: oklch(0.98 0 0);
-  --color-border: oklch(0.26 0.02 145);
-  --color-input: oklch(0.26 0.02 145);
-  --color-ring: oklch(0.62 0.1 145);
+  --color-border: oklch(0.26 0.02 144.5);
+  --color-input: oklch(0.26 0.02 144.5);
+  --color-ring: oklch(0.50 0.08 144.5);
 }
 
 /* ── Reset e Base ── */
@@ -106,30 +120,48 @@
     font-feature-settings: "kern" 1, "liga" 1;
   }
 
+  /* Títulos: Poppins ExtraBold (peso 800), tracking negativo */
   h1, h2, h3 {
-    font-family: var(--font-serif);
-    font-feature-settings: "kern" 1, "liga" 1, "swsh" 1;
+    font-family: var(--font-sans);
+    font-weight: 800;
     letter-spacing: -0.02em;
   }
 
   h4, h5, h6 {
     font-family: var(--font-sans);
+    font-weight: 700;
     letter-spacing: -0.01em;
   }
 
   p {
     line-height: 1.75;
   }
+
+  /* Listas com bullet verde (Manual de Marca) */
+  ul li::marker {
+    color: var(--color-verde-serra);
+  }
 }
 
 /* ── Utilitários customizados ── */
 @layer utilities {
   .font-serif {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
+    font-weight: 800;
   }
 
   .font-display {
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
+    font-weight: 800;
+  }
+
+  /* Headline bicolor (Manual de Marca: verde + azul) */
+  .headline-bicolor {
+    color: var(--color-verde-serra);
+  }
+
+  .headline-bicolor .destaque {
+    color: var(--color-azul-oceano);
   }
 
   .text-forest {
@@ -142,6 +174,22 @@
 
   .text-ocean {
     color: var(--color-ocean);
+  }
+
+  .text-verde-serra {
+    color: var(--color-verde-serra);
+  }
+
+  .text-azul-oceano {
+    color: var(--color-azul-oceano);
+  }
+
+  .text-amarelo-sol {
+    color: var(--color-amarelo-sol);
+  }
+
+  .text-tinta {
+    color: var(--color-tinta);
   }
 
   .bg-forest {
@@ -168,28 +216,45 @@
     background-color: var(--color-earth);
   }
 
+  .bg-areia {
+    background-color: var(--color-areia);
+  }
+
+  .bg-verde-serra {
+    background-color: var(--color-verde-serra);
+  }
+
+  .bg-azul-oceano {
+    background-color: var(--color-azul-oceano);
+  }
+
   /* Gradientes naturais */
   .gradient-forest {
-    background: linear-gradient(135deg, oklch(0.26 0.07 145) 0%, oklch(0.45 0.1 145) 100%);
+    background: linear-gradient(135deg, oklch(0.30 0.06 144.5) 0%, oklch(0.45 0.08 144.5) 100%);
   }
 
   .gradient-nature {
-    background: linear-gradient(180deg, oklch(0.38 0.09 145) 0%, oklch(0.22 0.05 145) 100%);
+    background: linear-gradient(180deg, oklch(0.392 0.075 144.5) 0%, oklch(0.25 0.05 144.5) 100%);
   }
 
   .gradient-hero {
     background: linear-gradient(
       160deg,
-      oklch(0.18 0.04 145 / 0.92) 0%,
-      oklch(0.28 0.07 145 / 0.75) 50%,
-      oklch(0.38 0.09 145 / 0.55) 100%
+      oklch(0.20 0.04 144.5 / 0.92) 0%,
+      oklch(0.30 0.06 144.5 / 0.75) 50%,
+      oklch(0.392 0.075 144.5 / 0.55) 100%
     );
   }
 
-  /* Linha decorativa dourada */
+  /* Onda dupla — assinatura gráfica (azul + amarela) */
+  .onda-dupla {
+    background: linear-gradient(180deg, var(--color-azul-oceano) 0%, var(--color-azul-oceano) 60%, var(--color-amarelo-sol) 60%, var(--color-amarelo-sol) 100%);
+  }
+
+  /* Linha decorativa — onda */
   .divider-gold {
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--color-earth), transparent);
+    background: linear-gradient(90deg, transparent, var(--color-amarelo-sol), transparent);
   }
 
   /* Efeito vidro */
@@ -201,7 +266,7 @@
 
   .glass-dark {
     backdrop-filter: blur(12px) saturate(1.5);
-    background: oklch(0.12 0.015 145 / 0.85);
+    background: oklch(0.15 0.02 144.5 / 0.85);
     border: 1px solid oklch(1 0 0 / 0.08);
   }
 
@@ -224,41 +289,80 @@
     @apply py-24 md:py-32;
   }
 
-  /* Label de seção */
+  /* Label de seção — Tag/pílula (caixa alta, tracking expandido) */
   .section-label {
-    @apply text-xs font-semibold tracking-[0.2em] uppercase text-earth;
+    @apply text-xs font-semibold tracking-[0.2em] uppercase;
+    color: var(--color-verde-serra);
   }
 
-  /* Título de seção */
+  /* Título de seção — Poppins ExtraBold */
   .section-title {
-    @apply text-4xl md:text-5xl font-serif font-medium leading-tight text-foreground;
+    @apply text-4xl md:text-5xl font-extrabold leading-tight;
+    color: var(--color-tinta);
   }
 
   /* Subtítulo de seção */
   .section-subtitle {
-    @apply text-lg text-muted-foreground leading-relaxed max-w-2xl;
+    @apply text-lg leading-relaxed max-w-2xl;
+    color: var(--color-muted-foreground);
   }
 
-  /* Botão primário elegante */
+  /* Botão primário — Verde Serra */
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-8 py-4 bg-forest text-white font-medium
-           rounded-sm tracking-wide transition-all duration-200
-           hover:bg-forest-dark hover:shadow-lg hover:shadow-forest/20
+    @apply inline-flex items-center gap-2 px-8 py-4 text-white font-semibold
+           rounded-lg tracking-wide transition-all duration-200
+           hover:shadow-lg
            active:scale-[0.98];
+    background-color: var(--color-verde-serra);
   }
 
-  /* Botão outline elegante */
-  .btn-outline {
-    @apply inline-flex items-center gap-2 px-8 py-4 border border-forest text-forest font-medium
-           rounded-sm tracking-wide transition-all duration-200
-           hover:bg-forest hover:text-white
+  .btn-primary:hover {
+    background-color: var(--color-forest-dark);
+  }
+
+  /* Botão secundário — Azul Oceano */
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-8 py-4 text-white font-semibold
+           rounded-lg tracking-wide transition-all duration-200
+           hover:shadow-lg
            active:scale-[0.98];
+    background-color: var(--color-azul-oceano);
+  }
+
+  /* Botão outline */
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-8 py-4 font-semibold
+           rounded-lg tracking-wide transition-all duration-200
+           hover:text-white
+           active:scale-[0.98];
+    border: 2px solid var(--color-verde-serra);
+    color: var(--color-verde-serra);
+  }
+
+  .btn-outline:hover {
+    background-color: var(--color-verde-serra);
+  }
+
+  /* Botão CTA quente — Amarelo Sol */
+  .btn-cta {
+    @apply inline-flex items-center gap-2 px-8 py-4 font-bold
+           rounded-lg tracking-wide transition-all duration-200
+           hover:shadow-lg
+           active:scale-[0.98];
+    background-color: var(--color-amarelo-sol);
+    color: var(--color-tinta);
   }
 
   /* Card elegante */
   .card-elegant {
-    @apply bg-card rounded-lg border border-border/60 shadow-sm
-           hover:shadow-md hover:border-forest/20 transition-all duration-300;
+    @apply rounded-xl border shadow-sm
+           hover:shadow-md transition-all duration-300;
+    background-color: var(--color-card);
+    border-color: oklch(0.90 0.01 84.6);
+  }
+
+  .card-elegant:hover {
+    border-color: oklch(0.392 0.075 144.5 / 0.3);
   }
 }
 
@@ -285,7 +389,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-background);
+  background: var(--color-areia);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -294,12 +398,12 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-forest);
+  background: var(--color-verde-serra);
 }
 
 /* ── Seleção de texto ── */
 ::selection {
-  background: oklch(0.38 0.09 145 / 0.2);
+  background: oklch(0.392 0.075 144.5 / 0.2);
   color: var(--color-forest-dark);
 }
 

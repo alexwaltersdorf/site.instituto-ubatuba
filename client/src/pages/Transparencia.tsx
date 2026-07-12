@@ -35,7 +35,7 @@ const principiosGovernanca = [
   {
     icon: Globe,
     title: "Alinhamento à Agenda 2030",
-    desc: "Todas as nossas ações são mapeadas aos Objetivos de Desenvolvimento Sustentável (ODS), especialmente à ODS 18 — Bem-Estar Animal e Conservação Ecológica, ODS 3 (Saúde), ODS 4 (Educação) e ODS 17 (Parcerias).",
+    desc: "Todas as nossas ações são mapeadas aos Objetivos de Desenvolvimento Sustentável (ODS), especialmente à ODS 17 — Parcerias e Meios de Implementação, ODS 3 (Saúde), ODS 4 (Educação) e ODS 14 (Vida na Água).",
   },
 ];
 
@@ -168,7 +168,7 @@ function SecaoColapsavel({ id, titulo, icone: Icone, cor, children, defaultOpen 
           <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center", cor.replace("text-", "bg-") + "/10")}>
             <Icone className={cn("w-5 h-5", cor)} />
           </div>
-          <span className="font-serif text-xl font-medium text-foreground">{titulo}</span>
+          <span className="text-xl font-extrabold text-foreground">{titulo}</span>
         </div>
         {aberta ? <ChevronDown className="w-5 h-5 text-muted-foreground" /> : <ChevronRight className="w-5 h-5 text-muted-foreground" />}
       </button>
@@ -219,7 +219,7 @@ export default function Transparencia() {
         </div>
         <div className="relative container text-center text-white">
           <span className="section-label block mb-4 text-white/60">Governança e Integridade</span>
-          <h1 className="font-serif text-5xl md:text-6xl font-medium text-white mb-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
             Compliance e Transparência
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
@@ -263,7 +263,7 @@ export default function Transparencia() {
                 <div className="w-11 h-11 rounded-lg bg-forest/10 flex items-center justify-center mb-5">
                   <p.icon className="w-5 h-5 text-forest" />
                 </div>
-                <h3 className="font-serif text-lg font-medium text-foreground mb-3">{p.title}</h3>
+                <h3 className="text-lg font-extrabold text-foreground mb-3">{p.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
               </div>
             ))}
@@ -352,7 +352,7 @@ export default function Transparencia() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <span className="section-label block mb-4">Resultados Financeiros</span>
-              <h2 className="font-serif text-4xl font-medium text-foreground mb-6 leading-tight">
+              <h2 className="text-4xl font-extrabold text-foreground mb-6 leading-tight">
                 Como aplicamos os recursos
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-8">
@@ -378,17 +378,17 @@ export default function Transparencia() {
             </div>
             <div className="space-y-4">
               <div className="card-elegant p-8 text-center">
-                <div className="font-serif text-6xl font-medium text-forest mb-2">72%</div>
+                <div className="text-6xl font-extrabold text-forest mb-2">72%</div>
                 <p className="text-muted-foreground font-medium">dos recursos aplicados em programas socioambientais</p>
                 <p className="text-xs text-muted-foreground mt-2">Exercício 2024 — auditado por empresa independente</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="card-elegant p-6 text-center">
-                  <div className="font-serif text-3xl font-medium text-earth mb-1">360+</div>
+                  <div className="text-3xl font-extrabold text-earth mb-1">360+</div>
                   <p className="text-xs text-muted-foreground">crianças beneficiadas</p>
                 </div>
                 <div className="card-elegant p-6 text-center">
-                  <div className="font-serif text-3xl font-medium text-ocean mb-1">781</div>
+                  <div className="text-3xl font-extrabold text-ocean mb-1">781</div>
                   <p className="text-xs text-muted-foreground">atendimentos de saúde</p>
                 </div>
               </div>
@@ -452,7 +452,7 @@ export default function Transparencia() {
                 <div className="w-11 h-11 rounded-lg bg-forest/10 flex items-center justify-center mb-5">
                   <item.icone className="w-5 h-5 text-forest" />
                 </div>
-                <h3 className="font-serif text-lg font-medium text-foreground mb-4">{item.titulo}</h3>
+                <h3 className="text-lg font-extrabold text-foreground mb-4">{item.titulo}</h3>
                 <ul className="space-y-2.5">
                   {item.itens.map((it, j) => (
                     <li key={j} className="flex items-start gap-2.5 text-sm text-muted-foreground">
@@ -510,7 +510,7 @@ export default function Transparencia() {
                 <div className="w-16 h-16 rounded-full bg-forest/10 flex items-center justify-center mx-auto mb-5">
                   <CheckCircle2 className="w-8 h-8 text-forest" />
                 </div>
-                <h3 className="font-serif text-2xl font-medium text-foreground mb-3">Denúncia registrada com sucesso</h3>
+                <h3 className="text-2xl font-extrabold text-foreground mb-3">Denúncia registrada com sucesso</h3>
                 <p className="text-muted-foreground mb-6">Guarde o protocolo abaixo para acompanhar o andamento da sua denúncia.</p>
                 <div className="inline-flex items-center gap-3 px-6 py-4 bg-forest/8 rounded-xl border border-forest/20 mb-6">
                   <span className="font-mono text-xl font-bold text-forest tracking-wider">{protocoloEnviado}</span>
@@ -529,7 +529,7 @@ export default function Transparencia() {
               </div>
             ) : (
               <div className="card-elegant p-8">
-                <h3 className="font-serif text-xl font-medium text-foreground mb-6">Registrar ocorrência</h3>
+                <h3 className="text-xl font-extrabold text-foreground mb-6">Registrar ocorrência</h3>
                 <div className="space-y-5">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">Categoria da ocorrência *</label>
@@ -617,7 +617,7 @@ export default function Transparencia() {
 
             {/* Consultar status */}
             <div className="mt-8 card-elegant p-6">
-              <h4 className="font-serif text-lg font-medium text-foreground mb-4 flex items-center gap-2">
+              <h4 className="text-lg font-extrabold text-foreground mb-4 flex items-center gap-2">
                 <Search className="w-5 h-5 text-forest" />
                 Consultar status de denúncia
               </h4>
@@ -666,7 +666,7 @@ export default function Transparencia() {
             {certificacoes.map((cert, i) => (
               <div key={i} className={cn("rounded-xl border p-6 flex flex-col", cert.cor)}>
                 <div className="text-3xl mb-4">{cert.icone}</div>
-                <h3 className="font-serif text-lg font-medium text-foreground mb-2">{cert.nome}</h3>
+                <h3 className="text-lg font-extrabold text-foreground mb-2">{cert.nome}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-4">{cert.descricao}</p>
                 <span className={cn(
                   "text-xs font-semibold px-3 py-1.5 rounded-full self-start",
@@ -690,7 +690,7 @@ export default function Transparencia() {
                   <Users className="w-6 h-6 text-ocean" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl font-medium text-foreground mb-2">Relatório de Igualdade Salarial</h3>
+                  <h3 className="text-2xl font-extrabold text-foreground mb-2">Relatório de Igualdade Salarial</h3>
                   <p className="text-muted-foreground text-sm">Conforme Lei nº 14.611/2023 e Instrução Normativa GM/MTE nº 6/2024</p>
                 </div>
               </div>
@@ -704,7 +704,7 @@ export default function Transparencia() {
                   { label: "Plano de cargos e salários", valor: "Publicado" },
                 ].map((item, i) => (
                   <div key={i} className="text-center p-4 rounded-lg bg-muted/30">
-                    <div className="font-serif text-2xl font-medium text-forest mb-1">{item.valor}</div>
+                    <div className="text-2xl font-extrabold text-forest mb-1">{item.valor}</div>
                     <p className="text-xs text-muted-foreground">{item.label}</p>
                   </div>
                 ))}
@@ -722,7 +722,7 @@ export default function Transparencia() {
       <section className="section-padding bg-forest-dark text-white">
         <div className="container text-center">
           <Award className="w-12 h-12 text-white/40 mx-auto mb-5" />
-          <h2 className="font-serif text-4xl font-medium text-white mb-4">
+          <h2 className="text-4xl font-extrabold text-white mb-4">
             Dúvidas ou solicitações?
           </h2>
           <p className="text-white/70 text-lg max-w-xl mx-auto mb-8 leading-relaxed">

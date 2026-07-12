@@ -34,7 +34,7 @@ export default function Footer() {
         <div className="container py-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
-              <h3 className="font-serif text-2xl font-medium text-white mb-2">
+              <h3 className="text-2xl font-extrabold text-white mb-2">
                 Receba nossas novidades
               </h3>
               <p className="text-sm text-white/60">
@@ -81,12 +81,12 @@ export default function Footer() {
                 <Leaf className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="block font-serif font-semibold text-white text-base">Instituto Ubatuba</span>
+                <span className="block font-extrabold text-white text-base">Instituto Ubatuba</span>
                 <span className="block text-xs tracking-[0.12em] uppercase text-white/50">Santuário Ecológico</span>
               </div>
             </div>
             <p className="text-sm leading-relaxed text-white/60 mb-6">
-              Promovendo a conservação socioambiental de Ubatuba por meio de parcerias, educação e inclusão social, alinhados à Agenda 2030.
+              Água limpa é vida — e proteger a nossa começa aqui. Saúde, esporte e meio ambiente para as comunidades de Ubatuba.
             </p>
             {/* Redes sociais */}
             <div>
@@ -221,11 +221,19 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-white/40">Alinhado à</span>
-            <span className="text-xs font-semibold text-earth/80 tracking-wide">ODS 18 — Bem-estar Animal</span>
+            <span className="text-xs font-semibold text-earth/80 tracking-wide">ODS 17 — Parcerias e Meios de Implementação</span>
             <span className="text-xs text-white/40">·</span>
             <span className="text-xs text-white/40">Agenda 2030</span>
           </div>
         </div>
+      </div>
+
+      {/* Onda dupla — assinatura gráfica do manual de marca (azul + amarela) */}
+      <div className="w-full overflow-hidden leading-[0]">
+        <svg viewBox="0 0 1440 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-6" preserveAspectRatio="none">
+          <path d="M0,12 C360,24 720,0 1080,12 C1260,18 1380,6 1440,12 L1440,24 L0,24 Z" fill="var(--color-azul-oceano)" />
+          <path d="M0,18 C360,24 720,12 1080,18 C1260,21 1380,15 1440,18 L1440,24 L0,24 Z" fill="var(--color-amarelo-sol)" />
+        </svg>
       </div>
     </footer>
   );

@@ -88,7 +88,7 @@ export default function Galeria() {
         </div>
         <div className="relative container text-center text-white">
           <span className="section-label block mb-4 text-white/60">Memórias e Registros</span>
-          <h1 className="font-serif text-5xl md:text-6xl font-medium text-white mb-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6">
             Galeria
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -153,7 +153,7 @@ export default function Galeria() {
                       <span className="text-xs font-semibold tracking-widest uppercase text-white/70 block mb-1">{item.category}</span>
                     )}
                     {item.title && (
-                      <h3 className="font-serif text-lg font-medium text-white">{item.title}</h3>
+                      <h3 className="text-lg font-extrabold text-white">{item.title}</h3>
                     )}
                   </div>
                 </div>
@@ -162,7 +162,7 @@ export default function Galeria() {
           ) : (
             <div className="text-center py-20 text-muted-foreground">
               <Leaf className="w-12 h-12 mx-auto mb-4 opacity-30" />
-              <p className="font-serif text-xl">Galeria em construção</p>
+              <p className="text-xl font-semibold">Galeria em construção</p>
               <p className="text-sm mt-2">Em breve, registros do santuário e das atividades do instituto</p>
             </div>
           )}
@@ -193,7 +193,7 @@ export default function Galeria() {
             {(lightboxItem.title || lightboxItem.description) && (
               <div className="mt-4 text-center">
                 {lightboxItem.title && (
-                  <h3 className="font-serif text-xl text-white mb-1">{lightboxItem.title}</h3>
+                  <h3 className="text-xl font-bold text-white mb-1">{lightboxItem.title}</h3>
                 )}
                 {lightboxItem.description && (
                   <p className="text-white/60 text-sm">{lightboxItem.description}</p>

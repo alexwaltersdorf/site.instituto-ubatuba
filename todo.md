@@ -117,3 +117,31 @@
 - [x] Adicionar carrossel de 4 fotos reais no card "Bituqueira Ecológica" (flyer, ponto de coleta, bitucas arte, coletor em árvore)
 - [x] Adicionar carrossel de 10 fotos reais no card "Feira Literária" (crianças, palco, leitura, banner, teatro, apresentação, alunos, grupo, plateia, encenação)
 - [x] Adicionar carrossel de 13 fotos reais no card "Festivais Culturais" (Festival de Pipas e Festival de Escultura na Areia)
+
+## Adequação ao Manual de Marca v1.0
+
+### Tipografia
+- [x] Substituir fonte atual por Poppins ExtraBold (títulos) + Poppins Regular (corpo)
+- [x] Implementar headlines bicolor (verde #2A502B + azul #008CBF) em títulos principais
+- [x] Ajustar hierarquia: Display 40-68px, H1 26-34px, H2 20-24px, Corpo 16-18px, Legenda 12-13px
+- [x] Tags/pílulas em caixa alta com tracking expandido
+
+### Paleta de Cores
+- [x] Atualizar cor primária para Verde Serra #2A502B
+- [x] Atualizar cor secundária para Azul Oceano #008CBF
+- [x] Atualizar cor de acento para Amarelo Sol #F4C42E
+- [x] Adicionar Laranja Praia #EC9939 como terciária
+- [x] Fundo principal: Areia #F6F1E7 (não branco puro)
+- [x] Texto principal: Tinta #122019 (não preto puro)
+- [x] Remover qualquer uso de vermelho da paleta
+
+### Informações Institucionais
+- [x] Atualizar pilares: Saúde, Esporte Social, Meio Ambiente (conforme manual)
+- [x] Verificar tom de voz: humano, esperançoso, mobilizador, próximo, transparente
+- [x] Atualizar textos para refletir "impacto, não favor" (sem assistencialismo)
+- [x] Incluir referência ODS 17 — Parcerias como base estratégica
+
+### Elementos Visuais
+- [x] Adicionar onda dupla (azul + amarela) como assinatura no rodapé
+- [x] Fundo Areia (#F6F1E7) nas seções de texto
+- [x] Bullets com ponto verde nas listas
