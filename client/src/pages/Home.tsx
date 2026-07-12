@@ -64,6 +64,14 @@ const causasData = [
     description: "Mutirões e exames gratuitos com clínicas parceiras. Já realizamos 781 exames e consultas para a comunidade em parceria com a Total Quality Medicina Diagnóstica. Prevenção e políticas públicas que cuidam de quem mais precisa.",
     image: HERO_IMAGE,
     link: "#acoes",
+    gallery: [
+      { src: "/manus-storage/saude_equipe_outubro_rosa_30c65acf.webp", alt: "Equipe de saúde no Outubro Rosa" },
+      { src: "/manus-storage/saude_palestra_comunitaria_087af887.webp", alt: "Palestra de saúde comunitária" },
+      { src: "/manus-storage/saude_grupo_mulheres_ff963075.webp", alt: "Grupo de mulheres em ação de saúde" },
+      { src: "/manus-storage/saude_evento_rosa_e8d42020.JPEG", alt: "Evento Outubro Rosa" },
+      { src: "/manus-storage/saude_ultrassom_85631ea7.webp", alt: "Exame de ultrassom gratuito" },
+      { src: "/manus-storage/saude_consulta_medica_8b0bf6d6.webp", alt: "Consulta médica comunitária" },
+    ],
   },
   {
     id: "esporte",
@@ -83,6 +91,15 @@ const causasData = [
     description: "Limpeza de praias, reflorestamento da Mata Atlântica e a Bituqueira Ecológica. Com o Projeto Itaguá Azul, protegemos os ecossistemas marinhos e terrestres de Ubatuba para as próximas gerações.",
     image: NATUREZA_IMAGE,
     link: "#acoes",
+    gallery: [
+      { src: "/manus-storage/itaguaazul_voluntarios_praia_f3eed109.jpg", alt: "Voluntários do Itaguá Azul na praia" },
+      { src: "/manus-storage/itaguaazul_grupo_limpeza_734d6de7.jpg", alt: "Grupo de voluntários em ação de limpeza" },
+      { src: "/manus-storage/itaguaazul_limpeza_praia_8b82609f.jpg", alt: "Limpeza da praia de Ubatuba" },
+      { src: "/manus-storage/itaguaazul_canoa_bc570881.jpg", alt: "Voluntárias com canoa na praia" },
+      { src: "/manus-storage/bituqueira_flyer_6acac4ec.jpg", alt: "Projeto BitucAqui" },
+      { src: "/manus-storage/bituqueira_ponto_coleta_961501c5.jpg", alt: "Ponto de coleta de bitucas" },
+      { src: "/manus-storage/bituqueira_coletor_arvore_6c62721b.jpg", alt: "Coletor de bitucas na praia" },
+    ],
   },
 ];
 
@@ -124,6 +141,70 @@ const postsDestaque = [
     publishedAt: new Date("2025-07-10"),
   },
 ];
+
+/* ── Componente: Card de Área de Atuação com Carrossel ── */
+
+function AreaAtuacaoCard({ causa }: { causa: typeof causasData[0] }) {
+  const images = causa.gallery || (causa.image ? [{ src: causa.image, alt: causa.title }] : []);
+  const [current, setCurrent] = useState(0);
+  const next = useCallback(() => setCurrent((c) => (c + 1) % images.length), [images.length]);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const timer = setInterval(next, 3500);
+    return () => clearInterval(timer);
+  }, [next, images.length]);
+
+  return (
+    <div className="rounded-xl overflow-hidden shadow-lg bg-card border border-border flex flex-col">
+      {/* Carrossel de imagens */}
+      <div className="relative h-[240px] md:h-[280px] bg-black/5">
+        {images.map((img, idx) => (
+          <img
+            key={img.src}
+            src={img.src}
+            alt={img.alt}
+            className={cn(
+              "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+              idx === current ? "opacity-100" : "opacity-0"
+            )}
+          />
+        ))}
+        {/* Overlay com título */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <causa.icon className="w-4 h-4 text-white/90" />
+            <span className="text-white/80 text-xs font-semibold uppercase tracking-wider">{causa.label}</span>
+          </div>
+          <h3 className="text-xl font-extrabold text-white">{causa.title}</h3>
+        </div>
+        {/* Dots */}
+        {images.length > 1 && (
+          <div className="absolute bottom-14 right-3 flex gap-1">
+            {images.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrent(idx)}
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all",
+                  idx === current ? "bg-white scale-125" : "bg-white/50"
+                )}
+                aria-label={`Foto ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      {/* Conteúdo */}
+      <div className="p-5 flex-1 flex flex-col">
+        <p className="text-muted-foreground text-sm leading-relaxed mb-4 flex-1">{causa.description}</p>
+        <a href="#acoes" className="btn-primary text-sm w-fit">
+          Ver ações <ArrowRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
+    </div>
+  );
+}
 
 /* ── Componente: Galeria Esporte com Carrossel ── */
 
@@ -694,7 +775,7 @@ export default function Home() {
       <WaveDivider color="var(--color-cream)" />
 
       {/* ══════════════════════════════════════════════════════════════
-          SEÇÃO DE CAUSAS COM TABS (inspirado SOS)
+          ÁREAS DE ATUAÇÃO — 3 COLUNAS COM CARROSSEL
       ══════════════════════════════════════════════════════════════ */}
       <section className="bg-cream section-padding -mt-1">
         <div className="container">
@@ -703,41 +784,11 @@ export default function Home() {
             <h2 className="section-title mx-auto">Áreas de <span className="text-azul-oceano">atuação</span></h2>
           </div>
 
-          <Tabs defaultValue="saude" className="w-full">
-            <TabsList className="w-full max-w-2xl mx-auto grid grid-cols-3 h-auto gap-2 bg-transparent p-0 mb-12">
-              {causasData.map((causa) => (
-                <TabsTrigger
-                  key={causa.id}
-                  value={causa.id}
-                  className="flex items-center gap-2 px-4 py-3 rounded-lg border border-border bg-card text-sm font-semibold data-[state=active]:bg-forest data-[state=active]:text-white data-[state=active]:border-forest transition-all"
-                >
-                  <causa.icon className="w-4 h-4" />
-                  {causa.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
+          <div className="grid md:grid-cols-3 gap-6">
             {causasData.map((causa) => (
-              <TabsContent key={causa.id} value={causa.id}>
-                {causa.gallery ? (
-                  <EsporteGalleryTab causa={causa} />
-                ) : (
-                  <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    <div className="rounded-xl overflow-hidden shadow-xl">
-                      <img src={causa.image} alt={causa.title} className="w-full h-[320px] object-cover" />
-                    </div>
-                    <div>
-                      <h3 className="text-3xl font-extrabold text-foreground mb-4">{causa.title}</h3>
-                      <p className="text-muted-foreground leading-relaxed text-lg mb-6">{causa.description}</p>
-                      <Link href={causa.link} className="btn-primary">
-                        Saiba Mais <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
+              <AreaAtuacaoCard key={causa.id} causa={causa} />
             ))}
-          </Tabs>
+          </div>
         </div>
       </section>
 
