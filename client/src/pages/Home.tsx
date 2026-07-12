@@ -155,8 +155,18 @@ function AreaAtuacaoCard({ causa }: { causa: typeof causasData[0] }) {
     return () => clearInterval(timer);
   }, [next, images.length]);
 
+  // Cor do título conforme manual de marca
+  const titleColor = causa.id === "saude" ? "text-azul-oceano" : causa.id === "esporte" ? "text-amarelo-sol" : "text-forest";
+
   return (
     <div className="rounded-xl overflow-hidden shadow-lg bg-card border border-border flex flex-col">
+      {/* Título com ícone ACIMA da imagem */}
+      <div className="px-5 pt-5 pb-3">
+        <div className="flex items-center gap-3">
+          <causa.icon className={cn("w-6 h-6", titleColor)} />
+          <h3 className={cn("text-xl font-extrabold", titleColor)}>{causa.label}</h3>
+        </div>
+      </div>
       {/* Carrossel de imagens */}
       <div className="relative h-[240px] md:h-[280px] bg-black/5">
         {images.map((img, idx) => (
@@ -170,17 +180,13 @@ function AreaAtuacaoCard({ causa }: { causa: typeof causasData[0] }) {
             )}
           />
         ))}
-        {/* Overlay com título */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-          <div className="flex items-center gap-2 mb-1">
-            <causa.icon className="w-4 h-4 text-white/90" />
-            <span className="text-white/80 text-xs font-semibold uppercase tracking-wider">{causa.label}</span>
-          </div>
-          <h3 className="text-xl font-extrabold text-white">{causa.title}</h3>
+        {/* Legenda da foto */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
+          <p className="text-white text-xs font-medium">{images[current].alt}</p>
         </div>
         {/* Dots */}
         {images.length > 1 && (
-          <div className="absolute bottom-14 right-3 flex gap-1">
+          <div className="absolute top-3 right-3 flex gap-1">
             {images.map((_, idx) => (
               <button
                 key={idx}
