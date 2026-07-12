@@ -1,6 +1,7 @@
 import { ArrowLeft, Calendar, Tag, BookOpen } from "lucide-react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
+import { postsDemo } from "@/data/postsDemo";
 
 interface Props {
   slug: string;
@@ -13,6 +14,10 @@ function formatDate(date: Date | null | undefined) {
 
 export default function NoticiaDetalhe({ slug }: Props) {
   const { data: post, isLoading, error } = trpc.posts.bySlug.useQuery({ slug });
+
+  // Fallback: se o banco não retornar o post, buscar nos dados demo
+  const demoPost = postsDemo.find((p) => p.slug === slug);
+  const displayPost = post || demoPost;
 
   if (isLoading) {
     return (
@@ -34,7 +39,7 @@ export default function NoticiaDetalhe({ slug }: Props) {
     );
   }
 
-  if (error || !post) {
+  if (!displayPost) {
     return (
       <div className="pt-20 min-h-screen">
         <div className="container py-20 text-center">
@@ -53,23 +58,23 @@ export default function NoticiaDetalhe({ slug }: Props) {
   return (
     <div className="pt-20">
       {/* ── Hero com imagem de capa ── */}
-      {post.coverImage && (
+      {displayPost.coverImage && (
         <div className="relative h-[50vh] overflow-hidden">
           <img
-            src={post.coverImage}
-            alt={post.title}
+            src={displayPost.coverImage}
+            alt={displayPost.title}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/30 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 container pb-12">
-            {post.category && (
+            {displayPost.category && (
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-white/70 mb-3 block">
                 <Tag className="w-3 h-3" />
-                {post.category}
+                {displayPost.category}
               </span>
             )}
             <h1 className="text-4xl md:text-5xl font-extrabold text-white max-w-3xl leading-tight">
-              {post.title}
+              {displayPost.title}
             </h1>
           </div>
         </div>
@@ -86,55 +91,61 @@ export default function NoticiaDetalhe({ slug }: Props) {
                 Notícias
               </Link>
               <span className="text-muted-foreground/40">/</span>
-              <span className="text-sm text-muted-foreground truncate max-w-[200px]">{post.title}</span>
+              <span className="text-sm text-muted-foreground truncate max-w-[200px]">{displayPost.title}</span>
             </div>
 
             {/* Título (se não houver imagem de capa) */}
-            {!post.coverImage && (
+            {!displayPost.coverImage && (
               <>
-                {post.category && (
+                {displayPost.category && (
                   <span className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-earth mb-4 block">
                     <Tag className="w-3 h-3" />
-                    {post.category}
+                    {displayPost.category}
                   </span>
                 )}
                 <h1 className="text-4xl md:text-5xl font-extrabold text-foreground mb-6 leading-tight">
-                  {post.title}
+                  {displayPost.title}
                 </h1>
               </>
             )}
 
             {/* Meta */}
             <div className="flex items-center gap-4 mb-8 pb-8 border-b border-border/40">
-              {post.publishedAt && (
+              {displayPost.publishedAt && (
                 <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <Calendar className="w-4 h-4" />
-                  {formatDate(post.publishedAt)}
+                  {formatDate(displayPost.publishedAt)}
                 </span>
               )}
             </div>
 
             {/* Excerpt */}
-            {post.excerpt && (
+            {displayPost.excerpt && (
               <p className="text-xl text-muted-foreground leading-relaxed mb-8 font-light italic border-l-4 border-forest/30 pl-6">
-                {post.excerpt}
+                {displayPost.excerpt}
               </p>
             )}
 
             {/* Conteúdo */}
             <div className="text-foreground leading-relaxed space-y-4">
-              {post.content.split("\n\n").map((paragraph, i) => (
-                <p key={i} className="text-base leading-[1.8] text-muted-foreground">
-                  {paragraph}
+              {displayPost.content && displayPost.content.length > 0 ? (
+                displayPost.content.split("\n\n").map((paragraph, i) => (
+                  <p key={i} className="text-base leading-[1.8] text-muted-foreground">
+                    {paragraph}
+                  </p>
+                ))
+              ) : (
+                <p className="text-base leading-[1.8] text-muted-foreground">
+                  {displayPost.excerpt}
                 </p>
-              ))}
+              )}
             </div>
 
             {/* Tags */}
-            {post.tags && (
+            {displayPost.tags && (
               <div className="mt-10 pt-8 border-t border-border/40">
                 <div className="flex flex-wrap gap-2">
-                  {JSON.parse(post.tags).map((tag: string, i: number) => (
+                  {(typeof displayPost.tags === 'string' ? JSON.parse(displayPost.tags) : displayPost.tags).map((tag: string, i: number) => (
                     <span key={i} className="px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-medium">
                       {tag}
                     </span>

@@ -1,11 +1,12 @@
 import { ArrowRight, BookOpen, Calendar, Tag } from "lucide-react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
+import { postsDemo } from "@/data/postsDemo";
 
 const HERO_IMAGE = "/manus-storage/ubatuba-praia_8ed0b366.jpg";
 
-// Matérias baseadas no conteúdo real das redes sociais do instituto
-const postsDemo = [
+/* Dados demo importados de @/data/postsDemo.ts */
+const _unused_postsDemo = [
   {
     id: 1,
     slug: "instituto-ubatuba-realiza-capacitacao-com-parceiros-em-dezembro-2025",

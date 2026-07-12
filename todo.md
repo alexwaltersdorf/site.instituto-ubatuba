@@ -152,3 +152,7 @@
 - [x] Adicionar link "Ações" no menu de navegação principal
 - [x] Garantir que o link rola até a seção de ações na Home
 - [x] Substituir tabs por 3 cards lado a lado na seção Áreas de Atuação (Saúde, Esporte Social, Meio Ambiente) com carrosséis de fotos reais
+
+## Bug Fix: Notícias não abrem conteúdo
+
+- [x] Fazer NoticiaDetalhe funcionar com fallback para postsDemo quando o banco está vazio
