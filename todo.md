@@ -145,3 +145,9 @@
 - [x] Adicionar onda dupla (azul + amarela) como assinatura no rodapé
 - [x] Fundo Areia (#F6F1E7) nas seções de texto
 - [x] Bullets com ponto verde nas listas
+
+## Integrar Ações na Página Início
+
+- [x] Mover conteúdo da página Ações (Programas) para dentro da Home
+- [x] Adicionar link "Ações" no menu de navegação principal
+- [x] Garantir que o link rola até a seção de ações na Home

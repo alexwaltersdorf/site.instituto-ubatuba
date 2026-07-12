@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const subItems = [
   { href: "/sobre", label: "Sobre Nós" },
-  { href: "/programas", label: "Ações" },
+
   { href: "/galeria", label: "Galeria" },
   { href: "/noticias", label: "Notícias" },
   { href: "/contato", label: "Contato" },
@@ -156,6 +156,19 @@ export default function Header() {
               </div>
             </div>
 
+            {/* Ações */}
+            <a
+              href="/#acoes"
+              className={cn(
+                "px-4 py-2 text-sm font-medium tracking-wide rounded-sm transition-all duration-200",
+                isLight
+                  ? "text-foreground/70 hover:text-forest hover:bg-accent/60"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
+              )}
+            >
+              Ações
+            </a>
+
             {/* Transparência */}
             <Link
               href="/transparencia"
@@ -264,6 +277,14 @@ export default function Header() {
               ))}
             </div>
           </div>
+
+          {/* Ações */}
+          <a
+            href="/#acoes"
+            className="px-4 py-3 text-sm font-medium rounded-sm transition-colors text-foreground/70 hover:text-forest hover:bg-accent/60"
+          >
+            Ações
+          </a>
 
           {/* Transparência */}
           <Link
