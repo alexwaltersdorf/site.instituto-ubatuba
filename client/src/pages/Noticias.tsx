@@ -40,7 +40,7 @@ const postsDemo = [
     id: 3,
     slug: "capacitacao-em-saude-fortalece-parceria-com-o-sus",
     title: "Capacitação em saúde fortalece parceria do instituto com o SUS",
-    excerpt: "O Instituto Ubatuba participou de capacitação sobre certificação de entidades de saúde e integração com o Sistema Único de Saúde (SUS). A iniciativa reforça a parceria com a Total Quality Medicina Diagnóstica, que já realizou 781 exames e consultas gratuitas para a comunidade.",
+    excerpt: "O Instituto Ubatuba participou de capacitação sobre certificação de entidades de saúde e integração com o Sistema Único de Saúde (SUS). A iniciativa reforça a parceria com a Total Quality Medicina Diagnóstica, que já realizou mais de 5.000 exames e atendimentos gratuitos para a comunidade.",
     coverImage: "/manus-storage/ig_foto1_2593cca7.jpg",
     category: "Saúde",
     publishedAt: new Date("2025-09-20"),

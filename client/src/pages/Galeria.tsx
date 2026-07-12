@@ -33,7 +33,7 @@ const galeriaDemo = [
     imageUrl: "/manus-storage/ig_foto4_6643d6c8.jpg",
     title: "Ações de Saúde",
     category: "Saúde",
-    description: "Projeto de saúde comunitária com 781 exames e consultas realizados",
+    description: "Projeto de saúde comunitária com + de 5.000 exames e atendimentos realizados",
   },
   {
     id: 5,
@@ -54,7 +54,7 @@ const galeriaDemo = [
     imageUrl: "/manus-storage/ubatuba-praia_8ed0b366.jpg",
     title: "Escolinha de Surfe",
     category: "Ações",
-    description: "160 crianças atendidas pela Escolinha de Surfe Social do instituto",
+    description: "+ de 3.000 aulas ministradas pela Escolinha de Surfe Social do instituto",
   },
   {
     id: 8,

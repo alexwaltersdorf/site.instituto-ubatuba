@@ -12,7 +12,7 @@ const programas = [
     categoria: "Esporte e Inclusão",
     titulo: "Escolinha de Surfe",
     descricao: "A Escolinha de Surfe do Instituto Ubatuba oferece aulas gratuitas para crianças e jovens da comunidade, promovendo o contato com o oceano, a prática esportiva e o desenvolvimento de valores como disciplina, respeito à natureza e trabalho em equipe.",
-    impacto: "160 crianças atendidas",
+    impacto: "+ de 3.000 aulas ministradas",
     detalhes: [
       "Aulas semanais na praia de Ubatuba",
       "Equipamentos fornecidos pelo instituto",
@@ -30,7 +30,7 @@ const programas = [
     categoria: "Esporte e Inclusão",
     titulo: "Escolinha de Futebol",
     descricao: "A Escolinha de Futebol reúne crianças de diferentes bairros de Ubatuba em torno do esporte mais popular do Brasil, desenvolvendo habilidades técnicas, sociais e emocionais em um ambiente seguro e acolhedor.",
-    impacto: "120 crianças atendidas",
+    impacto: "+ de 2.500 aulas ministradas",
     detalhes: [
       "Treinos regulares com metodologia pedagógica",
       "Participação em torneios regionais",
@@ -48,7 +48,7 @@ const programas = [
     categoria: "Esporte e Inclusão",
     titulo: "Escolinha de Futevôlei",
     descricao: "O futevôlei combina a destreza do futebol com a dinâmica do vôlei de praia, sendo praticado diretamente na areia de Ubatuba. A escolinha oferece uma experiência única que une esporte, praia e comunidade.",
-    impacto: "80 crianças atendidas",
+    impacto: "+ de 2.000 aulas ministradas",
     detalhes: [
       "Prática na praia com redes profissionais",
       "Desenvolvimento de coordenação motora",
@@ -112,7 +112,7 @@ const programas = [
     categoria: "Saúde Comunitária",
     titulo: "Ações de Saúde",
     descricao: "Em parceria com a Total Quality Medicina Diagnóstica, o instituto oferece exames e consultas gratuitas para a comunidade de Ubatuba, com foco nas populações mais vulneráveis e nas crianças e jovens atendidos pelos programas esportivos.",
-    impacto: "781 exames e consultas realizados · 3 bolsas de estudo",
+    impacto: "+ de 5.000 exames e atendimentos realizados",
     detalhes: [
       "Exames laboratoriais e de imagem gratuitos",
       "Consultas médicas especializadas",
@@ -291,8 +291,8 @@ export default function Programas() {
               <div className="text-sm text-white/60">Crianças nas Escolinhas</div>
             </div>
             <div>
-              <div className="text-5xl font-extrabold mb-2">781</div>
-              <div className="text-sm text-white/60">Exames e Consultas</div>
+              <div className="text-5xl font-extrabold mb-2">5.000+</div>
+              <div className="text-sm text-white/60">Exames e Atendimentos</div>
             </div>
             <div>
               <div className="text-5xl font-extrabold mb-2">3</div>
