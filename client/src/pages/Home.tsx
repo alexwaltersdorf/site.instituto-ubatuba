@@ -23,7 +23,7 @@ const heroSlides = [
   },
   {
     title: "Cada criança que entra na quadra encontra um caminho.",
-    subtitle: "360 crianças nas escolinhas de surfe, futebol e futevôlei — oportunidades reais para jovens de Ubatuba.",
+    subtitle: "+ de 7.500 aulas ministradas nas escolinhas de surfe, futebol e futevôlei — oportunidades reais para jovens de Ubatuba.",
     cta: "Veja nosso impacto",
     ctaHref: "/#acoes",
     image: PRAIA_IMAGE,
@@ -38,8 +38,8 @@ const heroSlides = [
 ];
 
 const impactNumbers = [
-  { value: "360+", label: "Crianças atendidas nas escolinhas", icon: Users },
-  { value: "781", label: "Exames e consultas realizados", icon: Stethoscope },
+  { value: "7.500+", label: "Aulas ministradas nas escolinhas", icon: Users },
+  { value: "5.000+", label: "Exames e atendimentos realizados", icon: Stethoscope },
   { value: "8", label: "Projetos socioambientais ativos", icon: TreePine },
   { value: "3", label: "Bolsas de estudo concedidas", icon: GraduationCap },
 ];
@@ -78,7 +78,7 @@ const causasData = [
     label: "Esporte Social",
     icon: Waves,
     title: "Esporte Social",
-    description: "Surfe, futebol, jiu-jitsu, futevôlei, skate e natação para crianças em vulnerabilidade. 360 crianças nas escolinhas encontram disciplina, saúde e conexão com o oceano. O esporte abre portas e constrói cidadania.",
+    description: "Surfe, futebol, jiu-jitsu, futevôlei, skate e natação para crianças em vulnerabilidade. + de 7.500 aulas ministradas nas escolinhas, promovendo disciplina, saúde e conexão com o oceano. O esporte abre portas e constrói cidadania.",
     image: PRAIA_IMAGE,
     link: "#acoes",
     gallery: esporteImages,
@@ -133,9 +133,9 @@ const postsDestaque = [
   },
   {
     id: 3,
-    slug: "escolinhas-esportivas-atingem-360-criancas-atendidas",
-    title: "Escolinhas esportivas atingem 360 crianças atendidas em Ubatuba",
-    excerpt: "As escolinhas de surfe (160), futebol (120) e futevôlei (80) alcançaram a marca de 360 crianças atendidas, consolidando o programa como referência em inclusão social.",
+    slug: "escolinhas-esportivas-ultrapassam-7500-aulas",
+    title: "Escolinhas esportivas ultrapassam 7.500 aulas ministradas em Ubatuba",
+    excerpt: "As escolinhas de surfe (+ de 3.000), futebol (+ de 2.500) e futevôlei (+ de 2.000) ultrapassaram a marca de 7.500 aulas ministradas, consolidando o programa como referência em inclusão social.",
     coverImage: "/manus-storage/ubatuba-praia_8ed0b366.jpg",
     category: "Ações",
     publishedAt: new Date("2025-07-10"),
@@ -552,12 +552,12 @@ function AcoesSection() {
         {/* Números de Impacto */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
           <div className="text-center p-6 rounded-lg bg-forest/5 border border-forest/10">
-            <div className="text-4xl font-extrabold text-forest mb-1">360+</div>
-            <div className="text-sm text-muted-foreground">Crianças nas Escolinhas</div>
+            <div className="text-4xl font-extrabold text-forest mb-1">7.500+</div>
+            <div className="text-sm text-muted-foreground">Aulas Ministradas</div>
           </div>
           <div className="text-center p-6 rounded-lg bg-ocean/5 border border-ocean/10">
-            <div className="text-4xl font-extrabold text-ocean mb-1">781</div>
-            <div className="text-sm text-muted-foreground">Exames e Consultas</div>
+            <div className="text-4xl font-extrabold text-ocean mb-1">5.000+</div>
+            <div className="text-sm text-muted-foreground">Exames e Atendimentos</div>
           </div>
           <div className="text-center p-6 rounded-lg bg-earth/5 border border-earth/10">
             <div className="text-4xl font-extrabold text-earth mb-1">3</div>

@@ -407,8 +407,8 @@ export default function Apoie() {
               </p>
               <div className="grid grid-cols-2 gap-6 mb-8">
                 {[
-                  { num: "360+", label: "Crianças atendidas" },
-                  { num: "781", label: "Exames realizados" },
+                  { num: "7.500+", label: "Aulas ministradas" },
+                  { num: "5.000+", label: "Exames e atendimentos" },
                   { num: "8+", label: "Projetos ativos" },
                   { num: "3", label: "Bolsas de estudo" },
                 ].map((stat, i) => (

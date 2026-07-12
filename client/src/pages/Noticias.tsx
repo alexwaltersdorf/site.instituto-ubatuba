@@ -68,9 +68,9 @@ const postsDemo = [
   },
   {
     id: 5,
-    slug: "escolinhas-esportivas-atingem-360-criancas-atendidas",
-    title: "Escolinhas esportivas atingem 360 crianças atendidas em Ubatuba",
-    excerpt: "As escolinhas de surfe (160 crianças), futebol (120 crianças) e futevôlei (80 crianças) do instituto alcançaram a marca de 360 crianças atendidas, consolidando o programa como referência em inclusão social pelo esporte no litoral norte paulista.",
+    slug: "escolinhas-esportivas-ultrapassam-7500-aulas",
+    title: "Escolinhas esportivas ultrapassam 7.500 aulas ministradas em Ubatuba",
+    excerpt: "As escolinhas de surfe (+ de 3.000 aulas), futebol (+ de 2.500 aulas) e futevôlei (+ de 2.000 aulas) do instituto ultrapassaram a marca de 7.500 aulas ministradas, consolidando o programa como referência em inclusão social pelo esporte no litoral norte paulista.",
     coverImage: "/manus-storage/ubatuba-praia_8ed0b366.jpg",
     category: "Ações",
     publishedAt: new Date("2025-07-10"),

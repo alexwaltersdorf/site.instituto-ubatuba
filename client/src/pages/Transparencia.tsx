@@ -384,12 +384,12 @@ export default function Transparencia() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="card-elegant p-6 text-center">
-                  <div className="text-3xl font-extrabold text-earth mb-1">360+</div>
-                  <p className="text-xs text-muted-foreground">crianças beneficiadas</p>
+                  <div className="text-3xl font-extrabold text-earth mb-1">7.500+</div>
+                  <p className="text-xs text-muted-foreground">aulas ministradas</p>
                 </div>
                 <div className="card-elegant p-6 text-center">
-                  <div className="text-3xl font-extrabold text-ocean mb-1">781</div>
-                  <p className="text-xs text-muted-foreground">atendimentos de saúde</p>
+                  <div className="text-3xl font-extrabold text-ocean mb-1">5.000+</div>
+                  <p className="text-xs text-muted-foreground">exames e atendimentos</p>
                 </div>
               </div>
               <div className="card-elegant p-6 border-l-4 border-forest">

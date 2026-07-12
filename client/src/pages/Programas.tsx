@@ -287,8 +287,8 @@ export default function Programas() {
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
             <div>
-              <div className="text-5xl font-extrabold mb-2">360+</div>
-              <div className="text-sm text-white/60">Crianças nas Escolinhas</div>
+              <div className="text-5xl font-extrabold mb-2">7.500+</div>
+              <div className="text-sm text-white/60">Aulas Ministradas</div>
             </div>
             <div>
               <div className="text-5xl font-extrabold mb-2">5.000+</div>
