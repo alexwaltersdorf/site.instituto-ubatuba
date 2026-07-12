@@ -208,7 +208,7 @@ function ImageCarouselCard({ images, titulo, impacto }: { images: { src: string;
   }, [next]);
 
   return (
-    <div className="relative h-[320px] md:h-[380px]">
+    <div className="relative h-[320px] md:h-[400px] bg-black/5">
       {/* Images */}
       {images.map((img, idx) => (
         <img
@@ -216,7 +216,7 @@ function ImageCarouselCard({ images, titulo, impacto }: { images: { src: string;
           src={img.src}
           alt={img.alt}
           className={cn(
-            "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+            "absolute inset-0 w-full h-full object-contain transition-opacity duration-700",
             idx === current ? "opacity-100" : "opacity-0"
           )}
         />

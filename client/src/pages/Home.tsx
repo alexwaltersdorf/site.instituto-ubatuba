@@ -415,14 +415,14 @@ function AcoesImageCarousel({ images, titulo }: { images: { src: string; alt: st
   }, [next]);
 
   return (
-    <div className="relative h-[280px] md:h-[340px]">
+    <div className="relative h-[320px] md:h-[400px] bg-black/5">
       {images.map((img, idx) => (
         <img
           key={img.src}
           src={img.src}
           alt={img.alt}
           className={cn(
-            "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+            "absolute inset-0 w-full h-full object-contain transition-opacity duration-700",
             idx === current ? "opacity-100" : "opacity-0"
           )}
         />
