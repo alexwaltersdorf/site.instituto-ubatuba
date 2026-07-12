@@ -1,6 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { contacts, ethicsReports, gallery, InsertContact, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertUser, posts, users } from "../drizzle/schema";
+import { contacts, ethicsReports, gallery, InsertContact, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertUser, newsletterSubscribers, posts, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -154,4 +154,17 @@ export async function getEthicsReports(limit = 50) {
   const db = await getDb();
   if (!db) return [];
   return db.select().from(ethicsReports).orderBy(desc(ethicsReports.createdAt)).limit(limit);
+}
+
+// ── Newsletter ──
+export async function subscribeNewsletter(email: string, name?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(newsletterSubscribers).values({ email, name: name ?? null, lgpdConsent: true }).onDuplicateKeyUpdate({ set: { active: true } });
+}
+
+export async function getNewsletterSubscribers(limit = 100) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(newsletterSubscribers).where(eq(newsletterSubscribers.active, true)).orderBy(desc(newsletterSubscribers.createdAt)).limit(limit);
 }

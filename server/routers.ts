@@ -14,6 +14,7 @@ import {
   getGalleryItems,
   getPostBySlug,
   getPublishedPosts,
+  subscribeNewsletter,
   updatePost,
 } from "./db";
 import { notifyOwner } from "./_core/notification";
@@ -272,6 +273,16 @@ export const appRouter = router({
     adminList: adminProcedure.query(async () => {
       return getEthicsReports();
     }),
+  }),
+
+  // ── Newsletter ──
+  newsletter: router({
+    subscribe: publicProcedure
+      .input(z.object({ email: z.string().email(), name: z.string().optional() }))
+      .mutation(async ({ input }) => {
+        await subscribeNewsletter(input.email, input.name);
+        return { success: true };
+      }),
   }),
 });
 

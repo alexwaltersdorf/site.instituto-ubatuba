@@ -86,3 +86,15 @@
 - [x] Atualizar página Apoie com seção de doação com botões de valores pré-definidos (R$30, R$50, R$100, R$200) e valor personalizado
 - [x] Webhook Stripe para confirmar pagamentos e notificar o owner
 - [x] 14 testes Vitest passando
+
+## Redesign inspirado na SOS Mata Atlântica
+
+- [x] Adicionar barra lateral flutuante com atalhos (Doar, Newsletter, WhatsApp)
+- [x] Adicionar wave dividers (ondas orgânicas) entre seções da Home
+- [x] Criar seção de Causas/Áreas com tabs (Esporte, Saúde, Conservação, Educação)
+- [x] Criar CTA de doação com fundo vibrante (dourado) na Home
+- [x] Adicionar seção de Parceiros com grid de logos
+- [x] Adicionar formulário de Newsletter no footer com LGPD
+- [x] Melhorar seção de números de impacto com ícones line-art e fundo colorido
+- [x] Transformar hero em carrossel de notícias/destaques com auto-advance
+- [x] Adicionar seção "Fique por dentro" com grid de notícias/artigos

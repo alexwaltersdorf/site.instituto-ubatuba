@@ -100,3 +100,15 @@ export const ethicsReports = mysqlTable("ethics_reports", {
 
 export type EthicsReport = typeof ethicsReports.$inferSelect;
 export type InsertEthicsReport = typeof ethicsReports.$inferInsert;
+
+// ── Newsletter ──
+export const newsletterSubscribers = mysqlTable("newsletter_subscribers", {
+  id: int("id").autoincrement().primaryKey(),
+  email: varchar("email", { length: 320 }).notNull().unique(),
+  name: varchar("name", { length: 200 }),
+  lgpdConsent: boolean("lgpdConsent").default(true).notNull(),
+  active: boolean("active").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
+export type InsertNewsletterSubscriber = typeof newsletterSubscribers.$inferInsert;

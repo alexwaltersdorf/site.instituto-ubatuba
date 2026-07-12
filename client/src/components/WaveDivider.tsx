@@ -1,0 +1,24 @@
+interface WaveDividerProps {
+  color?: string;
+  flip?: boolean;
+  className?: string;
+}
+
+export default function WaveDivider({ color = "var(--color-background)", flip = false, className = "" }: WaveDividerProps) {
+  return (
+    <div className={`w-full overflow-hidden leading-[0] ${flip ? "rotate-180" : ""} ${className}`}>
+      <svg
+        viewBox="0 0 1440 120"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-[60px] md:h-[80px]"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,120 L0,120 Z"
+          fill={color}
+        />
+      </svg>
+    </div>
+  );
+}

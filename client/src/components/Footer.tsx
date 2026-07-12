@@ -1,12 +1,77 @@
 import { Link } from "wouter";
-import { Leaf, Mail, MapPin, Phone, Instagram, Facebook, Shield, ArrowRight, Heart } from "lucide-react";
+import { Leaf, Mail, MapPin, Phone, Instagram, Facebook, Shield, ArrowRight, Heart, Send, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const subscribeMutation = trpc.newsletter.subscribe.useMutation({
+    onSuccess: () => {
+      toast.success("Inscrição realizada com sucesso! Você receberá nossas novidades em breve.");
+      setEmail("");
+    },
+    onError: (err) => {
+      if (err.message?.includes("Duplicate")) {
+        toast.info("Este e-mail já está inscrito na nossa newsletter.");
+        setEmail("");
+      } else {
+        toast.error("Erro ao realizar inscrição. Tente novamente.");
+      }
+    },
+  });
+
+  const handleNewsletter = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    subscribeMutation.mutate({ email: email.trim() });
+  };
+
   return (
     <footer className="bg-forest-dark text-white/80">
-      {/* Linha dourada decorativa */}
-      <div className="h-px bg-gradient-to-r from-transparent via-earth to-transparent opacity-60" />
+      {/* ── Newsletter Banner (estilo SOS) ── */}
+      <div id="newsletter" className="bg-forest border-b border-white/10">
+        <div className="container py-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left">
+              <h3 className="font-serif text-2xl font-medium text-white mb-2">
+                Receba nossas novidades
+              </h3>
+              <p className="text-sm text-white/60">
+                Cadastre-se e fique por dentro das ações do Instituto Ubatuba.
+              </p>
+            </div>
+            <form onSubmit={handleNewsletter} className="flex w-full md:w-auto gap-2">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Seu melhor e-mail"
+                required
+                disabled={subscribeMutation.isPending}
+                className="flex-1 md:w-72 px-4 py-3 bg-white/10 border border-white/20 rounded-sm text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-earth/60 transition-colors disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={subscribeMutation.isPending}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-earth text-white font-semibold text-sm rounded-sm hover:bg-earth/90 transition-all active:scale-[0.98] disabled:opacity-50"
+              >
+                {subscribeMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+                <span className="hidden sm:inline">Inscrever</span>
+              </button>
+            </form>
+          </div>
+          <p className="text-xs text-white/30 mt-4 text-center md:text-left">
+            Ao se inscrever, você concorda com nossa Política de Privacidade (LGPD). Seus dados não serão compartilhados com terceiros.
+          </p>
+        </div>
+      </div>
 
+      {/* ── Conteúdo principal do footer ── */}
       <div className="container py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Coluna 1 — Identidade */}
@@ -41,7 +106,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Coluna 2 — Navegação (reflete a estrutura do menu) */}
+          {/* Coluna 2 — Navegação */}
           <div>
             <h4 className="text-white font-semibold text-sm tracking-[0.12em] uppercase mb-5">Navegação</h4>
             <ul className="space-y-3">
