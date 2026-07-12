@@ -107,3 +107,8 @@
 - [x] Auto-advance do carrossel a cada 4 segundos
 - [x] Controles de navegação (setas + thumbnails clicáveis)
 - [x] 18 testes Vitest passando
+
+## Fotos Reais na Página Ações (/programas)
+
+- [x] Substituir cards com ícones por fotos reais nos projetos de Surfe, Futebol e Futevôlei
+- [x] Manter layout alternado (texto à esquerda/direita) com imagens reais

@@ -21,6 +21,7 @@ const programas = [
     color: "text-ocean",
     bg: "bg-ocean/10",
     border: "border-ocean/20",
+    image: "/manus-storage/esporte_surfe_01_4756749a.jpg",
   },
   {
     id: "futebol",
@@ -38,6 +39,7 @@ const programas = [
     color: "text-earth",
     bg: "bg-earth/10",
     border: "border-earth/20",
+    image: "/manus-storage/esporte_futebol_01_eab01f3c.jpg",
   },
   {
     id: "futevolei",
@@ -55,6 +57,7 @@ const programas = [
     color: "text-forest",
     bg: "bg-forest/10",
     border: "border-forest/20",
+    image: "/manus-storage/esporte_futevolei_01_075b0952.jpg",
   },
   {
     id: "ituaga-azul",
@@ -250,15 +253,31 @@ export default function Programas() {
                 </div>
 
                 {/* Card visual */}
-                <div className={cn("card-elegant p-10 text-center", i % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : "")}>
-                  <div className={cn("w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center", prog.bg)}>
-                    <prog.icon className={cn("w-10 h-10", prog.color)} />
-                  </div>
-                  <h3 className="font-serif text-2xl font-medium text-foreground mb-3">{prog.titulo}</h3>
-                  <p className={cn("text-3xl font-serif font-semibold mb-2", prog.color)}>
-                    {prog.impacto.split("·")[0].trim()}
-                  </p>
-                  <p className="text-sm text-muted-foreground">{prog.categoria}</p>
+                <div className={cn("rounded-xl overflow-hidden shadow-xl", i % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : "")}>
+                  {prog.image ? (
+                    <div className="relative">
+                      <img
+                        src={prog.image}
+                        alt={prog.titulo}
+                        className="w-full h-[320px] md:h-[380px] object-cover"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                        <h3 className="font-serif text-xl font-medium text-white mb-1">{prog.titulo}</h3>
+                        <p className="text-white/80 text-sm">{prog.impacto.split("·")[0].trim()}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="card-elegant p-10 text-center h-full flex flex-col items-center justify-center">
+                      <div className={cn("w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center", prog.bg)}>
+                        <prog.icon className={cn("w-10 h-10", prog.color)} />
+                      </div>
+                      <h3 className="font-serif text-2xl font-medium text-foreground mb-3">{prog.titulo}</h3>
+                      <p className={cn("text-3xl font-serif font-semibold mb-2", prog.color)}>
+                        {prog.impacto.split("·")[0].trim()}
+                      </p>
+                      <p className="text-sm text-muted-foreground">{prog.categoria}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
