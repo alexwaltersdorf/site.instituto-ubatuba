@@ -156,3 +156,7 @@
 ## Bug Fix: Notícias não abrem conteúdo
 
 - [x] Fazer NoticiaDetalhe funcionar com fallback para postsDemo quando o banco está vazio
+
+## Ajuste de Cores
+
+- [x] Trocar texto/botões amarelos para azul oceano na seção CTA com fundo verde (doação + newsletter)

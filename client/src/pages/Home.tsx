@@ -969,7 +969,7 @@ export default function Home() {
             Seja como voluntário, doador ou parceiro institucional — sua contribuição é fundamental para ampliar nosso impacto em Ubatuba e região.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/apoie#doacoes" className="inline-flex items-center gap-2 px-8 py-4 bg-earth text-white font-semibold rounded-sm hover:bg-earth/90 transition-all active:scale-[0.98]">
+            <Link href="/apoie#doacoes" className="inline-flex items-center gap-2 px-8 py-4 bg-ocean text-white font-semibold rounded-sm hover:bg-ocean/90 transition-all active:scale-[0.98]">
               Fazer uma doação
               <ArrowRight className="w-4 h-4" />
             </Link>

@@ -49,12 +49,12 @@ export default function Footer() {
                 placeholder="Seu melhor e-mail"
                 required
                 disabled={subscribeMutation.isPending}
-                className="flex-1 md:w-72 px-4 py-3 bg-white/10 border border-white/20 rounded-sm text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-earth/60 transition-colors disabled:opacity-50"
+                className="flex-1 md:w-72 px-4 py-3 bg-white/10 border border-white/20 rounded-sm text-white placeholder:text-white/40 text-sm focus:outline-none focus:border-ocean/60 transition-colors disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={subscribeMutation.isPending}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-earth text-white font-semibold text-sm rounded-sm hover:bg-earth/90 transition-all active:scale-[0.98] disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-ocean text-white font-semibold text-sm rounded-sm hover:bg-ocean/90 transition-all active:scale-[0.98] disabled:opacity-50"
               >
                 {subscribeMutation.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -148,27 +148,27 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link href="/apoie" className="group flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors">
-                  <Heart className="w-4 h-4 text-earth shrink-0" />
+                  <Heart className="w-4 h-4 text-ocean shrink-0" />
                   Apoie o Instituto
                 </Link>
               </li>
               <li>
                 <Link href="/transparencia" className="group flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors">
-                  <Shield className="w-4 h-4 text-earth shrink-0" />
+                  <Shield className="w-4 h-4 text-ocean shrink-0" />
                   Compliance &amp; Transparência
                 </Link>
               </li>
               <li>
                 <a href="https://www.instagram.com/instituto.ubatuba" target="_blank" rel="noopener noreferrer"
                   className="group flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors">
-                  <Instagram className="w-4 h-4 text-earth shrink-0" />
+                  <Instagram className="w-4 h-4 text-ocean shrink-0" />
                   Instagram
                 </a>
               </li>
               <li>
                 <a href="https://www.facebook.com/institutoubatuba" target="_blank" rel="noopener noreferrer"
                   className="group flex items-center gap-2.5 text-sm text-white/60 hover:text-white transition-colors">
-                  <Facebook className="w-4 h-4 text-earth shrink-0" />
+                  <Facebook className="w-4 h-4 text-ocean shrink-0" />
                   Facebook
                 </a>
               </li>
@@ -176,7 +176,7 @@ export default function Footer() {
             <div className="mt-6">
               <Link
                 href="/apoie"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-earth/80 text-white text-sm font-semibold rounded-sm hover:bg-earth transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-ocean/80 text-white text-sm font-semibold rounded-sm hover:bg-ocean transition-colors"
               >
                 Faça uma Doação
                 <ArrowRight className="w-4 h-4" />
@@ -189,20 +189,20 @@ export default function Footer() {
             <h4 className="text-white font-semibold text-sm tracking-[0.12em] uppercase mb-5">Contato</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-earth mt-0.5 shrink-0" />
+                <MapPin className="w-4 h-4 text-ocean mt-0.5 shrink-0" />
                 <span className="text-sm text-white/60">
                   Ubatuba, São Paulo — Brasil<br />
                   Litoral Norte do Estado
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-earth shrink-0" />
+                <Mail className="w-4 h-4 text-ocean shrink-0" />
                 <a href="mailto:ubatuba@institutoubatuba.org" className="text-sm text-white/60 hover:text-white transition-colors">
                   ubatuba@institutoubatuba.org
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-earth shrink-0" />
+                <Phone className="w-4 h-4 text-ocean shrink-0" />
                 <span className="text-sm text-white/60">(12) 99999-0000</span>
               </li>
             </ul>
@@ -221,7 +221,7 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-white/40">Alinhado à</span>
-            <span className="text-xs font-semibold text-earth/80 tracking-wide">ODS 17 — Parcerias e Meios de Implementação</span>
+            <span className="text-xs font-semibold text-ocean/80 tracking-wide">ODS 17 — Parcerias e Meios de Implementação</span>
             <span className="text-xs text-white/40">·</span>
             <span className="text-xs text-white/40">Agenda 2030</span>
           </div>
