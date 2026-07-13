@@ -410,7 +410,7 @@ export default function Apoie() {
                   { num: "7.500+", label: "Aulas ministradas" },
                   { num: "5.000+", label: "Exames e atendimentos" },
                   { num: "8+", label: "Projetos ativos" },
-                  { num: "3", label: "Bolsas de estudo" },
+                  { num: "120", label: "Bolsas de estudo" },
                 ].map((stat, i) => (
                   <div key={i} className="text-center p-5 bg-white rounded-lg border border-border/60">
                     <div className="text-3xl font-extrabold text-forest mb-1">{stat.num}</div>

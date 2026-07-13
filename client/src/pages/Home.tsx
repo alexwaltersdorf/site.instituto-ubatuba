@@ -41,7 +41,7 @@ const impactNumbers = [
   { value: "7.500+", label: "Aulas ministradas nas escolinhas", icon: Users },
   { value: "5.000+", label: "Exames e atendimentos realizados", icon: Stethoscope },
   { value: "8", label: "Projetos socioambientais ativos", icon: TreePine },
-  { value: "3", label: "Bolsas de estudo concedidas", icon: GraduationCap },
+  { value: "120", label: "Bolsas de estudo concedidas", icon: GraduationCap },
 ];
 
 const esporteImages = [
@@ -463,7 +463,7 @@ const programas = [
     detalhes: [
       "Exames laboratoriais e de imagem gratuitos",
       "Consultas médicas especializadas",
-      "3 bolsas de estudo para jovens de destaque",
+      "120 bolsas de estudo para jovens de destaque",
       "Acompanhamento de saúde dos atletas",
     ],
     color: "text-earth",
@@ -610,7 +610,7 @@ function AcoesSection() {
             <div className="text-sm text-muted-foreground">Exames e Atendimentos</div>
           </div>
           <div className="text-center p-6 rounded-lg bg-earth/5 border border-earth/10">
-            <div className="text-4xl font-extrabold text-earth mb-1">3</div>
+            <div className="text-4xl font-extrabold text-earth mb-1">120</div>
             <div className="text-sm text-muted-foreground">Bolsas de Estudo</div>
           </div>
           <div className="text-center p-6 rounded-lg bg-forest-light/5 border border-forest-light/10">

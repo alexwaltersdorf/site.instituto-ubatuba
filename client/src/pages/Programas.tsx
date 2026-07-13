@@ -116,7 +116,7 @@ const programas = [
     detalhes: [
       "Exames laboratoriais e de imagem gratuitos",
       "Consultas médicas especializadas",
-      "3 bolsas de estudo para jovens de destaque",
+      "120 bolsas de estudo para jovens de destaque",
       "Acompanhamento de saúde dos atletas",
     ],
     color: "text-earth",
@@ -295,7 +295,7 @@ export default function Programas() {
               <div className="text-sm text-white/60">Exames e Atendimentos</div>
             </div>
             <div>
-              <div className="text-5xl font-extrabold mb-2">3</div>
+              <div className="text-5xl font-extrabold mb-2">120</div>
               <div className="text-sm text-white/60">Bolsas de Estudo</div>
             </div>
             <div>
