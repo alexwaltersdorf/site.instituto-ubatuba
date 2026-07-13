@@ -160,3 +160,10 @@
 ## Ajuste de Cores
 
 - [x] Trocar texto/botões amarelos para azul oceano na seção CTA com fundo verde (doação + newsletter)
+
+## Página Mascotes
+
+- [x] Upload de todas as imagens de mascotes para o storage
+- [x] Criar página Mascotes.tsx com grid de personagens e descritivos
+- [x] Adicionar rota /mascotes no App.tsx
+- [x] Adicionar link "Mascotes" na navegação do Header

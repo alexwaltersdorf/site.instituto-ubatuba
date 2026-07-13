@@ -228,6 +228,14 @@
     background-color: var(--color-azul-oceano);
   }
 
+  .bg-ocean {
+    background-color: var(--color-ocean);
+  }
+
+  .bg-laranja {
+    background-color: var(--color-laranja-praia);
+  }
+
   /* Gradientes naturais */
   .gradient-forest {
     background: linear-gradient(135deg, oklch(0.30 0.06 144.5) 0%, oklch(0.45 0.08 144.5) 100%);
