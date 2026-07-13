@@ -694,6 +694,33 @@ export default function Home() {
   // Carrossel state
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Parallax scroll state
+  const [parallaxOffset, setParallaxOffset] = useState(0);
+  const heroImageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          // Only apply parallax within the hero area (first 150vh)
+          const maxScroll = window.innerHeight * 0.5;
+          const offset = Math.min(scrollY * 0.4, maxScroll);
+          setParallaxOffset(offset);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
   }, []);
@@ -714,99 +741,106 @@ export default function Home() {
       <FloatingSidebar />
 
       {/* ══════════════════════════════════════════════════════════════
-          HERO CARROSSEL
+          HERO CARROSSEL — com efeito parallax sticky
       ══════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Slides */}
-        {heroSlides.map((slide, i) => (
-          <div
-            key={i}
-            className={cn(
-              "absolute inset-0 transition-opacity duration-1000",
-              i === currentSlide ? "opacity-100" : "opacity-0 pointer-events-none"
-            )}
-          >
-            <img
-              src={slide.image}
-              alt={slide.title}
-              className="w-full h-full object-cover object-center"
-            />
-            <div className="absolute inset-0 gradient-hero" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-forest-dark/60" />
-          </div>
-        ))}
-
-        {/* Conteúdo do slide ativo */}
-        <div className="relative container text-center text-white pt-20">
-          <div className="max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm mb-8 animate-fade-in">
-              <Leaf className="w-3.5 h-3.5 text-white/80" />
-              <span className="text-xs font-medium tracking-[0.15em] uppercase text-white/80">
-                Ubatuba, São Paulo · ODS 17 — Parcerias
-              </span>
-            </div>
-
-            <h1
-              key={`title-${currentSlide}`}
-              className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] mb-6 animate-fade-up tracking-tight"
-            >
-              {heroSlides[currentSlide].title}
-            </h1>
-
-            <p
-              key={`sub-${currentSlide}`}
-              className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto mb-10 animate-fade-up"
-              style={{ animationDelay: "0.15s" }}
-            >
-              {heroSlides[currentSlide].subtitle}
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: "0.25s" }}>
-              <Link
-                href={heroSlides[currentSlide].ctaHref}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-forest font-semibold rounded-sm hover:bg-white/90 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-[0.98]"
-              >
-                {heroSlides[currentSlide].cta}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/apoie"
-                className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white/60 text-white font-semibold rounded-sm hover:bg-white/10 hover:border-white transition-all duration-200 active:scale-[0.98]"
-              >
-                Apoie o Instituto
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Controles do carrossel */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
-
-        {/* Indicadores */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
-          {heroSlides.map((_, i) => (
-            <button
+      <div className="relative h-[150vh]">
+        <section className="sticky top-0 min-h-screen flex items-center justify-center overflow-hidden">
+          {/* Slides */}
+          {heroSlides.map((slide, i) => (
+            <div
               key={i}
-              onClick={() => setCurrentSlide(i)}
               className={cn(
-                "w-2.5 h-2.5 rounded-full transition-all duration-300",
-                i === currentSlide ? "bg-white w-8" : "bg-white/40 hover:bg-white/60"
+                "absolute inset-0 transition-opacity duration-1000",
+                i === currentSlide ? "opacity-100" : "opacity-0 pointer-events-none"
               )}
-            />
+            >
+              <img
+                ref={i === currentSlide ? heroImageRef : undefined}
+                src={slide.image}
+                alt={slide.title}
+                className="w-full h-full object-cover object-center transition-transform duration-100 will-change-transform"
+                style={{ transform: `translateY(${parallaxOffset}px) scale(${1 + parallaxOffset * 0.0003})` }}
+              />
+              <div className="absolute inset-0 gradient-hero" />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-forest-dark/60" />
+            </div>
           ))}
-        </div>
-      </section>
+
+          {/* Conteúdo do slide ativo */}
+          <div
+            className="relative container text-center text-white pt-20"
+            style={{ transform: `translateY(${parallaxOffset * 0.3}px)`, opacity: Math.max(0, 1 - parallaxOffset * 0.003) }}
+          >
+            <div className="max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm mb-8 animate-fade-in">
+                <Leaf className="w-3.5 h-3.5 text-white/80" />
+                <span className="text-xs font-medium tracking-[0.15em] uppercase text-white/80">
+                  Ubatuba, São Paulo · ODS 17 — Parcerias
+                </span>
+              </div>
+
+              <h1
+                key={`title-${currentSlide}`}
+                className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] mb-6 animate-fade-up tracking-tight"
+              >
+                {heroSlides[currentSlide].title}
+              </h1>
+
+              <p
+                key={`sub-${currentSlide}`}
+                className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto mb-10 animate-fade-up"
+                style={{ animationDelay: "0.15s" }}
+              >
+                {heroSlides[currentSlide].subtitle}
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: "0.25s" }}>
+                <Link
+                  href={heroSlides[currentSlide].ctaHref}
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-white text-forest font-semibold rounded-sm hover:bg-white/90 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-[0.98]"
+                >
+                  {heroSlides[currentSlide].cta}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/apoie"
+                  className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white/60 text-white font-semibold rounded-sm hover:bg-white/10 hover:border-white transition-all duration-200 active:scale-[0.98]"
+                >
+                  Apoie o Instituto
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Controles do carrossel */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          {/* Indicadores */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+            {heroSlides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentSlide(i)}
+                className={cn(
+                  "w-2.5 h-2.5 rounded-full transition-all duration-300",
+                  i === currentSlide ? "bg-white w-8" : "bg-white/40 hover:bg-white/60"
+                )}
+              />
+            ))}
+          </div>
+        </section>
+      </div>
 
       {/* ══════════════════════════════════════════════════════════════
           NÚMEROS DE IMPACTO (estilo SOS — fundo colorido + ícones)

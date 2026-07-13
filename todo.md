@@ -167,3 +167,7 @@
 - [x] Criar página Mascotes.tsx com grid de personagens e descritivos
 - [x] Adicionar rota /mascotes no App.tsx
 - [x] Adicionar link "Mascotes" na navegação do Header
+
+## Efeito Parallax Hero
+
+- [x] Implementar efeito de scroll parallax no hero da Home onde a imagem desce com a página "congelada"
