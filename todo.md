@@ -197,3 +197,9 @@
 - [x] Elaborar Regimento Interno completo do Instituto
 - [x] Upload de todos os PDFs de governança para o storage
 - [x] Atualizar página de Transparência com seção de Governança e downloads
+
+## Atualização Mascotes Nomeados
+
+- [x] Upload das 27 novas imagens nomeadas dos mascotes
+- [x] Atualizar página Mascotes.tsx com nomes, significados históricos e categorias
+- [x] Destacar mascotes especiais: Alex (Presidente/Saúde), Keli (Vice/Educação), Lucas (Embaixador Jiu-Jitsu)
