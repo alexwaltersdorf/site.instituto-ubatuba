@@ -360,13 +360,7 @@ function MascotCard({ mascot }: { mascot: Mascot }) {
         />
         {/* Badge de cor */}
         <div className={`absolute top-3 right-3 w-3 h-3 rounded-full ${mascot.color} ring-2 ring-white shadow`} />
-        {/* Badge especial */}
-        {mascot.special && (
-          <div className="absolute top-3 left-3 inline-flex items-center gap-1 px-2 py-1 bg-earth/90 text-white text-[10px] font-bold rounded-full shadow-md">
-            <Star className="w-3 h-3" fill="currentColor" />
-            {mascot.special.split("—")[0].trim()}
-          </div>
-        )}
+
       </div>
 
       {/* Conteúdo */}
