@@ -384,6 +384,7 @@ function EsporteGalleryTab({ causa }: { causa: typeof causasData[0] }) {
 const programas = [
   {
     id: "surfe",
+    slug: "escolinha-de-surfe-ods-saude-educacao-oceano",
     icon: Waves,
     categoria: "Esporte e Inclusão",
     titulo: "Escolinha de Surfe",
@@ -402,6 +403,7 @@ const programas = [
   },
   {
     id: "futebol",
+    slug: "escolinha-de-futebol-ods-saude-educacao-comunidade",
     icon: Trophy,
     categoria: "Esporte e Inclusão",
     titulo: "Escolinha de Futebol",
@@ -420,6 +422,7 @@ const programas = [
   },
   {
     id: "futevolei",
+    slug: "escolinha-de-futevolei-ods-saude-inclusao",
     icon: Users,
     categoria: "Esporte e Inclusão",
     titulo: "Escolinha de Futevôlei",
@@ -438,6 +441,7 @@ const programas = [
   },
   {
     id: "ituaga-azul",
+    slug: "projeto-itagua-azul-ods-oceanos-parcerias",
     icon: Fish,
     categoria: "Conservação Ambiental",
     titulo: "Projeto Itaguá Azul",
@@ -461,6 +465,7 @@ const programas = [
   },
   {
     id: "bituqueira",
+    slug: "bituqueira-ecologica-ods-consumo-responsavel",
     icon: Leaf,
     categoria: "Conservação Ambiental",
     titulo: "Bituqueira Ecológica",
@@ -484,6 +489,7 @@ const programas = [
   },
   {
     id: "saude",
+    slug: "acoes-de-saude-ods-bem-estar-igualdade",
     icon: Stethoscope,
     categoria: "Saúde Comunitária",
     titulo: "Ações de Saúde",
@@ -509,6 +515,7 @@ const programas = [
   },
   {
     id: "educacao",
+    slug: "feira-literaria-ods-educacao-cultura",
     icon: BookOpen,
     categoria: "Educação e Cultura",
     titulo: "Feira Literária",
@@ -538,6 +545,7 @@ const programas = [
   },
   {
     id: "cultura",
+    slug: "festivais-culturais-ods-turismo-sustentavel",
     icon: Music,
     categoria: "Educação e Cultura",
     titulo: "Festivais Culturais",
@@ -597,15 +605,15 @@ function AcoesImageCarousel({ images, titulo }: { images: { src: string; alt: st
         <h3 className="text-lg font-extrabold text-white mb-1">{titulo}</h3>
         <p className="text-white/80 text-xs">{images[current].alt}</p>
       </div>
-      <button onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white transition-colors" aria-label="Anterior">
+      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); prev(); }} className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white transition-colors z-20" aria-label="Anterior">
         <ChevronLeft className="w-4 h-4" />
       </button>
-      <button onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white transition-colors" aria-label="Próxima">
+      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); next(); }} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/60 flex items-center justify-center text-white transition-colors z-20" aria-label="Próxima">
         <ChevronRight className="w-4 h-4" />
       </button>
-      <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex gap-1.5">
+      <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
         {images.map((_, idx) => (
-          <button key={idx} onClick={() => setCurrent(idx)} className={cn("w-2 h-2 rounded-full transition-all", idx === current ? "bg-white w-4" : "bg-white/50")} aria-label={`Foto ${idx + 1}`} />
+          <button key={idx} onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCurrent(idx); }} className={cn("w-2 h-2 rounded-full transition-all", idx === current ? "bg-white w-4" : "bg-white/50")} aria-label={`Foto ${idx + 1}`} />
         ))}
       </div>
     </div>
@@ -678,34 +686,45 @@ function AcoesSection() {
                     </li>
                   ))}
                 </ul>
-                <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium", prog.bg, prog.border, prog.color)}>
-                  <Heart className="w-3.5 h-3.5" />
-                  {prog.impacto}
+                <div className="flex items-center gap-3 flex-wrap">
+                  <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium", prog.bg, prog.border, prog.color)}>
+                    <Heart className="w-3.5 h-3.5" />
+                    {prog.impacto}
+                  </div>
+                  <Link href={`/noticias/${prog.slug}`} className={cn("inline-flex items-center gap-1.5 text-sm font-semibold hover:gap-2.5 transition-all", prog.color)}>
+                    Ver ação <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               </div>
 
               {/* Card visual */}
-              <div className={cn("rounded-xl overflow-hidden shadow-xl", i % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : "")}>
-                {prog.images ? (
+              {prog.images ? (
+                <div className={cn("rounded-xl overflow-hidden shadow-xl relative", i % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : "")}>
                   <AcoesImageCarousel images={prog.images} titulo={prog.titulo} />
-                ) : prog.image ? (
-                  <div className="relative">
-                    <img src={prog.image} alt={prog.titulo} className="w-full h-[280px] md:h-[340px] object-cover" />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-5">
-                      <h3 className="text-lg font-extrabold text-white mb-1">{prog.titulo}</h3>
-                      <p className="text-white/80 text-xs">{prog.impacto.split("·")[0].trim()}</p>
+                  <Link href={`/noticias/${prog.slug}`} className="absolute inset-0 z-10" aria-label={`Ler sobre ${prog.titulo}`} />
+                  {/* Buttons above the link overlay */}
+                </div>
+              ) : (
+                <Link href={`/noticias/${prog.slug}`} className={cn("rounded-xl overflow-hidden shadow-xl block group cursor-pointer", i % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : "")}>
+                  {prog.image ? (
+                    <div className="relative overflow-hidden">
+                      <img src={prog.image} alt={prog.titulo} className="w-full h-[280px] md:h-[340px] object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-5">
+                        <h3 className="text-lg font-extrabold text-white mb-1">{prog.titulo}</h3>
+                        <p className="text-white/80 text-xs">{prog.impacto.split("\u00b7")[0].trim()}</p>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="card-elegant p-10 text-center h-full flex flex-col items-center justify-center">
-                    <div className={cn("w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center", prog.bg)}>
-                      <prog.icon className={cn("w-10 h-10", prog.color)} />
+                  ) : (
+                    <div className="card-elegant p-10 text-center h-full flex flex-col items-center justify-center">
+                      <div className={cn("w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center", prog.bg)}>
+                        <prog.icon className={cn("w-10 h-10", prog.color)} />
+                      </div>
+                      <h3 className="text-2xl font-extrabold text-foreground mb-3">{prog.titulo}</h3>
+                      <p className={cn("text-3xl font-extrabold mb-2", prog.color)}>{prog.impacto.split("\u00b7")[0].trim()}</p>
                     </div>
-                    <h3 className="text-2xl font-extrabold text-foreground mb-3">{prog.titulo}</h3>
-                    <p className={cn("text-3xl font-extrabold mb-2", prog.color)}>{prog.impacto.split("·")[0].trim()}</p>
-                  </div>
-                )}
-              </div>
+                  )}
+                </Link>
+              )}
             </div>
           ))}
         </div>

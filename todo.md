@@ -184,3 +184,9 @@
 - [x] Criar post: Ações de Saúde (ODS 3, 10, 17)
 - [x] Criar post: Feira Literária (ODS 4, 10, 11)
 - [x] Criar post: Festivais Culturais (ODS 8, 11, 12, 17)
+
+## Links Ações → Blog
+
+- [x] Adicionar slug do blog em cada programa no array programas[]
+- [x] Fazer "Ver ações" direcionar para /noticias/{slug} do blog correspondente
+- [x] Fazer clique na foto da ação direcionar para /noticias/{slug} do blog correspondente
