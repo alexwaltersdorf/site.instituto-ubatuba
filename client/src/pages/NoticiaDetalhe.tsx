@@ -68,7 +68,7 @@ export default function NoticiaDetalhe({ slug }: Props) {
           <img
             src={displayPost.coverImage}
             alt={displayPost.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/30 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 container pb-12">
