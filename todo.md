@@ -190,3 +190,10 @@
 - [x] Adicionar slug do blog em cada programa no array programas[]
 - [x] Fazer "Ver ações" direcionar para /noticias/{slug} do blog correspondente
 - [x] Fazer clique na foto da ação direcionar para /noticias/{slug} do blog correspondente
+
+## Governança - Documentos
+
+- [x] Ler Estatuto Social e Ata de Posse para extrair informações
+- [x] Elaborar Regimento Interno completo do Instituto
+- [x] Upload de todos os PDFs de governança para o storage
+- [x] Atualizar página de Transparência com seção de Governança e downloads

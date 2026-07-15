@@ -46,45 +46,45 @@ const documentosPublicos = [
     cor: "text-forest",
     bg: "bg-forest/8",
     docs: [
-      { nome: "Estatuto Social", tipo: "PDF", status: "disponivel", desc: "Documento constitutivo do instituto com finalidade, estrutura e normas de funcionamento." },
-      { nome: "Ata de Fundação", tipo: "PDF", status: "disponivel", desc: "Registro oficial da constituição do Instituto Ubatuba Santuário Ecológico." },
-      { nome: "Composição do Conselho", tipo: "PDF", status: "disponivel", desc: "Lista de membros do Conselho de Administração e Conselho Fiscal com mandatos vigentes." },
-      { nome: "Regimento Interno", tipo: "PDF", status: "em_breve", desc: "Normas internas de funcionamento, atribuições e responsabilidades." },
+      { nome: "Estatuto Social (Atualizado 2025)", tipo: "PDF", status: "disponivel", desc: "Documento constitutivo do instituto com finalidade, estrutura e normas de funcionamento — versão atualizada.", url: "/manus-storage/ESTATUTO2025-ATUALIZADO_a0210599.pdf" },
+      { nome: "Estatuto Social (Fundação)", tipo: "PDF", status: "disponivel", desc: "Estatuto original aprovado na Assembleia Geral de Criação e Fundação em 30/08/2021.", url: "/manus-storage/10-ESTATUTOINSTITUTOUBATUBASANTUARIOECOLOGICO_343a2569.pdf" },
+      { nome: "Ata de Fundação (30/08/2021)", tipo: "PDF", status: "disponivel", desc: "Ata da Assembleia Geral de Criação e Fundação do Instituto Ubatuba Santuário Ecológico.", url: "/manus-storage/10-ESTATUTOINSTITUTOUBATUBASANTUARIOECOLOGICO_343a2569.pdf" },
+      { nome: "Composição do Conselho e Diretoria (2025)", tipo: "PDF", status: "disponivel", desc: "Ata de Eleição e Posse dos integrantes dos Órgãos de Administração — Diretoria Executiva e Conselho Fiscal.", url: "/manus-storage/ATADEPOSSE-ATUALIZADO2025_5c0bccec.pdf" },
+      { nome: "Regimento Interno", tipo: "PDF", status: "disponivel", desc: "Normas internas de funcionamento, atribuições, competências e responsabilidades dos órgãos de direção.", url: "/manus-storage/regimento_interno_4eefe0ff.pdf" },
+    ],
+  },
+  {
+    categoria: "Certificação OSCIP",
+    icone: Award,
+    cor: "text-earth",
+    bg: "bg-earth/8",
+    docs: [
+      { nome: "Despacho OSCIP — Ministério da Justiça", tipo: "PDF", status: "disponivel", desc: "SEI/MJ — Despacho de qualificação como Organização da Sociedade Civil de Interesse Público.", url: "/manus-storage/SEI_MJ-33323909-Despacho-OSCIP_5fe1c086.pdf" },
+      { nome: "Publicação DOU — Certificação OSCIP", tipo: "PDF", status: "disponivel", desc: "Publicação no Diário Oficial da União em 30 de outubro, confirmando a qualificação OSCIP.", url: "/manus-storage/Publicacao_30_outubro-OSCIP_40a43af2.pdf" },
+    ],
+  },
+  {
+    categoria: "Certidões Negativas",
+    icone: CheckCircle2,
+    cor: "text-ocean",
+    bg: "bg-ocean/8",
+    docs: [
+      { nome: "CND — Contas Julgadas Irregulares (TCU)", tipo: "PDF", status: "disponivel", desc: "Certidão Negativa de Débitos de Contas Julgadas Irregulares pelo Tribunal de Contas da União.", url: "/manus-storage/03-CND-CONTAS-JULGADAS-TCU_39f82166.pdf" },
+      { nome: "CND — Débitos Trabalhistas", tipo: "PDF", status: "disponivel", desc: "Certidão Negativa de Débitos Trabalhistas emitida pelo Tribunal Superior do Trabalho.", url: "/manus-storage/05-CND-DEBITOSTRABALHISTAS_5c815fbb.pdf" },
+      { nome: "CND — Improbidade Administrativa e Inelegibilidade", tipo: "PDF", status: "disponivel", desc: "Certidão Negativa de Improbidade Administrativa e Inelegibilidade do Instituto.", url: "/manus-storage/06-CND-IMPROBIDADE_16b65f4d.pdf" },
+      { nome: "CND — FGTS", tipo: "PDF", status: "disponivel", desc: "Certificado de Regularidade do FGTS emitido pela Caixa Econômica Federal.", url: "/manus-storage/07-CND-FGTS_cc6c8a11.pdf" },
+      { nome: "CND — Estadual (Fazenda do Estado de SP)", tipo: "PDF", status: "disponivel", desc: "Certidão Negativa de Débitos Tributários da Fazenda do Estado de São Paulo.", url: "/manus-storage/24-CNDESTADUAL_c5633455.pdf" },
+      { nome: "CND — Falência e Concordata", tipo: "PDF", status: "disponivel", desc: "Certidão Negativa de Falência, Concordata e Recuperação Judicial.", url: "/manus-storage/CND-FALENCIA-CONCORDATA_63b8e0c6.pdf" },
     ],
   },
   {
     categoria: "Financeiro",
     icone: BarChart3,
-    cor: "text-earth",
-    bg: "bg-earth/8",
-    docs: [
-      { nome: "Demonstrações Financeiras 2024", tipo: "PDF", status: "disponivel", desc: "Balanço patrimonial, DRE e notas explicativas auditadas por empresa independente." },
-      { nome: "Relatório de Atividades 2024", tipo: "PDF", status: "disponivel", desc: "Resultados, impacto social e aplicação de recursos do exercício." },
-      { nome: "Formulário 990 / RAIS", tipo: "PDF", status: "disponivel", desc: "Declaração anual de informações sociais e prestação de contas ao Ministério Público." },
-      { nome: "Relatório de Captação de Recursos", tipo: "PDF", status: "em_breve", desc: "Detalhamento das fontes de financiamento e uso dos recursos captados." },
-    ],
-  },
-  {
-    categoria: "Integridade",
-    icone: Scale,
-    cor: "text-ocean",
-    bg: "bg-ocean/8",
-    docs: [
-      { nome: "Código de Conduta e Ética", tipo: "PDF", status: "disponivel", desc: "Princípios e regras de comportamento para colaboradores, voluntários e parceiros." },
-      { nome: "Política Anticorrupção", tipo: "PDF", status: "disponivel", desc: "Diretrizes para prevenção, detecção e resposta a atos de corrupção." },
-      { nome: "Política de Conflito de Interesses", tipo: "PDF", status: "disponivel", desc: "Procedimentos para identificação e gestão de conflitos de interesse." },
-      { nome: "Política de Proteção de Dados (LGPD)", tipo: "PDF", status: "disponivel", desc: "Tratamento, armazenamento e proteção de dados pessoais conforme a Lei 13.709/2018." },
-    ],
-  },
-  {
-    categoria: "Parcerias Públicas",
-    icone: FileText,
     cor: "text-forest-light",
     bg: "bg-forest-light/8",
     docs: [
-      { nome: "Convênios Municipais", tipo: "PDF", status: "disponivel", desc: "Termos de fomento e contratos firmados com a Prefeitura de Ubatuba." },
-      { nome: "Parcerias com Secretaria Estadual", tipo: "PDF", status: "em_breve", desc: "Acordos com a Secretaria Estadual de Meio Ambiente e Saúde de São Paulo." },
-      { nome: "Relatório de Igualdade Salarial", tipo: "PDF", status: "disponivel", desc: "Transparência remuneratória conforme Lei nº 14.611/2023 e IN GM/MTE nº 6/2024." },
+      { nome: "Demonstrações Financeiras 2024", tipo: "PDF", status: "em_breve", desc: "Balanço patrimonial, DRE e notas explicativas auditadas por empresa independente." },
+      { nome: "Relatório de Atividades 2024", tipo: "PDF", status: "em_breve", desc: "Resultados, impacto social e aplicação de recursos do exercício." },
     ],
   },
 ];
@@ -326,7 +326,17 @@ export default function Transparencia() {
                         </div>
                       </div>
                       <div className="shrink-0">
-                        {doc.status === "disponivel" ? (
+                        {doc.status === "disponivel" && (doc as any).url ? (
+                          <a
+                            href={(doc as any).url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs font-medium text-forest hover:text-forest-dark transition-colors px-3 py-1.5 rounded-lg border border-forest/20 hover:border-forest/40 hover:bg-forest/5"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            {doc.tipo}
+                          </a>
+                        ) : doc.status === "disponivel" ? (
                           <button className="inline-flex items-center gap-1.5 text-xs font-medium text-forest hover:text-forest-dark transition-colors px-3 py-1.5 rounded-lg border border-forest/20 hover:border-forest/40 hover:bg-forest/5">
                             <Download className="w-3.5 h-3.5" />
                             {doc.tipo}
