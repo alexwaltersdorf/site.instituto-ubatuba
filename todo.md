@@ -173,3 +173,14 @@
 - [x] Implementar efeito de scroll parallax no hero da Home onde a imagem desce com a página "congelada"
 - [x] Ajustar velocidade do parallax (0.7x scroll speed, imagem 130% altura, offset 0.6x)
 - [x] Adicionar efeito de reveal (fade-in + slide-up) nas seções: Números de Impacto, Áreas de Atuação, CTA Doação, Notícias, Parceiros
+
+## Blog Posts por Ação (ODS)
+
+- [x] Criar post: Escolinha de Surfe (ODS 3, 4, 10, 14)
+- [x] Criar post: Escolinha de Futebol (ODS 3, 4, 10, 11)
+- [x] Criar post: Escolinha de Futevôlei (ODS 3, 4, 10)
+- [x] Criar post: Projeto Itaguá Azul (ODS 6, 14, 15, 17)
+- [x] Criar post: Bituqueira Ecológica (ODS 12, 14, 15)
+- [x] Criar post: Ações de Saúde (ODS 3, 10, 17)
+- [x] Criar post: Feira Literária (ODS 4, 10, 11)
+- [x] Criar post: Festivais Culturais (ODS 8, 11, 12, 17)
