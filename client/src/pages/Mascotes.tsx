@@ -352,11 +352,11 @@ function MascotCard({ mascot }: { mascot: Mascot }) {
   return (
     <div className="group bg-white rounded-xl shadow-sm border border-forest/10 overflow-hidden hover:shadow-lg hover:border-ocean/30 transition-all duration-300">
       {/* Imagem */}
-      <div className="relative aspect-square overflow-hidden bg-cream">
+      <div className="relative aspect-[3/4] overflow-hidden bg-cream">
         <img
           src={mascot.image}
           alt={mascot.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
         />
         {/* Badge de cor */}
         <div className={`absolute top-3 right-3 w-3 h-3 rounded-full ${mascot.color} ring-2 ring-white shadow`} />
