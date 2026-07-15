@@ -1,4 +1,5 @@
 import { ArrowLeft, Calendar, Tag, BookOpen } from "lucide-react";
+import { useEffect } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { postsDemo } from "@/data/postsDemo";
@@ -13,6 +14,10 @@ function formatDate(date: Date | null | undefined) {
 }
 
 export default function NoticiaDetalhe({ slug }: Props) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [slug]);
+
   const { data: post, isLoading, error } = trpc.posts.bySlug.useQuery({ slug });
 
   // Fallback: se o banco não retornar o post, buscar nos dados demo
