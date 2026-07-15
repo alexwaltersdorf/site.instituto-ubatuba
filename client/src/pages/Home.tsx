@@ -142,6 +142,35 @@ const postsDestaque = [
   },
 ];
 
+/* ── Componente: RevealSection — fade-in + slide-up ao entrar na viewport ── */
+
+function RevealSection({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.15 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      ref={ref}
+      className={cn(
+        className,
+        "transition-all duration-700 ease-out",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      )}
+    >
+      {children}
+    </section>
+  );
+}
+
 /* ── Componente: Contador de Impacto com animação count-up ── */
 
 function ImpactCounter({ item, delay }: { item: { value: string; label: string; icon: any }; delay: number }) {
@@ -707,9 +736,9 @@ export default function Home() {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const scrollY = window.scrollY;
-          // Only apply parallax within the hero area (first 150vh)
-          const maxScroll = window.innerHeight * 0.5;
-          const offset = Math.min(scrollY * 0.4, maxScroll);
+          // Stronger parallax: image moves at 70% of scroll speed
+          const maxScroll = window.innerHeight * 1.2;
+          const offset = Math.min(scrollY * 0.7, maxScroll);
           setParallaxOffset(offset);
           ticking = false;
         });
@@ -755,8 +784,8 @@ export default function Home() {
             <img
               src={slide.image}
               alt={slide.title}
-              className="absolute inset-0 w-full h-[120%] object-cover object-center will-change-transform"
-              style={{ transform: `translateY(${-parallaxOffset * 0.5}px)` }}
+              className="absolute inset-0 w-full h-[130%] object-cover object-center will-change-transform"
+              style={{ transform: `translateY(${-parallaxOffset * 0.6}px)` }}
             />
             <div className="absolute inset-0 gradient-hero" />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-forest-dark/60" />
@@ -766,7 +795,7 @@ export default function Home() {
         {/* Conteúdo do slide ativo — sobe e desaparece ao rolar */}
         <div
           className="relative container text-center text-white pt-20"
-          style={{ transform: `translateY(${-parallaxOffset * 0.25}px)`, opacity: Math.max(0, 1 - parallaxOffset * 0.004) }}
+          style={{ transform: `translateY(${-parallaxOffset * 0.4}px)`, opacity: Math.max(0, 1 - parallaxOffset * 0.005) }}
         >
           <div className="max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm mb-8 animate-fade-in">
@@ -839,9 +868,9 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          NÚMEROS DE IMPACTO (estilo SOS — fundo colorido + ícones)
+          NÚMEROS DE IMPACTO (estilo SOS — fundo colorido + ícones) com reveal
       ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-forest relative py-8 md:py-10 overflow-hidden">
+      <RevealSection className="bg-forest relative py-8 md:py-10 overflow-hidden">
         <div className="container">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {impactNumbers.map((item, i) => (
@@ -849,7 +878,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </RevealSection>
 
       {/* Wave divider */}
       <WaveDivider color="var(--color-cream)" />
@@ -857,7 +886,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════
           ÁREAS DE ATUAÇÃO — 3 COLUNAS COM CARROSSEL
       ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-cream py-10 md:py-14 -mt-1">
+      <RevealSection className="bg-cream py-10 md:py-14 -mt-1">
         <div className="container">
           <div className="text-center mb-12">
             <span className="section-label block mb-4">Nossas Causas</span>
@@ -870,7 +899,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </RevealSection>
 
       {/* ══════════════════════════════════════════════════════════════
           AÇÕES E PROJETOS (integrado da página Programas)
@@ -880,7 +909,7 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════
           CTA DE DOAÇÃO VIBRANTE (estilo SOS — fundo dourado)
       ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-earth py-12 md:py-16">
+      <RevealSection className="bg-earth py-12 md:py-16">
         <div className="container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
@@ -900,12 +929,12 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </RevealSection>
 
       {/* ══════════════════════════════════════════════════════════════
           FIQUE POR DENTRO — Notícias e Artigos (estilo SOS)
       ══════════════════════════════════════════════════════════════ */}
-      <section className="section-padding bg-background">
+      <RevealSection className="section-padding bg-background">
         <div className="container">
           <div className="text-center mb-14">
             <span className="section-label block mb-4">Blog e Notícias</span>
@@ -948,12 +977,12 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </RevealSection>
 
       {/* ══════════════════════════════════════════════════════════════
           PARCEIROS (estilo SOS — grid de logos)
       ══════════════════════════════════════════════════════════════ */}
-      <section className="section-padding bg-sand">
+      <RevealSection className="section-padding bg-sand">
         <div className="container">
           <div className="text-center mb-12">
             <span className="section-label block mb-4">Rede de Apoio</span>
@@ -980,7 +1009,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </RevealSection>
 
       {/* ══════════════════════════════════════════════════════════════
           BANNER APOIE (mantido — imagem + CTA)

@@ -171,3 +171,5 @@
 ## Efeito Parallax Hero
 
 - [x] Implementar efeito de scroll parallax no hero da Home onde a imagem desce com a página "congelada"
+- [x] Ajustar velocidade do parallax (0.7x scroll speed, imagem 130% altura, offset 0.6x)
+- [x] Adicionar efeito de reveal (fade-in + slide-up) nas seções: Números de Impacto, Áreas de Atuação, CTA Doação, Notícias, Parceiros
