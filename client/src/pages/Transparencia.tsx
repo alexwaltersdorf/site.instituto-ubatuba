@@ -333,8 +333,8 @@ export default function Transparencia() {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 text-xs font-medium text-forest hover:text-forest-dark transition-colors px-3 py-1.5 rounded-lg border border-forest/20 hover:border-forest/40 hover:bg-forest/5"
                           >
-                            <Download className="w-3.5 h-3.5" />
-                            {doc.tipo}
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            Abrir {doc.tipo}
                           </a>
                         ) : doc.status === "disponivel" ? (
                           <button className="inline-flex items-center gap-1.5 text-xs font-medium text-forest hover:text-forest-dark transition-colors px-3 py-1.5 rounded-lg border border-forest/20 hover:border-forest/40 hover:bg-forest/5">
