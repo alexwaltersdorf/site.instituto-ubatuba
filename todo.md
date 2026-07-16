@@ -203,3 +203,14 @@
 - [x] Upload das 27 novas imagens nomeadas dos mascotes
 - [x] Atualizar página Mascotes.tsx com nomes, significados históricos e categorias
 - [x] Destacar mascotes especiais: Alex (Presidente/Saúde), Keli (Vice/Educação), Lucas (Embaixador Jiu-Jitsu)
+
+## Emendas Parlamentares - Transparência
+
+- [x] Processar planilha Excel com dados das emendas
+- [x] Pesquisar fotos e perfis dos parlamentares
+- [x] Upload das fotos dos parlamentares
+- [x] Criar página de Emendas Parlamentares com tabela, filtros e perfis dos deputados/senadores
+- [x] Adicionar link na página de Transparência para a seção de emendas
+- [x] Expandir para todos os partidos (PT, PSDB, PSD, PP, MDB/Podemos além do PL)
+- [x] Incluir descrição da meta/área de aplicação de cada emenda
+- [x] Adicionar perfis de todos os 17 parlamentares com foto e bio

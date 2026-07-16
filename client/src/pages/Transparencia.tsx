@@ -234,6 +234,7 @@ export default function Transparencia() {
               { href: "#integridade", label: "Integridade" },
               { href: "#canal-etica", label: "Canal de Ética" },
               { href: "#certificacoes", label: "Certificações" },
+              { href: "/emendas-parlamentares", label: "Emendas Parlamentares" },
             ].map((item) => (
               <a
                 key={item.href}
@@ -353,6 +354,24 @@ export default function Transparencia() {
               </SecaoColapsavel>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Banner Emendas Parlamentares ── */}
+      <section className="py-10 bg-forest/5">
+        <div className="container">
+          <Link href="/emendas-parlamentares" className="block group">
+            <div className="bg-white rounded-2xl border border-forest/10 p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 hover:shadow-lg transition-all hover:border-ocean/30">
+              <div className="w-16 h-16 rounded-full bg-ocean/10 flex items-center justify-center shrink-0">
+                <BarChart3 className="w-8 h-8 text-ocean" />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-xl font-bold text-forest mb-1">Emendas Parlamentares para Ubatuba</h3>
+                <p className="text-sm text-forest/70">Consulte todas as emendas parlamentares destinadas ao município de Ubatuba com valores, parlamentares, datas e links para o Portal da Transparência.</p>
+              </div>
+              <ArrowRight className="w-6 h-6 text-ocean group-hover:translate-x-1 transition-transform shrink-0" />
+            </div>
+          </Link>
         </div>
       </section>
 

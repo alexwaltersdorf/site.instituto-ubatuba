@@ -17,6 +17,7 @@ import NoticiaDetalhe from "./pages/NoticiaDetalhe";
 import Transparencia from "./pages/Transparencia";
 import Obrigado from "./pages/Obrigado";
 import Mascotes from "./pages/Mascotes";
+import EmendasParlamentares from "./pages/EmendasParlamentares";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -41,6 +42,7 @@ function Router() {
       <Route path="/noticias/:slug" component={({ params }) => <Layout><NoticiaDetalhe slug={params.slug} /></Layout>} />
       <Route path="/transparencia" component={() => <Layout><Transparencia /></Layout>} />
       <Route path="/mascotes" component={() => <Layout><Mascotes /></Layout>} />
+      <Route path="/emendas-parlamentares" component={() => <Layout><EmendasParlamentares /></Layout>} />
       <Route path="/obrigado" component={() => <Obrigado />} />
       <Route component={NotFound} />
     </Switch>
