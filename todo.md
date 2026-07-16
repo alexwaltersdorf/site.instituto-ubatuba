@@ -214,3 +214,10 @@
 - [x] Expandir para todos os partidos (PT, PSDB, PSD, PP, MDB/Podemos além do PL)
 - [x] Incluir descrição da meta/área de aplicação de cada emenda
 - [x] Adicionar perfis de todos os 17 parlamentares com foto e bio
+
+## Deploy Hostinger via GitHub
+
+- [x] Configurar scripts de build compatíveis com Hostinger (Node.js 22 + Express)
+- [x] Criar arquivo de configuração para Hostinger (.nvmrc, .npmrc, engines)
+- [x] Documentar variáveis de ambiente necessárias (HOSTINGER-DEPLOY.md)
+- [ ] Salvar checkpoint para sincronizar com GitHub e acionar deploy automático
