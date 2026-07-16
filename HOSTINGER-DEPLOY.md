@@ -8,14 +8,14 @@ Na seção "Configurações de compilação e saída" do painel da Hostinger:
 |-------|-------|
 | **Framework** | Express |
 | **Versão do Node** | 22.x |
-| **Build command** | `npm install --include=dev && npm run build` |
+| **Build command** | `npm install --legacy-peer-deps && npm run build` |
 | **Output directory** | `dist` |
 | **Entry file** | `dist/index.js` |
 | **Diretório raiz** | `.` (raiz) |
 
-> **Importante:** O build command usa `npm install --include=dev` para garantir que as devDependencies (TypeScript, Vite, esbuild, etc.) sejam instaladas antes de compilar.
+> **Importante:** O repositório agora usa `package-lock.json` (npm) em vez de `pnpm-lock.yaml`. Isso garante que o npm execute corretamente os build scripts do esbuild, evitando o erro EACCES que ocorria com pnpm.
 >
-> O script `scripts/fix-esbuild.cjs` é executado automaticamente no início do `npm run build` para corrigir permissões do binário nativo do esbuild (problema EACCES em ambientes onde pnpm ignora build scripts de dependências).
+> O `--legacy-peer-deps` é necessário para resolver conflitos de peer dependencies entre plugins.
 
 ## Variáveis de Ambiente
 
