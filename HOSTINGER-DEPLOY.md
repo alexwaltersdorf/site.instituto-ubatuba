@@ -14,6 +14,8 @@ Na seção "Configurações de compilação e saída" do painel da Hostinger:
 | **Diretório raiz** | `.` (raiz) |
 
 > **Importante:** O build command usa `npm install --include=dev` para garantir que as devDependencies (TypeScript, Vite, esbuild, etc.) sejam instaladas antes de compilar.
+>
+> O script `scripts/fix-esbuild.cjs` é executado automaticamente no início do `npm run build` para corrigir permissões do binário nativo do esbuild (problema EACCES em ambientes onde pnpm ignora build scripts de dependências).
 
 ## Variáveis de Ambiente
 
@@ -70,6 +72,10 @@ O site usa MySQL/TiDB. Você pode:
 3. A Hostinger detecta o push no GitHub e reimplanta automaticamente
 
 ## Solução de Problemas
+
+### Build falha com "EACCES" ou "spawn esbuild EACCES"
+- O script `scripts/fix-esbuild.cjs` já corrige isso automaticamente
+- Se persistir, tente usar como build command: `npm install --include=dev && chmod +x node_modules/.pnpm/@esbuild+linux-x64@*/node_modules/@esbuild/linux-x64/bin/esbuild && npm run build`
 
 ### Build falha com "module not found"
 - Verifique se o build command inclui `--include=dev`

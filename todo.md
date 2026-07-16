@@ -220,4 +220,4 @@
 - [x] Configurar scripts de build compatíveis com Hostinger (Node.js 22 + Express)
 - [x] Criar arquivo de configuração para Hostinger (.nvmrc, .npmrc, engines)
 - [x] Documentar variáveis de ambiente necessárias (HOSTINGER-DEPLOY.md)
-- [ ] Salvar checkpoint para sincronizar com GitHub e acionar deploy automático
+- [x] Salvar checkpoint para sincronizar com GitHub e acionar deploy automático
