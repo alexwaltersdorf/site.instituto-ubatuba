@@ -199,14 +199,31 @@
 - [x] Atualizar página de Transparência com seção de Governança e downloads
 
 ## SEO - Otimização para Motores de Busca
-
-- [ ] Criar server/_core/routes-metadata.ts com meta tags de todas as páginas
-- [ ] Criar componente SEOHead com hooks useCanonical e useMetaDescription
-- [ ] Implementar injeção server-side de meta tags no vite.ts
-- [ ] Criar rota /sitemap.xml dinâmica
-- [ ] Criar rota /robots.txt
-- [ ] Integrar SEOHead em todas as páginas existentes
-- [ ] Adicionar Open Graph tags (og:title, og:description, og:image, og:url)
-- [ ] Adicionar canonical URLs em todas as páginas
-- [ ] Testar meta tags com curl em todas as rotas
+- [x] Criar server/_core/routes-metadata.ts com meta tags de todas as páginas
+- [x] Criar componente SEOHead com hooks useCanonical e useMetaDescription
+- [x] Implementar injeção server-side de meta tags no vite.ts
+- [x] Criar rota /sitemap.xml dinâmica
+- [x] Criar rota /robots.txt
+- [x] Integrar SEOHead em todas as páginas existentes
+- [x] Adicionar Open Graph tags (og:title, og:description, og:image, og:url)
+- [x] Adicionar canonical URLs em todas as páginas
+- [x] Testar meta tags com curl em todas as rotas
 - [ ] Corrigir deploy Manus (pnpm allowBuilds no pnpm-workspace.yaml)
+## Atualização Mascotes Nomeados
+- [x] Upload das 27 novas imagens nomeadas dos mascotes
+- [x] Atualizar página Mascotes.tsx com nomes, significados históricos e categorias
+- [x] Destacar mascotes especiais: Alex (Presidente/Saúde), Keli (Vice/Educação), Lucas (Embaixador Jiu-Jitsu)
+## Emendas Parlamentares - Transparência
+- [x] Processar planilha Excel com dados das emendas
+- [x] Pesquisar fotos e perfis dos parlamentares
+- [x] Upload das fotos dos parlamentares
+- [x] Criar página de Emendas Parlamentares com tabela, filtros e perfis dos deputados/senadores
+- [x] Adicionar link na página de Transparência para a seção de emendas
+- [x] Expandir para todos os partidos (PT, PSDB, PSD, PP, MDB/Podemos além do PL)
+- [x] Incluir descrição da meta/área de aplicação de cada emenda
+- [x] Adicionar perfis de todos os 17 parlamentares com foto e bio
+## Deploy Hostinger via GitHub
+- [x] Configurar scripts de build compatíveis com Hostinger (Node.js 22 + Express)
+- [x] Criar arquivo de configuração para Hostinger (.nvmrc, .npmrc, engines)
+- [x] Documentar variáveis de ambiente necessárias (HOSTINGER-DEPLOY.md)
+- [x] Salvar checkpoint para sincronizar com GitHub e acionar deploy automático
