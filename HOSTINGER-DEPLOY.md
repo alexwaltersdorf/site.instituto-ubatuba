@@ -1,6 +1,12 @@
 # Deploy na Hostinger - Instituto Ubatuba
 
-## Configurações de Build na Hostinger
+> ⚠️ **REGRAS INVIOLÁVEIS DE BUILD**: antes de mexer em qualquer configuração
+> de build/instalação, leia [`references/hostinger-deploy-rules.md`](references/hostinger-deploy-rules.md).
+> Em especial: **nunca** whitelistar `esbuild` em `onlyBuiltDependencies`/`allowBuilds`
+> e **nunca** remover `.pnpmfile.cjs`, `scripts/fix-esbuild.cjs` ou o script
+> `postinstall` do `package.json`.
+
+## Configurações de Build na Hostinger (estado real do painel, 2026-07-17)
 
 Na seção "Configurações de compilação e saída" do painel da Hostinger:
 
@@ -8,14 +14,17 @@ Na seção "Configurações de compilação e saída" do painel da Hostinger:
 |-------|-------|
 | **Framework** | Express |
 | **Versão do Node** | 22.x |
-| **Build command** | `npm install --legacy-peer-deps && npm run build` |
-| **Output directory** | `dist` |
+| **Comando de instalação** | `pnpm install` (o build roda via `postinstall` do package.json) |
 | **Entry file** | `dist/index.js` |
-| **Diretório raiz** | `.` (raiz) |
+| **Diretório raiz** | `./` |
 
-> **Importante:** O repositório agora usa `package-lock.json` (npm) em vez de `pnpm-lock.yaml`. Isso garante que o npm execute corretamente os build scripts do esbuild, evitando o erro EACCES que ocorria com pnpm.
->
-> O `--legacy-peer-deps` é necessário para resolver conflitos de peer dependencies entre plugins.
+> **Importante:** apesar de o repositório conter `package-lock.json`, o painel
+> da Hostinger está configurado com `pnpm install` — é o pnpm que roda no deploy.
+> O pnpm v10 pula os build scripts do esbuild (desde que ele NÃO esteja
+> whitelistado), e o `postinstall` do projeto gera o `dist/` chamando
+> `node scripts/fix-esbuild.cjs && vite build && esbuild ...`.
+> O erro `EACCES` histórico acontecia quando o postinstall do esbuild era
+> executado no ambiente da Hostinger — ver regras acima.
 
 ## Variáveis de Ambiente
 
@@ -73,9 +82,20 @@ O site usa MySQL/TiDB. Você pode:
 
 ## Solução de Problemas
 
-### Build falha com "EACCES" ou "spawn esbuild EACCES"
-- O script `scripts/fix-esbuild.cjs` já corrige isso automaticamente
-- Se persistir, tente usar como build command: `npm install --include=dev && chmod +x node_modules/.pnpm/@esbuild+linux-x64@*/node_modules/@esbuild/linux-x64/bin/esbuild && npm run build`
+### Build falha com "EACCES" + "esbuild ... install.js" + "Failed to install dependencies"
+- Causa: alguém whitelistou o `esbuild` em `onlyBuiltDependencies`/`allowBuilds`
+  (`pnpm-workspace.yaml` ou `package.json`), fazendo o pnpm da Hostinger executar
+  o postinstall do esbuild — que sempre falha lá com EACCES.
+- Correção: **remova o esbuild (e `@esbuild/*`) de qualquer whitelist de builds**
+  e faça novo push. O `.pnpmfile.cjs` cuida do lado Manus (ERR_PNPM_IGNORED_BUILDS)
+  e o `scripts/fix-esbuild.cjs` cuida do chmod antes do build.
+- Referência completa: `references/hostinger-deploy-rules.md`. Deploy bom: commit `486064e`.
+
+### Páginas /cursos/:slug ou /meus-certificados quebram com "TypeError: Invalid URL"
+- Causa: `getLoginUrl()` avaliado em render/default parameter sem as envs de
+  OAuth (a Hostinger builda sem `VITE_OAUTH_PORTAL_URL`/`VITE_APP_ID`).
+- Correção: avaliar `getLoginUrl()` apenas no clique/redirect e manter os
+  fallbacks hardcoded em `client/src/const.ts` e `server/_core/env.ts`.
 
 ### Build falha com "module not found"
 - Verifique se o build command inclui `--include=dev`

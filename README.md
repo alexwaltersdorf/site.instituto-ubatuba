@@ -4,6 +4,34 @@ This template gives you a React 19 + Tailwind 4 + Express 4 + tRPC 11 stack with
 
 ---
 
+## ⚠️ CRÍTICO — Deploy automático na Hostinger (LEIA ANTES DE ALTERAR CONFIG)
+
+Este projeto é publicado em **institutoubatuba.org via Hostinger**, com deploy
+automático a cada push em `main`. O ambiente de build da Hostinger tem
+restrições que já quebraram 20+ deploys seguidos. **Antes de alterar
+`pnpm-workspace.yaml`, `.npmrc`, `.pnpmfile.cjs`, `scripts/fix-esbuild.cjs`
+ou os scripts `build`/`postinstall` do `package.json`, leia e obedeça
+[`references/hostinger-deploy-rules.md`](references/hostinger-deploy-rules.md).**
+
+Resumo das regras invioláveis:
+
+1. **NUNCA** adicionar `esbuild` ou `@esbuild/*` em `onlyBuiltDependencies`/
+   `allowBuilds` (nem no `pnpm-workspace.yaml`, nem no `package.json`) — o
+   postinstall do esbuild falha com `EACCES` na Hostinger e derruba TODOS os
+   deploys. Se o Manus acusar `ERR_PNPM_IGNORED_BUILDS`, a solução já existe:
+   o `.pnpmfile.cjs` da raiz (não deletar).
+2. **NUNCA** remover `.pnpmfile.cjs`, `scripts/fix-esbuild.cjs` ou o script
+   `postinstall` do `package.json` — é ele que gera o `dist/` na Hostinger.
+3. `.npmrc` contém apenas `legacy-peer-deps=true`.
+4. Código client que usa envs `VITE_*` deve tolerar env ausente (a Hostinger
+   builda sem as envs da Manus). Nunca chamar `getLoginUrl()` em render/default
+   parameter — só em clique/redirect. Manter os fallbacks de OAuth em
+   `client/src/const.ts` e `server/_core/env.ts`.
+5. Antes do push: `pnpm install` limpo não pode exibir nenhuma linha
+   `esbuild postinstall$ node install.js` e deve terminar gerando `dist/`.
+
+---
+
 ## Quick Facts
 
 - **tRPC-first:** define procedures in `server/routers.ts`, consume them with `trpc.*` hooks.
