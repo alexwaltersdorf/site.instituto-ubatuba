@@ -9,8 +9,10 @@ type UseAuthOptions = {
 };
 
 export function useAuth(options?: UseAuthOptions) {
-  const { redirectOnUnauthenticated = false, redirectPath = getLoginUrl() } =
-    options ?? {};
+  // getLoginUrl() não pode ser default parameter: seria avaliado em todo
+  // render e lança "Invalid URL" quando as envs de OAuth não estão definidas
+  // no build (ex.: Hostinger). Avaliamos só no momento do redirect.
+  const { redirectOnUnauthenticated = false, redirectPath } = options ?? {};
   const utils = trpc.useUtils();
 
   const meQuery = trpc.auth.me.useQuery(undefined, {
@@ -65,9 +67,10 @@ export function useAuth(options?: UseAuthOptions) {
     if (meQuery.isLoading || logoutMutation.isPending) return;
     if (state.user) return;
     if (typeof window === "undefined") return;
-    if (window.location.pathname === redirectPath) return;
+    const target = redirectPath ?? getLoginUrl();
+    if (!target || window.location.pathname === target) return;
 
-    window.location.href = redirectPath
+    window.location.href = target;
   }, [
     redirectOnUnauthenticated,
     redirectPath,
