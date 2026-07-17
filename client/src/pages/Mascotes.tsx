@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Sparkles, Users, Heart, Leaf, Dumbbell, BookOpen, Palette } from "lucide-react";
+import { useSEO } from "@/components/SEOHead";
+
 
 /* ═══════════════════════════════════════════════════════════════
    MASCOTES DO INSTITUTO UBATUBA
@@ -380,6 +382,15 @@ function MascotCard({ mascot }: { mascot: Mascot }) {
 
 // ── Página Principal ──
 export default function Mascotes() {
+  useSEO({
+    title: "Mascotes | Instituto Ubatuba Santuário Ecológico",
+    description: "Conheça os mascotes do Instituto Ubatuba: personagens que representam a fauna local e educam sobre conservação ambiental de forma lúdica.",
+    keywords: "mascotes instituto ubatuba, personagens fauna, educação ambiental, conservação lúdica, animais ubatuba",
+    canonical: "/mascotes",
+    ogTitle: "Mascotes | Instituto Ubatuba",
+    ogDescription: "Personagens que representam a fauna local e educam sobre conservação ambiental.",
+  });
+
   const [activeCategory, setActiveCategory] = useState<Category>("todos");
 
   const filteredMascots =

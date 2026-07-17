@@ -1,4 +1,6 @@
 import { Leaf, Target, Eye, Heart, Users, Shield, Lightbulb, Scale, TreePine, Star } from "lucide-react";
+import { useSEO } from "@/components/SEOHead";
+
 
 const MATA_IMAGE = "/manus-storage/santuario-mata_c008072f.jpg";
 const NATUREZA_IMAGE = "/manus-storage/ubatuba-natureza_083c332c.png";
@@ -21,6 +23,15 @@ const equipe = [
 ];
 
 export default function Sobre() {
+  useSEO({
+    title: "Sobre Nós | Instituto Ubatuba Santuário Ecológico",
+    description: "Conheça a história, missão, visão e valores do Instituto Ubatuba. Atuamos desde 2019 promovendo inclusão social, saúde e conservação ambiental em Ubatuba-SP.",
+    keywords: "sobre instituto ubatuba, história, missão, visão, valores, ODS, conservação, ubatuba",
+    canonical: "/sobre",
+    ogTitle: "Sobre o Instituto Ubatuba",
+    ogDescription: "Nossa história, missão e valores. Atuamos com saúde, esporte social e meio ambiente em Ubatuba-SP.",
+  });
+
   return (
     <div className="pt-20">
       {/* ── Hero da Página ── */}

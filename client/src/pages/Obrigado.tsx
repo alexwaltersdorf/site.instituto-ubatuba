@@ -4,8 +4,19 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSEO } from "@/components/SEOHead";
+
 
 export default function Obrigado() {
+  useSEO({
+    title: "Obrigado pela Doação | Instituto Ubatuba",
+    description: "Agradecemos sua contribuição ao Instituto Ubatuba. Sua doação ajuda a transformar vidas em Ubatuba.",
+    keywords: "obrigado doação, confirmação pagamento, instituto ubatuba",
+    canonical: "/obrigado",
+    ogTitle: "Obrigado! | Instituto Ubatuba",
+    ogDescription: "Sua doação faz a diferença. Obrigado por apoiar o Instituto Ubatuba.",
+  });
+
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {

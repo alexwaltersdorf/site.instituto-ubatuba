@@ -2,6 +2,8 @@ import { useState } from "react";
 import { X, ZoomIn, Leaf } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { cn } from "@/lib/utils";
+import { useSEO } from "@/components/SEOHead";
+
 
 const HERO_IMAGE = "/manus-storage/ubatuba-natureza_083c332c.png";
 
@@ -68,6 +70,15 @@ const galeriaDemo = [
 const categorias = ["Todos", "Eventos", "Saúde", "Institucional", "Natureza", "Ações"];
 
 export default function Galeria() {
+  useSEO({
+    title: "Galeria de Fotos | Instituto Ubatuba Santuário Ecológico",
+    description: "Veja fotos das atividades do Instituto Ubatuba: esportes, ações de saúde, conservação ambiental, festivais culturais e muito mais.",
+    keywords: "galeria fotos ubatuba, fotos esporte social, fotos conservação ambiental, instituto ubatuba fotos",
+    canonical: "/galeria",
+    ogTitle: "Galeria de Fotos | Instituto Ubatuba",
+    ogDescription: "Registros fotográficos das nossas ações em esporte, saúde e meio ambiente em Ubatuba.",
+  });
+
   const [categoriaAtiva, setCategoriaAtiva] = useState("Todos");
   type LightboxItem = { id: number; imageUrl: string; title?: string | null; category?: string | null; description?: string | null };
   const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);

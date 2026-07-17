@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useSEO } from "@/components/SEOHead";
+
 
 const HERO_IMAGE = "/manus-storage/ubatuba-natureza_083c332c.png";
 
@@ -178,6 +180,15 @@ function SecaoColapsavel({ id, titulo, icone: Icone, cor, children, defaultOpen 
 }
 
 export default function Transparencia() {
+  useSEO({
+    title: "Transparência e Governança | Instituto Ubatuba Santuário Ecológico",
+    description: "Acesse documentos públicos, relatórios financeiros, estatuto social e informações de governança do Instituto Ubatuba.",
+    keywords: "transparência ONG, governança instituto ubatuba, relatório financeiro, estatuto social, prestação de contas",
+    canonical: "/transparencia",
+    ogTitle: "Transparência | Instituto Ubatuba",
+    ogDescription: "Documentos públicos, relatórios financeiros e informações de governança.",
+  });
+
   const [protocoloBusca, setProtocoloBusca] = useState("");
   const [protocoloEnviado, setProtocoloEnviado] = useState<string | null>(null);
   const [copiado, setCopiado] = useState(false);

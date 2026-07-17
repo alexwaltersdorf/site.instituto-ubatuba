@@ -3,6 +3,7 @@ import { ArrowRight, Leaf, Users, Heart, BookOpen, Fish, TreePine, Waves, Chevro
 import { trpc } from "@/lib/trpc";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useSEO } from "@/components/SEOHead";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import WaveDivider from "@/components/WaveDivider";
 import FloatingSidebar from "@/components/FloatingSidebar";
@@ -736,6 +737,15 @@ function AcoesSection() {
 /* ── Componente Principal ── */
 
 export default function Home() {
+  useSEO({
+    title: "Instituto Ubatuba Santuário Ecológico | Saúde, Esporte e Meio Ambiente",
+    description: "Instituto Ubatuba promove conservação socioambiental em Ubatuba-SP por meio de esporte social, saúde comunitária e preservação ambiental. Conheça nossas ações.",
+    keywords: "instituto ubatuba, santuário ecológico, conservação ambiental, esporte social, saúde comunitária, ubatuba, ONG ubatuba",
+    canonical: "/",
+    ogTitle: "Instituto Ubatuba Santuário Ecológico",
+    ogDescription: "Promovendo saúde, esporte e meio ambiente para as comunidades de Ubatuba.",
+  });
+
   const { data: postsDB } = trpc.posts.list.useQuery({ limit: 3, offset: 0 });
   const posts = postsDB && postsDB.length > 0 ? postsDB : postsDestaque;
 

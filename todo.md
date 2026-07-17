@@ -197,3 +197,16 @@
 - [x] Elaborar Regimento Interno completo do Instituto
 - [x] Upload de todos os PDFs de governança para o storage
 - [x] Atualizar página de Transparência com seção de Governança e downloads
+
+## SEO - Otimização para Motores de Busca
+
+- [ ] Criar server/_core/routes-metadata.ts com meta tags de todas as páginas
+- [ ] Criar componente SEOHead com hooks useCanonical e useMetaDescription
+- [ ] Implementar injeção server-side de meta tags no vite.ts
+- [ ] Criar rota /sitemap.xml dinâmica
+- [ ] Criar rota /robots.txt
+- [ ] Integrar SEOHead em todas as páginas existentes
+- [ ] Adicionar Open Graph tags (og:title, og:description, og:image, og:url)
+- [ ] Adicionar canonical URLs em todas as páginas
+- [ ] Testar meta tags com curl em todas as rotas
+- [ ] Corrigir deploy Manus (pnpm allowBuilds no pnpm-workspace.yaml)

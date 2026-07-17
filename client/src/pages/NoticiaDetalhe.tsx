@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { postsDemo } from "@/data/postsDemo";
+import { useCanonical, useMetaDescription, useOpenGraph } from "@/components/SEOHead";
 
 interface Props {
   slug: string;
@@ -23,6 +24,21 @@ export default function NoticiaDetalhe({ slug }: Props) {
   // Fallback: se o banco não retornar o post, buscar nos dados demo
   const demoPost = postsDemo.find((p) => p.slug === slug);
   const displayPost = post || demoPost;
+
+  // SEO dinâmico baseado no post
+  const postTitle = displayPost?.title || "Notícia";
+  const postExcerpt = displayPost?.excerpt || "Leia esta notícia do Instituto Ubatuba Santuário Ecológico.";
+  useEffect(() => {
+    document.title = `${postTitle} | Instituto Ubatuba`;
+  }, [postTitle]);
+  useMetaDescription(postExcerpt);
+  useCanonical(`/noticias/${slug}`);
+  useOpenGraph({
+    title: `${postTitle} | Instituto Ubatuba`,
+    description: postExcerpt,
+    url: `https://www.institutoubatuba.org.br/noticias/${slug}`,
+    type: "article",
+  });
 
   if (isLoading) {
     return (

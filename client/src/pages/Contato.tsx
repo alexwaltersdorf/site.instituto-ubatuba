@@ -3,6 +3,8 @@ import { MapPin, Mail, Phone, Clock, Send, CheckCircle } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { MapView } from "@/components/Map";
+import { useSEO } from "@/components/SEOHead";
+
 
 const HERO_IMAGE = "/manus-storage/santuario-mata_c008072f.jpg";
 
@@ -17,6 +19,15 @@ const tiposContato = [
 type TipoContato = typeof tiposContato[number]["value"];
 
 export default function Contato() {
+  useSEO({
+    title: "Contato | Instituto Ubatuba Santuário Ecológico",
+    description: "Entre em contato com o Instituto Ubatuba. Envie sua mensagem, visite nosso endereço em Ubatuba-SP ou ligue para nós.",
+    keywords: "contato instituto ubatuba, endereço ubatuba, telefone instituto ubatuba, fale conosco",
+    canonical: "/contato",
+    ogTitle: "Contato | Instituto Ubatuba",
+    ogDescription: "Entre em contato conosco. Estamos em Ubatuba-SP prontos para atender você.",
+  });
+
   const [form, setForm] = useState({
     name: "",
     email: "",

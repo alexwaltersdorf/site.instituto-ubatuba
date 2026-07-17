@@ -2,6 +2,8 @@ import { ArrowRight, BookOpen, Calendar, Tag } from "lucide-react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { postsDemo } from "@/data/postsDemo";
+import { useSEO } from "@/components/SEOHead";
+
 
 const HERO_IMAGE = "/manus-storage/ubatuba-praia_8ed0b366.jpg";
 
@@ -105,6 +107,15 @@ function formatDate(date: Date | null | undefined) {
 }
 
 export default function Noticias() {
+  useSEO({
+    title: "Notícias e Blog | Instituto Ubatuba Santuário Ecológico",
+    description: "Acompanhe as últimas notícias do Instituto Ubatuba: ações realizadas, eventos, parcerias e resultados dos nossos programas socioambientais.",
+    keywords: "notícias instituto ubatuba, blog ONG ubatuba, ações sociais ubatuba, eventos ubatuba",
+    canonical: "/noticias",
+    ogTitle: "Notícias | Instituto Ubatuba",
+    ogDescription: "Últimas notícias e artigos sobre nossas ações em saúde, esporte e meio ambiente.",
+  });
+
   const { data: posts, isLoading } = trpc.posts.list.useQuery({ limit: 20, offset: 0 });
   const itens = posts && posts.length > 0 ? posts : postsDemo;
 

@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Waves, Users, Heart, BookOpen, Fish, Leaf, Trophy, Stethoscope, Music, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
 import { cn } from "@/lib/utils";
+import { useSEO } from "@/components/SEOHead";
+
 
 const HERO_IMAGE = "/manus-storage/ubatuba-praia_8ed0b366.jpg";
 
@@ -263,6 +265,15 @@ function ImageCarouselCard({ images, titulo, impacto }: { images: { src: string;
 }
 
 export default function Programas() {
+  useSEO({
+    title: "Ações e Programas | Instituto Ubatuba Santuário Ecológico",
+    description: "Conheça os programas do Instituto Ubatuba: Escolinhas de Surfe, Futebol e Futevôlei, Ações de Saúde, Projeto Itaguá Azul, Bituqueira Ecológica e mais.",
+    keywords: "programas sociais ubatuba, escolinha de surfe, futebol social, saúde comunitária, itaguá azul, bituqueira ecológica",
+    canonical: "/programas",
+    ogTitle: "Ações e Programas | Instituto Ubatuba",
+    ogDescription: "Escolinhas de Surfe, Futebol, Futevôlei, Ações de Saúde, Projeto Itaguá Azul e Bituqueira Ecológica.",
+  });
+
   return (
     <div className="pt-20">
       {/* ── Hero ── */}

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { cn } from "@/lib/utils";
+import { useSEO } from "@/components/SEOHead";
+
 
 const HERO_IMAGE = "/manus-storage/ubatuba-hero_110ea313.jpg";
 
@@ -312,6 +314,15 @@ function SecaoDoacoes() {
 
 // ── Página Principal ──────────────────────────────────────────────────────────
 export default function Apoie() {
+  useSEO({
+    title: "Apoie o Instituto Ubatuba | Doe, Seja Voluntário ou Parceiro",
+    description: "Apoie o Instituto Ubatuba: faça uma doação, seja voluntário ou torne-se parceiro institucional. Juntos transformamos vidas em Ubatuba-SP.",
+    keywords: "doar instituto ubatuba, voluntário ubatuba, parceiro ONG, apoiar conservação, doação social ubatuba",
+    canonical: "/apoie",
+    ogTitle: "Apoie o Instituto Ubatuba",
+    ogDescription: "Faça uma doação, seja voluntário ou torne-se parceiro. Juntos transformamos vidas em Ubatuba.",
+  });
+
   return (
     <div className="pt-20">
       {/* ── Hero ── */}
