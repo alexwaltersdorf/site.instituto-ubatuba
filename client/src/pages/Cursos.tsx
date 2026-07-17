@@ -209,13 +209,26 @@ function HeroBillboard({ courses }: { courses: CourseDemo[] }) {
 
   return (
     <section className={`relative overflow-hidden bg-gradient-to-br ${style.gradient} transition-colors duration-700`}>
+      {/* arte de capa do curso como fundo do billboard, quando cadastrada */}
+      {course.coverImage && (
+        <img
+          key={course.id}
+          src={course.coverImage}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-right animate-in fade-in duration-700"
+        />
+      )}
       {/* brilho de cor da categoria + vinheta para o fundo Tinta */}
-      <div className={`absolute -top-24 -right-24 w-[480px] h-[480px] rounded-full blur-3xl opacity-60 ${style.glow}`} />
+      {!course.coverImage && (
+        <div className={`absolute -top-24 -right-24 w-[480px] h-[480px] rounded-full blur-3xl opacity-60 ${style.glow}`} />
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-tinta via-transparent to-tinta/40" />
       <div className="absolute inset-0 bg-gradient-to-r from-tinta/80 via-transparent to-transparent" />
-      <div aria-hidden className="absolute right-6 bottom-2 text-[180px] md:text-[260px] leading-none opacity-15 select-none">
-        {cat?.icon}
-      </div>
+      {!course.coverImage && (
+        <div aria-hidden className="absolute right-6 bottom-2 text-[180px] md:text-[260px] leading-none opacity-15 select-none">
+          {cat?.icon}
+        </div>
+      )}
 
       <div className="container max-w-7xl relative z-10 pt-32 md:pt-36 pb-20 px-4">
         <div className="max-w-2xl" key={course.id}>
@@ -366,11 +379,24 @@ function PosterCard({ course, compact }: { course: CourseDemo; compact?: boolean
   return (
     <Link href={`/cursos/${course.slug}`}>
       <div className="group relative rounded-lg overflow-hidden cursor-pointer transition-all duration-300 md:hover:scale-[1.06] md:hover:z-20 hover:shadow-2xl hover:shadow-tinta ring-0 hover:ring-2 hover:ring-amarelo-sol/80 bg-forest-dark">
-        {/* Pôster */}
+        {/* Pôster: arte de capa (coverImage) quando cadastrada; senão, gradiente da categoria */}
         <div className={`relative bg-gradient-to-br ${style.gradient} ${compact ? "h-40" : "h-44 md:h-48"} p-4 flex flex-col justify-between overflow-hidden`}>
-          <div aria-hidden className="absolute -right-4 -bottom-6 text-[96px] leading-none opacity-25 select-none group-hover:scale-110 transition-transform duration-500">
-            {cat?.icon}
-          </div>
+          {course.coverImage ? (
+            <>
+              <img
+                src={course.coverImage}
+                alt=""
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              {/* vinheta para legibilidade do título e das pills */}
+              <div className="absolute inset-0 bg-gradient-to-t from-tinta/85 via-tinta/15 to-tinta/40" />
+            </>
+          ) : (
+            <div aria-hidden className="absolute -right-4 -bottom-6 text-[96px] leading-none opacity-25 select-none group-hover:scale-110 transition-transform duration-500">
+              {cat?.icon}
+            </div>
+          )}
           <div className="flex items-start justify-between gap-2 relative z-10">
             <span className="flex items-center gap-1.5 min-w-0 text-base">
               <InstitutionSeal institution={course.institution} logo={course.institutionLogo} className="w-8 h-8" />
