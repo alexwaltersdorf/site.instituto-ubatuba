@@ -252,3 +252,8 @@
 - [x] Adicionar cursos gratuitos de francês (Coursera/École Polytechnique, Kultivi)
 - [x] Adicionar cursos gratuitos de alemão (DW Learn German, LMU Munique/Coursera)
 - [x] Adicionar cursos gratuitos de italiano, japonês, libras, mandarim e coreano (Kultivi, Fundação Bradesco, Peking University, Yonsei University)
+
+## Bug Fix: Página Cursos não aparece na Hostinger
+- [x] Diagnosticar por que /cursos não funciona no deploy Hostinger (package-lock.json estava desatualizado e não regenerava por bug do fmin/yarn-patch)
+- [x] Corrigir package-lock.json com override de fmin e regenerar lockfile compatível com npm
+- [x] Sincronizar via GitHub (checkpoint)
