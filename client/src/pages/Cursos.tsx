@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSEO } from "@/components/SEOHead";
+import { InstitutionSeal } from "@/components/InstitutionLogo";
 import { trpc } from "@/lib/trpc";
 import { coursesDemo, CATEGORIES, type CourseDemo } from "@/data/coursesDemo";
 
@@ -229,7 +230,10 @@ function HeroBillboard({ courses }: { courses: CourseDemo[] }) {
             {course.title}
           </h1>
           <div className="flex items-center gap-4 text-sm text-areia/70 mb-4 animate-in fade-in duration-700">
-            <span className="flex items-center gap-1.5"><Building2 className="w-4 h-4" /> {course.institution}</span>
+            <span className="flex items-center gap-2 text-lg">
+              <InstitutionSeal institution={course.institution} logo={course.institutionLogo} className="w-10 h-10" />
+              <span className="text-sm text-areia/80 font-medium">{course.institution}</span>
+            </span>
             {course.duration && <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {course.duration}</span>}
           </div>
           <p className="text-base md:text-lg text-areia/80 line-clamp-3 mb-8 animate-in fade-in duration-700">
@@ -368,8 +372,11 @@ function PosterCard({ course, compact }: { course: CourseDemo; compact?: boolean
             {cat?.icon}
           </div>
           <div className="flex items-start justify-between gap-2 relative z-10">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-areia/80 bg-tinta/40 backdrop-blur-sm px-2 py-1 rounded-md">
-              {course.institution}
+            <span className="flex items-center gap-1.5 min-w-0 text-base">
+              <InstitutionSeal institution={course.institution} logo={course.institutionLogo} className="w-8 h-8" />
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-areia/80 bg-tinta/40 backdrop-blur-sm px-2 py-1 rounded-md truncate">
+                {course.institution}
+              </span>
             </span>
             <span className="text-[10px] font-bold uppercase tracking-wider text-tinta bg-amarelo-sol px-2 py-1 rounded-md shrink-0">
               Grátis
@@ -399,8 +406,11 @@ function PosterCard({ course, compact }: { course: CourseDemo; compact?: boolean
             <p className="text-xs text-areia/70 line-clamp-4">{course.description}</p>
           </div>
           <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1 text-[11px] text-areia/60"><Building2 className="w-3 h-3" /> {course.institution}</span>
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amarelo-sol text-tinta">
+            <span className="flex items-center gap-1.5 text-[11px] text-areia/60 min-w-0 text-sm">
+              <InstitutionSeal institution={course.institution} logo={course.institutionLogo} className="w-6 h-6" />
+              <span className="truncate text-[11px]">{course.institution}</span>
+            </span>
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amarelo-sol text-tinta shrink-0">
               <Play className="w-4 h-4 fill-tinta ml-0.5" />
             </span>
           </div>

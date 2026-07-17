@@ -1,3 +1,13 @@
+/**
+ * ⚠️ REGRA OBRIGATÓRIA AO ADICIONAR CURSOS NOVOS (aqui ou na tabela
+ * `courses` do banco): todo card de curso exibe o LOGOTIPO da instituição
+ * de ensino que oferece a bolsa gratuita. Para isso:
+ *   - preencha `institutionLogo` com a URL do logotipo oficial; OU
+ *   - garanta que a instituição tem o domínio oficial mapeado em
+ *     `INSTITUTION_DOMAINS` (client/src/components/InstitutionLogo.tsx).
+ * Sem uma das duas, o card cai no monograma de iniciais (fallback).
+ * Use SEMPRE o mesmo nome de instituição já existente (o mapa é por nome).
+ */
 export interface CourseDemo {
   id: number;
   slug: string;

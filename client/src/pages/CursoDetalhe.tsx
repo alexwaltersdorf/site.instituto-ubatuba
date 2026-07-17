@@ -3,6 +3,7 @@ import { GraduationCap, Clock, Building2, ExternalLink, ArrowLeft, CheckCircle2,
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useSEO } from "@/components/SEOHead";
+import { InstitutionSeal } from "@/components/InstitutionLogo";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
@@ -94,7 +95,10 @@ export default function CursoDetalhe() {
               <h1 className="text-3xl md:text-4xl font-bold text-forest-dark mb-4">{course.title}</h1>
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
-                <span className="flex items-center gap-1.5"><Building2 className="w-4 h-4" /> {course.institution}</span>
+                <span className="flex items-center gap-2 text-base">
+                  <InstitutionSeal institution={course.institution} logo={course.institutionLogo} className="w-9 h-9" />
+                  <span className="font-medium text-foreground/80">{course.institution}</span>
+                </span>
                 {course.duration && <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {course.duration}</span>}
                 {course.platform && <span className="flex items-center gap-1.5"><ExternalLink className="w-4 h-4" /> {course.platform}</span>}
               </div>
