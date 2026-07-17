@@ -227,3 +227,7 @@
 - [x] Criar arquivo de configuração para Hostinger (.nvmrc, .npmrc, engines)
 - [x] Documentar variáveis de ambiente necessárias (HOSTINGER-DEPLOY.md)
 - [x] Salvar checkpoint para sincronizar com GitHub e acionar deploy automático
+
+## Correções de Deploy e Blog
+- [x] Corrigir ERR_PNPM_IGNORED_BUILDS no deploy Manus (adicionar pnpm-workspace.yaml com allowBuilds ao repo)
+- [x] Corrigir "Post não encontrado" na Hostinger para posts de blog (postsDemo atualizado com todos os posts do DB como fallback)

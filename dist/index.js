@@ -1187,7 +1187,188 @@ var vite_config_default = defineConfig({
   }
 });
 
+// server/_core/routes-metadata.ts
+var SITE_URL = "https://www.institutoubatuba.org.br";
+var DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
+var routesMetadata = {
+  "": {
+    title: "Instituto Ubatuba Santu\xE1rio Ecol\xF3gico | Sa\xFAde, Esporte e Meio Ambiente",
+    description: "Instituto Ubatuba promove conserva\xE7\xE3o socioambiental em Ubatuba-SP por meio de esporte social, sa\xFAde comunit\xE1ria e preserva\xE7\xE3o ambiental. Conhe\xE7a nossas a\xE7\xF5es.",
+    keywords: "instituto ubatuba, santu\xE1rio ecol\xF3gico, conserva\xE7\xE3o ambiental, esporte social, sa\xFAde comunit\xE1ria, ubatuba, ONG ubatuba",
+    ogTitle: "Instituto Ubatuba Santu\xE1rio Ecol\xF3gico",
+    ogDescription: "Promovendo sa\xFAde, esporte e meio ambiente para as comunidades de Ubatuba. Some com a gente e fa\xE7a parte da rede.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: SITE_URL,
+    priority: 1,
+    changefreq: "weekly"
+  },
+  "sobre": {
+    title: "Sobre N\xF3s | Instituto Ubatuba Santu\xE1rio Ecol\xF3gico",
+    description: "Conhe\xE7a a hist\xF3ria, miss\xE3o, vis\xE3o e valores do Instituto Ubatuba. Atuamos desde 2019 promovendo inclus\xE3o social, sa\xFAde e conserva\xE7\xE3o ambiental em Ubatuba-SP.",
+    keywords: "sobre instituto ubatuba, hist\xF3ria, miss\xE3o, vis\xE3o, valores, ODS, conserva\xE7\xE3o, ubatuba",
+    ogTitle: "Sobre o Instituto Ubatuba",
+    ogDescription: "Nossa hist\xF3ria, miss\xE3o e valores. Atuamos com sa\xFAde, esporte social e meio ambiente em Ubatuba-SP.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/sobre`,
+    priority: 0.8,
+    changefreq: "monthly"
+  },
+  "programas": {
+    title: "A\xE7\xF5es e Programas | Instituto Ubatuba Santu\xE1rio Ecol\xF3gico",
+    description: "Conhe\xE7a os programas do Instituto Ubatuba: Escolinhas de Surfe, Futebol e Futev\xF4lei, A\xE7\xF5es de Sa\xFAde, Projeto Itagu\xE1 Azul, Bituqueira Ecol\xF3gica e mais.",
+    keywords: "programas sociais ubatuba, escolinha de surfe, futebol social, sa\xFAde comunit\xE1ria, itagu\xE1 azul, bituqueira ecol\xF3gica",
+    ogTitle: "A\xE7\xF5es e Programas | Instituto Ubatuba",
+    ogDescription: "Escolinhas de Surfe, Futebol, Futev\xF4lei, A\xE7\xF5es de Sa\xFAde, Projeto Itagu\xE1 Azul e Bituqueira Ecol\xF3gica.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/programas`,
+    priority: 0.9,
+    changefreq: "monthly"
+  },
+  "galeria": {
+    title: "Galeria de Fotos | Instituto Ubatuba Santu\xE1rio Ecol\xF3gico",
+    description: "Veja fotos das atividades do Instituto Ubatuba: esportes, a\xE7\xF5es de sa\xFAde, conserva\xE7\xE3o ambiental, festivais culturais e muito mais.",
+    keywords: "galeria fotos ubatuba, fotos esporte social, fotos conserva\xE7\xE3o ambiental, instituto ubatuba fotos",
+    ogTitle: "Galeria de Fotos | Instituto Ubatuba",
+    ogDescription: "Registros fotogr\xE1ficos das nossas a\xE7\xF5es em esporte, sa\xFAde e meio ambiente em Ubatuba.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/galeria`,
+    priority: 0.7,
+    changefreq: "weekly"
+  },
+  "apoie": {
+    title: "Apoie o Instituto Ubatuba | Doe, Seja Volunt\xE1rio ou Parceiro",
+    description: "Apoie o Instituto Ubatuba: fa\xE7a uma doa\xE7\xE3o, seja volunt\xE1rio ou torne-se parceiro institucional. Juntos transformamos vidas em Ubatuba-SP.",
+    keywords: "doar instituto ubatuba, volunt\xE1rio ubatuba, parceiro ONG, apoiar conserva\xE7\xE3o, doa\xE7\xE3o social ubatuba",
+    ogTitle: "Apoie o Instituto Ubatuba",
+    ogDescription: "Fa\xE7a uma doa\xE7\xE3o, seja volunt\xE1rio ou torne-se parceiro. Juntos transformamos vidas em Ubatuba.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/apoie`,
+    priority: 0.9,
+    changefreq: "monthly"
+  },
+  "contato": {
+    title: "Contato | Instituto Ubatuba Santu\xE1rio Ecol\xF3gico",
+    description: "Entre em contato com o Instituto Ubatuba. Envie sua mensagem, visite nosso endere\xE7o em Ubatuba-SP ou ligue para n\xF3s. Estamos prontos para atender.",
+    keywords: "contato instituto ubatuba, endere\xE7o ubatuba, telefone instituto ubatuba, fale conosco",
+    ogTitle: "Contato | Instituto Ubatuba",
+    ogDescription: "Entre em contato conosco. Estamos em Ubatuba-SP prontos para atender voc\xEA.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/contato`,
+    priority: 0.7,
+    changefreq: "monthly"
+  },
+  "noticias": {
+    title: "Not\xEDcias e Blog | Instituto Ubatuba Santu\xE1rio Ecol\xF3gico",
+    description: "Acompanhe as \xFAltimas not\xEDcias do Instituto Ubatuba: a\xE7\xF5es realizadas, eventos, parcerias e resultados dos nossos programas socioambientais.",
+    keywords: "not\xEDcias instituto ubatuba, blog ONG ubatuba, a\xE7\xF5es sociais ubatuba, eventos ubatuba",
+    ogTitle: "Not\xEDcias | Instituto Ubatuba",
+    ogDescription: "\xDAltimas not\xEDcias e artigos sobre nossas a\xE7\xF5es em sa\xFAde, esporte e meio ambiente.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/noticias`,
+    priority: 0.8,
+    changefreq: "weekly"
+  },
+  "transparencia": {
+    title: "Transpar\xEAncia e Governan\xE7a | Instituto Ubatuba Santu\xE1rio Ecol\xF3gico",
+    description: "Acesse documentos p\xFAblicos, relat\xF3rios financeiros, estatuto social e informa\xE7\xF5es de governan\xE7a do Instituto Ubatuba. Compromisso com a transpar\xEAncia.",
+    keywords: "transpar\xEAncia ONG, governan\xE7a instituto ubatuba, relat\xF3rio financeiro, estatuto social, presta\xE7\xE3o de contas",
+    ogTitle: "Transpar\xEAncia | Instituto Ubatuba",
+    ogDescription: "Documentos p\xFAblicos, relat\xF3rios financeiros e informa\xE7\xF5es de governan\xE7a. Nosso compromisso com a transpar\xEAncia.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/transparencia`,
+    priority: 0.8,
+    changefreq: "monthly"
+  },
+  "mascotes": {
+    title: "Mascotes | Instituto Ubatuba Santu\xE1rio Ecol\xF3gico",
+    description: "Conhe\xE7a os mascotes do Instituto Ubatuba: personagens que representam a fauna local e educam sobre conserva\xE7\xE3o ambiental de forma l\xFAdica.",
+    keywords: "mascotes instituto ubatuba, personagens fauna, educa\xE7\xE3o ambiental, conserva\xE7\xE3o l\xFAdica, animais ubatuba",
+    ogTitle: "Mascotes | Instituto Ubatuba",
+    ogDescription: "Personagens que representam a fauna local e educam sobre conserva\xE7\xE3o ambiental.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/mascotes`,
+    priority: 0.6,
+    changefreq: "monthly"
+  },
+  "obrigado": {
+    title: "Obrigado pela Doa\xE7\xE3o | Instituto Ubatuba",
+    description: "Agradecemos sua contribui\xE7\xE3o ao Instituto Ubatuba. Sua doa\xE7\xE3o ajuda a transformar vidas em Ubatuba atrav\xE9s de esporte, sa\xFAde e conserva\xE7\xE3o ambiental.",
+    keywords: "obrigado doa\xE7\xE3o, confirma\xE7\xE3o pagamento, instituto ubatuba",
+    ogTitle: "Obrigado! | Instituto Ubatuba",
+    ogDescription: "Sua doa\xE7\xE3o faz a diferen\xE7a. Obrigado por apoiar o Instituto Ubatuba.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/obrigado`,
+    priority: 0.3,
+    changefreq: "yearly"
+  }
+};
+function getRouteMetadata(path3) {
+  const cleanPath = path3.replace(/^\//, "").replace(/\/$/, "");
+  if (routesMetadata[cleanPath]) {
+    return routesMetadata[cleanPath];
+  }
+  if (cleanPath.startsWith("noticias/")) {
+    const slug = cleanPath.replace("noticias/", "");
+    return {
+      title: `${formatSlugToTitle(slug)} | Instituto Ubatuba`,
+      description: `Leia sobre ${formatSlugToTitle(slug).toLowerCase()} no blog do Instituto Ubatuba Santu\xE1rio Ecol\xF3gico.`,
+      keywords: `${slug.replace(/-/g, ", ")}, instituto ubatuba, blog`,
+      ogTitle: `${formatSlugToTitle(slug)} | Instituto Ubatuba`,
+      ogDescription: `Artigo do Instituto Ubatuba sobre ${formatSlugToTitle(slug).toLowerCase()}.`,
+      ogImage: DEFAULT_OG_IMAGE,
+      canonical: `${SITE_URL}/noticias/${slug}`,
+      priority: 0.7,
+      changefreq: "monthly"
+    };
+  }
+  return routesMetadata[""];
+}
+function formatSlugToTitle(slug) {
+  return slug.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+}
+function getAllStaticRoutes() {
+  return Object.entries(routesMetadata).filter(([path3]) => path3 !== "obrigado").map(([path3, metadata]) => ({
+    path: path3 === "" ? "/" : `/${path3}`,
+    metadata
+  }));
+}
+
 // server/_core/vite.ts
+function injectSEOMetaTags(html, url) {
+  const metadata = getRouteMetadata(url);
+  html = html.replace(
+    /<title>.*?<\/title>/,
+    `<title>${metadata.title}</title>`
+  );
+  html = html.replace(
+    /<meta name="description" content="[^"]*" \/>/,
+    `<meta name="description" content="${escapeHtml(metadata.description)}" />`
+  );
+  const seoTags = `
+    <meta name="keywords" content="${escapeHtml(metadata.keywords)}" />
+    <link rel="canonical" href="${metadata.canonical}" />
+    <meta property="og:title" content="${escapeHtml(metadata.ogTitle)}" />
+    <meta property="og:description" content="${escapeHtml(metadata.ogDescription)}" />
+    <meta property="og:image" content="${metadata.ogImage}" />
+    <meta property="og:url" content="${metadata.canonical}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Instituto Ubatuba Santu\xE1rio Ecol\xF3gico" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${escapeHtml(metadata.ogTitle)}" />
+    <meta name="twitter:description" content="${escapeHtml(metadata.ogDescription)}" />
+    <meta name="twitter:image" content="${metadata.ogImage}" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Instituto Ubatuba Santu\xE1rio Ecol\xF3gico" />
+    <meta name="geo.region" content="BR-SP" />
+    <meta name="geo.placename" content="Ubatuba" />`;
+  html = html.replace("</head>", `${seoTags}
+  </head>`);
+  return html;
+}
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 async function setupVite(app, server) {
   const serverOptions = {
     middlewareMode: true,
@@ -1215,6 +1396,7 @@ async function setupVite(app, server) {
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`
       );
+      template = injectSEOMetaTags(template, url);
       const page = await vite.transformIndexHtml(url, template);
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {
@@ -1231,8 +1413,11 @@ function serveStatic(app) {
     );
   }
   app.use(express.static(distPath));
-  app.use("*", (_req, res) => {
-    res.sendFile(path2.resolve(distPath, "index.html"));
+  app.use("*", (req, res) => {
+    const indexPath = path2.resolve(distPath, "index.html");
+    let html = fs2.readFileSync(indexPath, "utf-8");
+    html = injectSEOMetaTags(html, req.originalUrl);
+    res.status(200).set({ "Content-Type": "text/html" }).end(html);
   });
 }
 
@@ -1303,6 +1488,79 @@ function registerStripeWebhook(app) {
   );
 }
 
+// server/seo.ts
+import { eq as eq2 } from "drizzle-orm";
+function registerSEORoutes(app) {
+  app.get("/robots.txt", (_req, res) => {
+    const robotsTxt = `User-agent: *
+Allow: /
+
+# Bloquear rotas internas
+Disallow: /api/
+Disallow: /obrigado
+
+# Sitemap
+Sitemap: ${SITE_URL}/sitemap.xml
+`;
+    res.set("Content-Type", "text/plain");
+    res.set("Cache-Control", "public, max-age=86400");
+    res.send(robotsTxt);
+  });
+  app.get("/sitemap.xml", async (_req, res) => {
+    try {
+      const staticRoutes = getAllStaticRoutes();
+      let dynamicUrls = [];
+      try {
+        const db = await getDb();
+        if (!db) throw new Error("Database not available");
+        const publishedPosts = await db.select({
+          slug: posts.slug,
+          updatedAt: posts.updatedAt
+        }).from(posts).where(eq2(posts.published, true));
+        dynamicUrls = publishedPosts.map((post) => ({
+          loc: `${SITE_URL}/noticias/${post.slug}`,
+          lastmod: post.updatedAt ? new Date(post.updatedAt).toISOString().split("T")[0] : (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+          changefreq: "monthly",
+          priority: 0.7
+        }));
+      } catch {
+        console.warn("[SEO] Could not fetch posts for sitemap, continuing with static routes only");
+      }
+      const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
+      const urls = [
+        ...staticRoutes.map((route) => ({
+          loc: route.metadata.canonical,
+          lastmod: today,
+          changefreq: route.metadata.changefreq,
+          priority: route.metadata.priority
+        })),
+        ...dynamicUrls
+      ];
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${urls.map(
+        (url) => `  <url>
+    <loc>${escapeXml(url.loc)}</loc>
+    <lastmod>${url.lastmod}</lastmod>
+    <changefreq>${url.changefreq}</changefreq>
+    <priority>${url.priority}</priority>
+  </url>`
+      ).join("\n")}
+</urlset>`;
+      res.set("Content-Type", "application/xml");
+      res.set("Cache-Control", "public, max-age=3600");
+      res.send(xml);
+    } catch (error) {
+      console.error("[SEO] Error generating sitemap:", error);
+      res.status(500).send("Error generating sitemap");
+    }
+  });
+}
+function escapeXml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+
 // server/_core/index.ts
 function isPortAvailable(port) {
   return new Promise((resolve) => {
@@ -1329,6 +1587,7 @@ async function startServer() {
   app.use(express3.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+  registerSEORoutes(app);
   app.use(
     "/api/trpc",
     createExpressMiddleware({

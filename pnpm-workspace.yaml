@@ -1,0 +1,11 @@
+onlyBuiltDependencies:
+  - esbuild
+  - "@tailwindcss/oxide"
+  - "@esbuild/linux-x64"
+
+allowBuilds:
+  esbuild: true
+  "@tailwindcss/oxide": true
+
+overrides:
+  "tailwindcss>nanoid": "3.3.7"
