@@ -1,10 +1,12 @@
+# esbuild NAO pode entrar em onlyBuiltDependencies/allowBuilds:
+# o postinstall dele (node install.js) falha com EACCES no build da
+# Hostinger e derruba o pnpm install. O chmod +x dos binarios do esbuild
+# e feito por scripts/fix-esbuild.cjs no inicio de todo build, e o
+# .pnpmfile.cjs remove os scripts do esbuild onde pnpmfile e suportado.
 onlyBuiltDependencies:
-  - esbuild
   - "@tailwindcss/oxide"
-  - "@esbuild/linux-x64"
 
 allowBuilds:
-  esbuild: true
   "@tailwindcss/oxide": true
 
 overrides:
