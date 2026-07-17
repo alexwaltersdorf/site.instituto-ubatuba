@@ -29,6 +29,13 @@
       "when": 1783823035145,
       "tag": "0003_green_impossible_man",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1784306818099,
+      "tag": "0004_thin_sentinel",
+      "breakpoints": true
     }
   ]
 }

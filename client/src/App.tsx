@@ -18,6 +18,10 @@ import Transparencia from "./pages/Transparencia";
 import Obrigado from "./pages/Obrigado";
 import Mascotes from "./pages/Mascotes";
 import EmendasParlamentares from "./pages/EmendasParlamentares";
+import Cursos from "./pages/Cursos";
+import CursoDetalhe from "./pages/CursoDetalhe";
+import MeusCertificados from "./pages/MeusCertificados";
+import CertificadoVerificar from "./pages/CertificadoVerificar";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -43,6 +47,10 @@ function Router() {
       <Route path="/transparencia" component={() => <Layout><Transparencia /></Layout>} />
       <Route path="/mascotes" component={() => <Layout><Mascotes /></Layout>} />
       <Route path="/emendas-parlamentares" component={() => <Layout><EmendasParlamentares /></Layout>} />
+      <Route path="/cursos" component={() => <Layout><Cursos /></Layout>} />
+      <Route path="/cursos/:slug" component={({ params }) => <Layout><CursoDetalhe /></Layout>} />
+      <Route path="/meus-certificados" component={() => <Layout><MeusCertificados /></Layout>} />
+      <Route path="/certificado/:code" component={() => <Layout><CertificadoVerificar /></Layout>} />
       <Route path="/obrigado" component={() => <Obrigado />} />
       <Route component={NotFound} />
     </Switch>

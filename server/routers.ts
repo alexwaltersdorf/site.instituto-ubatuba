@@ -1,19 +1,32 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
+  completeCourse,
+  createCertificate,
   createContact,
+  createCourse,
   createEthicsReport,
   createGalleryItem,
   createPost,
   deletePost,
+  enrollInCourse,
+  getActiveCourses,
+  getAllCourses,
   getAllPosts,
+  getCertificateByCode,
   getContacts,
+  getCourseById,
+  getCourseBySlug,
+  getEnrollment,
   getEthicsReportByProtocol,
   getEthicsReports,
+  getFeaturedCourses,
   getFeaturedGallery,
   getGalleryItems,
   getPostBySlug,
   getPublishedPosts,
+  getUserCertificates,
+  getUserEnrollments,
   subscribeNewsletter,
   updatePost,
 } from "./db";
@@ -283,6 +296,116 @@ export const appRouter = router({
         await subscribeNewsletter(input.email, input.name);
         return { success: true };
       }),
+  }),
+
+  /* ── Cursos ── */
+  courses: router({
+    list: publicProcedure
+      .input(z.object({ category: z.string().optional() }).optional())
+      .query(async ({ input }) => {
+        return getActiveCourses(input?.category);
+      }),
+
+    featured: publicProcedure.query(async () => {
+      return getFeaturedCourses();
+    }),
+
+    bySlug: publicProcedure
+      .input(z.object({ slug: z.string() }))
+      .query(async ({ input }) => {
+        const course = await getCourseBySlug(input.slug);
+        if (!course) throw new TRPCError({ code: "NOT_FOUND", message: "Curso n\u00e3o encontrado." });
+        return course;
+      }),
+
+    enroll: protectedProcedure
+      .input(z.object({ courseId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        const enrollment = await enrollInCourse(ctx.user.id, input.courseId);
+        return enrollment;
+      }),
+
+    myEnrollments: protectedProcedure.query(async ({ ctx }) => {
+      return getUserEnrollments(ctx.user.id);
+    }),
+
+    getEnrollment: protectedProcedure
+      .input(z.object({ courseId: z.number() }))
+      .query(async ({ ctx, input }) => {
+        return getEnrollment(ctx.user.id, input.courseId);
+      }),
+
+    complete: protectedProcedure
+      .input(z.object({ enrollmentId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        await completeCourse(input.enrollmentId);
+        return { success: true };
+      }),
+
+    // Admin
+    adminList: adminProcedure.query(async () => {
+      return getAllCourses();
+    }),
+
+    create: adminProcedure
+      .input(z.object({
+        slug: z.string().min(1),
+        title: z.string().min(1),
+        description: z.string().min(1),
+        institution: z.string().min(1),
+        institutionLogo: z.string().optional(),
+        platform: z.string().optional(),
+        platformUrl: z.string().url(),
+        category: z.enum(["tecnologia", "saude", "administracao", "educacao", "meio_ambiente", "esporte", "idiomas", "direito", "ciencias", "artes"]),
+        duration: z.string().optional(),
+        level: z.enum(["iniciante", "intermediario", "avancado"]).default("iniciante"),
+        coverImage: z.string().optional(),
+        tags: z.string().optional(),
+        featured: z.boolean().default(false),
+      }))
+      .mutation(async ({ input }) => {
+        await createCourse(input);
+        return { success: true };
+      }),
+  }),
+
+  /* ── Certificados ── */
+  certificates: router({
+    issue: protectedProcedure
+      .input(z.object({ enrollmentId: z.number(), courseId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        // Verify enrollment is completed
+        const enrollment = await getEnrollment(ctx.user.id, input.courseId);
+        if (!enrollment || enrollment.status !== "concluido") {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Voc\u00ea precisa concluir o curso antes de emitir o certificado." });
+        }
+        if (enrollment.certificateId) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Certificado j\u00e1 emitido para este curso." });
+        }
+        // Get course info for certificate
+        const course = await getCourseById(input.courseId);
+        const cert = await createCertificate({
+          userId: ctx.user.id,
+          courseId: input.courseId,
+          enrollmentId: input.enrollmentId,
+          userName: ctx.user.name || "Aluno",
+          courseName: course?.title || "Curso",
+          institution: course?.institution || "Instituto Ubatuba",
+        });
+        return cert;
+      }),
+
+    verify: publicProcedure
+      .input(z.object({ code: z.string() }))
+      .query(async ({ input }) => {
+        const cert = await getCertificateByCode(input.code);
+        if (!cert) throw new TRPCError({ code: "NOT_FOUND", message: "Certificado n\u00e3o encontrado." });
+        return cert;
+      }),
+
+    myCertificates: protectedProcedure.query(async ({ ctx }) => {
+      return getUserCertificates(ctx.user.id);
+    }),
   }),
 });
 

@@ -231,3 +231,17 @@
 ## Correções de Deploy e Blog
 - [x] Corrigir ERR_PNPM_IGNORED_BUILDS no deploy Manus (adicionar pnpm-workspace.yaml com allowBuilds ao repo)
 - [x] Corrigir "Post não encontrado" na Hostinger para posts de blog (postsDemo atualizado com todos os posts do DB como fallback)
+
+## Cursos - Plataforma de Educação Gratuita
+- [x] Criar schema de banco: courses, enrollments, certificates
+- [x] Criar tRPC routes: courses.list, courses.bySlug, courses.enroll, courses.complete, courses.myEnrollments, certificates.issue, certificates.verify, certificates.myCertificates
+- [x] Criar página /cursos com catálogo de cursos por categoria, busca e filtros
+- [x] Criar página /cursos/:slug com detalhes do curso e botão de inscrição
+- [x] Implementar sistema de inscrição (enrollment) com autenticação
+- [x] Implementar emissão de certificado de conclusão
+- [x] Autenticação via Manus OAuth (Google/Microsoft/Apple) com redirecionamento pós-login
+- [x] Adicionar link "Cursos" no menu de navegação (Header)
+- [x] Criar dados demo com 25+ cursos curados de Harvard, MIT, USP, FGV, ENAP, Fiocruz, SENAI, Fundação Bradesco, etc.
+- [x] Criar página /meus-certificados com tabs (Meus Cursos / Certificados)
+- [x] Adicionar SEO metadata para rotas /cursos, /cursos/:slug, /meus-certificados
+- [x] Corrigir OAuth callback para redirecionar ao returnPath após login

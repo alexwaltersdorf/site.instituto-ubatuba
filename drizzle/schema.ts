@@ -112,3 +112,71 @@ export const newsletterSubscribers = mysqlTable("newsletter_subscribers", {
 });
 export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
 export type InsertNewsletterSubscriber = typeof newsletterSubscribers.$inferInsert;
+
+/* ── Cursos Gratuitos ── */
+export const courses = mysqlTable("courses", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  title: varchar("title", { length: 500 }).notNull(),
+  description: text("description").notNull(),
+  institution: varchar("institution", { length: 255 }).notNull(),
+  institutionLogo: text("institutionLogo"),
+  platform: varchar("platform", { length: 255 }), // Coursera, edX, Escola Virtual, etc.
+  platformUrl: text("platformUrl").notNull(), // Link externo para o curso
+  category: mysqlEnum("category", [
+    "tecnologia",
+    "saude",
+    "administracao",
+    "educacao",
+    "meio_ambiente",
+    "esporte",
+    "idiomas",
+    "direito",
+    "ciencias",
+    "artes",
+  ]).notNull(),
+  duration: varchar("duration", { length: 100 }), // Ex: "40 horas", "8 semanas"
+  level: mysqlEnum("level", ["iniciante", "intermediario", "avancado"]).default("iniciante").notNull(),
+  coverImage: text("coverImage"),
+  tags: text("tags"), // JSON array
+  featured: boolean("featured").default(false).notNull(),
+  active: boolean("active").default(true).notNull(),
+  sortOrder: int("sortOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Course = typeof courses.$inferSelect;
+export type InsertCourse = typeof courses.$inferInsert;
+
+/* ── Inscrições em Cursos ── */
+export const enrollments = mysqlTable("enrollments", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  courseId: int("courseId").notNull(),
+  status: mysqlEnum("status", ["inscrito", "em_andamento", "concluido", "cancelado"]).default("inscrito").notNull(),
+  progress: int("progress").default(0), // 0-100%
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  certificateId: int("certificateId"),
+});
+
+export type Enrollment = typeof enrollments.$inferSelect;
+export type InsertEnrollment = typeof enrollments.$inferInsert;
+
+/* ── Certificados ── */
+export const certificates = mysqlTable("certificates", {
+  id: int("id").autoincrement().primaryKey(),
+  code: varchar("code", { length: 50 }).notNull().unique(), // Código único de verificação
+  userId: int("userId").notNull(),
+  courseId: int("courseId").notNull(),
+  enrollmentId: int("enrollmentId").notNull(),
+  userName: varchar("userName", { length: 255 }).notNull(),
+  courseName: varchar("courseName", { length: 500 }).notNull(),
+  institution: varchar("institution", { length: 255 }).notNull(),
+  issuedAt: timestamp("issuedAt").defaultNow().notNull(),
+  validationUrl: text("validationUrl"),
+});
+
+export type Certificate = typeof certificates.$inferSelect;
+export type InsertCertificate = typeof certificates.$inferInsert;

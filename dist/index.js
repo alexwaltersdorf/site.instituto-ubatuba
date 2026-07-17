@@ -107,6 +107,65 @@ var newsletterSubscribers = mysqlTable("newsletter_subscribers", {
   active: boolean("active").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull()
 });
+var courses = mysqlTable("courses", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  title: varchar("title", { length: 500 }).notNull(),
+  description: text("description").notNull(),
+  institution: varchar("institution", { length: 255 }).notNull(),
+  institutionLogo: text("institutionLogo"),
+  platform: varchar("platform", { length: 255 }),
+  // Coursera, edX, Escola Virtual, etc.
+  platformUrl: text("platformUrl").notNull(),
+  // Link externo para o curso
+  category: mysqlEnum("category", [
+    "tecnologia",
+    "saude",
+    "administracao",
+    "educacao",
+    "meio_ambiente",
+    "esporte",
+    "idiomas",
+    "direito",
+    "ciencias",
+    "artes"
+  ]).notNull(),
+  duration: varchar("duration", { length: 100 }),
+  // Ex: "40 horas", "8 semanas"
+  level: mysqlEnum("level", ["iniciante", "intermediario", "avancado"]).default("iniciante").notNull(),
+  coverImage: text("coverImage"),
+  tags: text("tags"),
+  // JSON array
+  featured: boolean("featured").default(false).notNull(),
+  active: boolean("active").default(true).notNull(),
+  sortOrder: int("sortOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull()
+});
+var enrollments = mysqlTable("enrollments", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  courseId: int("courseId").notNull(),
+  status: mysqlEnum("status", ["inscrito", "em_andamento", "concluido", "cancelado"]).default("inscrito").notNull(),
+  progress: int("progress").default(0),
+  // 0-100%
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  certificateId: int("certificateId")
+});
+var certificates = mysqlTable("certificates", {
+  id: int("id").autoincrement().primaryKey(),
+  code: varchar("code", { length: 50 }).notNull().unique(),
+  // Código único de verificação
+  userId: int("userId").notNull(),
+  courseId: int("courseId").notNull(),
+  enrollmentId: int("enrollmentId").notNull(),
+  userName: varchar("userName", { length: 255 }).notNull(),
+  courseName: varchar("courseName", { length: 500 }).notNull(),
+  institution: varchar("institution", { length: 255 }).notNull(),
+  issuedAt: timestamp("issuedAt").defaultNow().notNull(),
+  validationUrl: text("validationUrl")
+});
 
 // server/_core/env.ts
 var ENV = {
@@ -251,6 +310,87 @@ async function subscribeNewsletter(email, name) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.insert(newsletterSubscribers).values({ email, name: name ?? null, lgpdConsent: true }).onDuplicateKeyUpdate({ set: { active: true } });
+}
+async function getActiveCourses(category) {
+  const db = await getDb();
+  if (!db) return [];
+  if (category) {
+    return db.select().from(courses).where(and(eq(courses.active, true), eq(courses.category, category))).orderBy(courses.sortOrder);
+  }
+  return db.select().from(courses).where(eq(courses.active, true)).orderBy(courses.sortOrder);
+}
+async function getFeaturedCourses() {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(courses).where(and(eq(courses.active, true), eq(courses.featured, true))).orderBy(courses.sortOrder).limit(6);
+}
+async function getCourseBySlug(slug) {
+  const db = await getDb();
+  if (!db) return void 0;
+  const result = await db.select().from(courses).where(and(eq(courses.slug, slug), eq(courses.active, true))).limit(1);
+  return result[0];
+}
+async function getCourseById(id) {
+  const db = await getDb();
+  if (!db) return void 0;
+  const result = await db.select().from(courses).where(eq(courses.id, id)).limit(1);
+  return result[0];
+}
+async function createCourse(data) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(courses).values(data);
+}
+async function getAllCourses(limit = 100) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(courses).orderBy(desc(courses.createdAt)).limit(limit);
+}
+async function enrollInCourse(userId, courseId) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const existing = await db.select().from(enrollments).where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId))).limit(1);
+  if (existing.length > 0) return existing[0];
+  const [result] = await db.insert(enrollments).values({ userId, courseId }).$returningId();
+  return { id: result.id, userId, courseId, status: "inscrito", progress: 0, startedAt: /* @__PURE__ */ new Date() };
+}
+async function getUserEnrollments(userId) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select({
+    enrollment: enrollments,
+    course: courses
+  }).from(enrollments).innerJoin(courses, eq(enrollments.courseId, courses.id)).where(eq(enrollments.userId, userId)).orderBy(desc(enrollments.startedAt));
+}
+async function getEnrollment(userId, courseId) {
+  const db = await getDb();
+  if (!db) return void 0;
+  const result = await db.select().from(enrollments).where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId))).limit(1);
+  return result[0];
+}
+async function completeCourse(enrollmentId) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(enrollments).set({ status: "concluido", progress: 100, completedAt: /* @__PURE__ */ new Date() }).where(eq(enrollments.id, enrollmentId));
+}
+async function createCertificate(data) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const code = `IU-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  const [result] = await db.insert(certificates).values({ ...data, code }).$returningId();
+  await db.update(enrollments).set({ certificateId: result.id }).where(eq(enrollments.id, data.enrollmentId));
+  return { id: result.id, code };
+}
+async function getCertificateByCode(code) {
+  const db = await getDb();
+  if (!db) return void 0;
+  const result = await db.select().from(certificates).where(eq(certificates.code, code)).limit(1);
+  return result[0];
+}
+async function getUserCertificates(userId) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(certificates).where(eq(certificates.userId, userId)).orderBy(desc(certificates.issuedAt));
 }
 
 // server/_core/cookies.ts
@@ -1012,6 +1152,86 @@ ${input.description.slice(0, 300)}${input.description.length > 300 ? "..." : ""}
       await subscribeNewsletter(input.email, input.name);
       return { success: true };
     })
+  }),
+  /* ── Cursos ── */
+  courses: router({
+    list: publicProcedure.input(z2.object({ category: z2.string().optional() }).optional()).query(async ({ input }) => {
+      return getActiveCourses(input?.category);
+    }),
+    featured: publicProcedure.query(async () => {
+      return getFeaturedCourses();
+    }),
+    bySlug: publicProcedure.input(z2.object({ slug: z2.string() })).query(async ({ input }) => {
+      const course = await getCourseBySlug(input.slug);
+      if (!course) throw new TRPCError3({ code: "NOT_FOUND", message: "Curso n\xE3o encontrado." });
+      return course;
+    }),
+    enroll: protectedProcedure.input(z2.object({ courseId: z2.number() })).mutation(async ({ ctx, input }) => {
+      const enrollment = await enrollInCourse(ctx.user.id, input.courseId);
+      return enrollment;
+    }),
+    myEnrollments: protectedProcedure.query(async ({ ctx }) => {
+      return getUserEnrollments(ctx.user.id);
+    }),
+    getEnrollment: protectedProcedure.input(z2.object({ courseId: z2.number() })).query(async ({ ctx, input }) => {
+      return getEnrollment(ctx.user.id, input.courseId);
+    }),
+    complete: protectedProcedure.input(z2.object({ enrollmentId: z2.number() })).mutation(async ({ ctx, input }) => {
+      await completeCourse(input.enrollmentId);
+      return { success: true };
+    }),
+    // Admin
+    adminList: adminProcedure2.query(async () => {
+      return getAllCourses();
+    }),
+    create: adminProcedure2.input(z2.object({
+      slug: z2.string().min(1),
+      title: z2.string().min(1),
+      description: z2.string().min(1),
+      institution: z2.string().min(1),
+      institutionLogo: z2.string().optional(),
+      platform: z2.string().optional(),
+      platformUrl: z2.string().url(),
+      category: z2.enum(["tecnologia", "saude", "administracao", "educacao", "meio_ambiente", "esporte", "idiomas", "direito", "ciencias", "artes"]),
+      duration: z2.string().optional(),
+      level: z2.enum(["iniciante", "intermediario", "avancado"]).default("iniciante"),
+      coverImage: z2.string().optional(),
+      tags: z2.string().optional(),
+      featured: z2.boolean().default(false)
+    })).mutation(async ({ input }) => {
+      await createCourse(input);
+      return { success: true };
+    })
+  }),
+  /* ── Certificados ── */
+  certificates: router({
+    issue: protectedProcedure.input(z2.object({ enrollmentId: z2.number(), courseId: z2.number() })).mutation(async ({ ctx, input }) => {
+      const enrollment = await getEnrollment(ctx.user.id, input.courseId);
+      if (!enrollment || enrollment.status !== "concluido") {
+        throw new TRPCError3({ code: "BAD_REQUEST", message: "Voc\xEA precisa concluir o curso antes de emitir o certificado." });
+      }
+      if (enrollment.certificateId) {
+        throw new TRPCError3({ code: "BAD_REQUEST", message: "Certificado j\xE1 emitido para este curso." });
+      }
+      const course = await getCourseById(input.courseId);
+      const cert = await createCertificate({
+        userId: ctx.user.id,
+        courseId: input.courseId,
+        enrollmentId: input.enrollmentId,
+        userName: ctx.user.name || "Aluno",
+        courseName: course?.title || "Curso",
+        institution: course?.institution || "Instituto Ubatuba"
+      });
+      return cert;
+    }),
+    verify: publicProcedure.input(z2.object({ code: z2.string() })).query(async ({ input }) => {
+      const cert = await getCertificateByCode(input.code);
+      if (!cert) throw new TRPCError3({ code: "NOT_FOUND", message: "Certificado n\xE3o encontrado." });
+      return cert;
+    }),
+    myCertificates: protectedProcedure.query(async ({ ctx }) => {
+      return getUserCertificates(ctx.user.id);
+    })
   })
 });
 
@@ -1300,6 +1520,28 @@ var routesMetadata = {
     canonical: `${SITE_URL}/obrigado`,
     priority: 0.3,
     changefreq: "yearly"
+  },
+  "cursos": {
+    title: "Cursos Gratuitos | Instituto Ubatuba Santu\xE1rio Ecol\xF3gico",
+    description: "Acesse cursos gratuitos de universidades como Harvard, MIT, USP, FGV e plataformas governamentais. Educa\xE7\xE3o de qualidade para todos, com certificado do Instituto Ubatuba.",
+    keywords: "cursos gratuitos, harvard, mit, usp, fgv, educa\xE7\xE3o gratuita, certificado, instituto ubatuba",
+    ogTitle: "Cursos Gratuitos | Instituto Ubatuba",
+    ogDescription: "Cursos gratuitos das melhores universidades do mundo com certificado do Instituto Ubatuba.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/cursos`,
+    priority: 0.9,
+    changefreq: "weekly"
+  },
+  "meus-certificados": {
+    title: "Meus Cursos e Certificados | Instituto Ubatuba",
+    description: "Acompanhe seus cursos em andamento e certificados emitidos pelo Instituto Ubatuba.",
+    keywords: "meus cursos, certificados, progresso, instituto ubatuba",
+    ogTitle: "Meus Certificados | Instituto Ubatuba",
+    ogDescription: "Acompanhe seus cursos e certificados no Instituto Ubatuba.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/meus-certificados`,
+    priority: 0.4,
+    changefreq: "monthly"
   }
 };
 function getRouteMetadata(path3) {
@@ -1317,6 +1559,20 @@ function getRouteMetadata(path3) {
       ogDescription: `Artigo do Instituto Ubatuba sobre ${formatSlugToTitle(slug).toLowerCase()}.`,
       ogImage: DEFAULT_OG_IMAGE,
       canonical: `${SITE_URL}/noticias/${slug}`,
+      priority: 0.7,
+      changefreq: "monthly"
+    };
+  }
+  if (cleanPath.startsWith("cursos/")) {
+    const slug = cleanPath.replace("cursos/", "");
+    return {
+      title: `${formatSlugToTitle(slug)} | Cursos Gratuitos | Instituto Ubatuba`,
+      description: `Curso gratuito: ${formatSlugToTitle(slug)}. Acesse na plataforma parceira e receba certificado do Instituto Ubatuba.`,
+      keywords: `${slug.replace(/-/g, ", ")}, curso gratuito, instituto ubatuba, certificado`,
+      ogTitle: `${formatSlugToTitle(slug)} | Cursos | Instituto Ubatuba`,
+      ogDescription: `Curso gratuito com certificado do Instituto Ubatuba.`,
+      ogImage: DEFAULT_OG_IMAGE,
+      canonical: `${SITE_URL}/cursos/${slug}`,
       priority: 0.7,
       changefreq: "monthly"
     };

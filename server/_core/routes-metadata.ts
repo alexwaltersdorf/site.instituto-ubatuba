@@ -142,6 +142,28 @@ export const routesMetadata: Record<string, RouteMetadata> = {
     priority: 0.3,
     changefreq: "yearly",
   },
+  "cursos": {
+    title: "Cursos Gratuitos | Instituto Ubatuba Santuário Ecológico",
+    description: "Acesse cursos gratuitos de universidades como Harvard, MIT, USP, FGV e plataformas governamentais. Educação de qualidade para todos, com certificado do Instituto Ubatuba.",
+    keywords: "cursos gratuitos, harvard, mit, usp, fgv, educação gratuita, certificado, instituto ubatuba",
+    ogTitle: "Cursos Gratuitos | Instituto Ubatuba",
+    ogDescription: "Cursos gratuitos das melhores universidades do mundo com certificado do Instituto Ubatuba.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/cursos`,
+    priority: 0.9,
+    changefreq: "weekly",
+  },
+  "meus-certificados": {
+    title: "Meus Cursos e Certificados | Instituto Ubatuba",
+    description: "Acompanhe seus cursos em andamento e certificados emitidos pelo Instituto Ubatuba.",
+    keywords: "meus cursos, certificados, progresso, instituto ubatuba",
+    ogTitle: "Meus Certificados | Instituto Ubatuba",
+    ogDescription: "Acompanhe seus cursos e certificados no Instituto Ubatuba.",
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: `${SITE_URL}/meus-certificados`,
+    priority: 0.4,
+    changefreq: "monthly",
+  },
 };
 
 /**
@@ -168,6 +190,22 @@ export function getRouteMetadata(path: string): RouteMetadata {
       ogDescription: `Artigo do Instituto Ubatuba sobre ${formatSlugToTitle(slug).toLowerCase()}.`,
       ogImage: DEFAULT_OG_IMAGE,
       canonical: `${SITE_URL}/noticias/${slug}`,
+      priority: 0.7,
+      changefreq: "monthly",
+    };
+  }
+
+  // Check for dynamic course routes
+  if (cleanPath.startsWith("cursos/")) {
+    const slug = cleanPath.replace("cursos/", "");
+    return {
+      title: `${formatSlugToTitle(slug)} | Cursos Gratuitos | Instituto Ubatuba`,
+      description: `Curso gratuito: ${formatSlugToTitle(slug)}. Acesse na plataforma parceira e receba certificado do Instituto Ubatuba.`,
+      keywords: `${slug.replace(/-/g, ", ")}, curso gratuito, instituto ubatuba, certificado`,
+      ogTitle: `${formatSlugToTitle(slug)} | Cursos | Instituto Ubatuba`,
+      ogDescription: `Curso gratuito com certificado do Instituto Ubatuba.`,
+      ogImage: DEFAULT_OG_IMAGE,
+      canonical: `${SITE_URL}/cursos/${slug}`,
       priority: 0.7,
       changefreq: "monthly",
     };
