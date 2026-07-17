@@ -19,10 +19,13 @@ export default function NoticiaDetalhe({ slug }: Props) {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [slug]);
 
-  const { data: post, isLoading, error } = trpc.posts.bySlug.useQuery({ slug });
-
-  // Fallback: se o banco não retornar o post, buscar nos dados demo
   const demoPost = postsDemo.find((p) => p.slug === slug);
+  const { data: post, isLoading, error } = trpc.posts.bySlug.useQuery(
+    { slug },
+    { retry: false } // Não retentar se o banco falhar — usar fallback imediatamente
+  );
+
+  // Fallback: se o banco não retornar o post ou der erro, buscar nos dados demo
   const displayPost = post || demoPost;
 
   // SEO dinâmico baseado no post
@@ -40,7 +43,7 @@ export default function NoticiaDetalhe({ slug }: Props) {
     type: "article",
   });
 
-  if (isLoading) {
+  if (isLoading && !demoPost) {
     return (
       <div className="pt-20 min-h-screen">
         <div className="container py-20">

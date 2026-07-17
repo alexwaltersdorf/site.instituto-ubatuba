@@ -116,8 +116,11 @@ export default function Noticias() {
     ogDescription: "Últimas notícias e artigos sobre nossas ações em saúde, esporte e meio ambiente.",
   });
 
-  const { data: posts, isLoading } = trpc.posts.list.useQuery({ limit: 20, offset: 0 });
-  const itens = posts && posts.length > 0 ? posts : postsDemo;
+  const { data: posts, isLoading, error } = trpc.posts.list.useQuery(
+    { limit: 20, offset: 0 },
+    { retry: false } // Não retentar se o banco falhar — usar fallback imediatamente
+  );
+  const itens = (posts && posts.length > 0) ? posts : postsDemo;
 
   return (
     <div className="pt-20">
@@ -141,7 +144,7 @@ export default function Noticias() {
       {/* ── Posts ── */}
       <section className="section-padding bg-background">
         <div className="container">
-          {isLoading ? (
+          {isLoading && !error ? (
             <div className="grid md:grid-cols-3 gap-8">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="card-elegant overflow-hidden animate-pulse">
