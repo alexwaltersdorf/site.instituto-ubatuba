@@ -208,7 +208,7 @@
 - [x] Adicionar Open Graph tags (og:title, og:description, og:image, og:url)
 - [x] Adicionar canonical URLs em todas as páginas
 - [x] Testar meta tags com curl em todas as rotas
-- [ ] Corrigir deploy Manus (pnpm allowBuilds no pnpm-workspace.yaml)
+- [x] Corrigir deploy (migrado de pnpm para npm no deploy Hostinger; pnpm-workspace.yaml com allowBuilds configurado para dev local)
 ## Atualização Mascotes Nomeados
 - [x] Upload das 27 novas imagens nomeadas dos mascotes
 - [x] Atualizar página Mascotes.tsx com nomes, significados históricos e categorias
