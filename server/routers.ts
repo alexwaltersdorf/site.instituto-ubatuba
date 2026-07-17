@@ -1,19 +1,29 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
+  completeEnrollment,
   createContact,
+  createEnrollment,
   createEthicsReport,
   createGalleryItem,
   createPost,
   deletePost,
   getAllPosts,
+  getCertificateByCode,
   getContacts,
+  getCourseById,
+  getCourseBySlug,
+  getCourses,
+  getEnrollment,
   getEthicsReportByProtocol,
   getEthicsReports,
   getFeaturedGallery,
   getGalleryItems,
+  getMyCertificates,
+  getMyEnrollments,
   getPostBySlug,
   getPublishedPosts,
+  issueCertificate,
   subscribeNewsletter,
   updatePost,
 } from "./db";
@@ -282,6 +292,72 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         await subscribeNewsletter(input.email, input.name);
         return { success: true };
+      }),
+  }),
+
+  /* ── Cursos Gratuitos ── */
+  courses: router({
+    list: publicProcedure
+      .input(z.object({ category: z.string().optional(), level: z.string().optional() }).optional())
+      .query(async ({ input }) => {
+        return getCourses(input?.category, input?.level);
+      }),
+
+    bySlug: publicProcedure
+      .input(z.object({ slug: z.string() }))
+      .query(async ({ input }) => {
+        const course = await getCourseBySlug(input.slug);
+        if (!course) throw new TRPCError({ code: "NOT_FOUND", message: "Curso não encontrado." });
+        return course;
+      }),
+
+    enroll: protectedProcedure
+      .input(z.object({ courseId: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        const course = await getCourseById(input.courseId);
+        if (!course) throw new TRPCError({ code: "NOT_FOUND", message: "Curso não encontrado." });
+        const enrollment = await createEnrollment(ctx.user.id, input.courseId);
+        return { success: true, enrollment, platformUrl: course.platformUrl };
+      }),
+
+    complete: protectedProcedure
+      .input(z.object({ enrollmentId: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        await completeEnrollment(input.enrollmentId, ctx.user.id);
+        return { success: true };
+      }),
+
+    myEnrollments: protectedProcedure.query(async ({ ctx }) => {
+      return getMyEnrollments(ctx.user.id);
+    }),
+
+    checkEnrollment: protectedProcedure
+      .input(z.object({ courseId: z.number() }))
+      .query(async ({ input, ctx }) => {
+        const enrollment = await getEnrollment(ctx.user.id, input.courseId);
+        return enrollment ?? null;
+      }),
+  }),
+
+  /* ── Certificados ── */
+  certificates: router({
+    issue: protectedProcedure
+      .input(z.object({ enrollmentId: z.number(), courseId: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        const cert = await issueCertificate(input.enrollmentId, ctx.user.id, input.courseId);
+        return cert;
+      }),
+
+    myCertificates: protectedProcedure.query(async ({ ctx }) => {
+      return getMyCertificates(ctx.user.id);
+    }),
+
+    verify: publicProcedure
+      .input(z.object({ code: z.string() }))
+      .query(async ({ input }) => {
+        const result = await getCertificateByCode(input.code);
+        if (!result) throw new TRPCError({ code: "NOT_FOUND", message: "Certificado não encontrado." });
+        return result;
       }),
   }),
 });

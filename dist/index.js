@@ -107,6 +107,40 @@ var newsletterSubscribers = mysqlTable("newsletter_subscribers", {
   active: boolean("active").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull()
 });
+var courses = mysqlTable("courses", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  institution: varchar("institution", { length: 255 }).notNull(),
+  institutionLogo: text("institutionLogo"),
+  platform: varchar("platform", { length: 255 }),
+  platformUrl: text("platformUrl").notNull(),
+  category: varchar("category", { length: 100 }).notNull(),
+  duration: varchar("duration", { length: 100 }),
+  level: mysqlEnum("level", ["iniciante", "intermediario", "avancado"]).default("iniciante").notNull(),
+  coverImage: text("coverImage"),
+  tags: text("tags"),
+  featured: boolean("featured").default(false).notNull(),
+  active: boolean("active").default(true).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull()
+});
+var enrollments = mysqlTable("enrollments", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  courseId: int("courseId").notNull(),
+  status: mysqlEnum("status", ["active", "completed", "cancelled"]).default("active").notNull(),
+  enrolledAt: timestamp("enrolledAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt")
+});
+var certificates = mysqlTable("certificates", {
+  id: int("id").autoincrement().primaryKey(),
+  enrollmentId: int("enrollmentId").notNull(),
+  userId: int("userId").notNull(),
+  courseId: int("courseId").notNull(),
+  code: varchar("code", { length: 50 }).notNull().unique(),
+  issuedAt: timestamp("issuedAt").defaultNow().notNull()
+});
 
 // server/_core/env.ts
 var ENV = {
@@ -251,6 +285,72 @@ async function subscribeNewsletter(email, name) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.insert(newsletterSubscribers).values({ email, name: name ?? null, lgpdConsent: true }).onDuplicateKeyUpdate({ set: { active: true } });
+}
+async function getCourses(category, level) {
+  const db = await getDb();
+  if (!db) return [];
+  const conditions = [eq(courses.active, true)];
+  if (category) conditions.push(eq(courses.category, category));
+  if (level) conditions.push(eq(courses.level, level));
+  return db.select().from(courses).where(and(...conditions)).orderBy(desc(courses.createdAt));
+}
+async function getCourseBySlug(slug) {
+  const db = await getDb();
+  if (!db) return void 0;
+  const result = await db.select().from(courses).where(and(eq(courses.slug, slug), eq(courses.active, true))).limit(1);
+  return result[0];
+}
+async function getCourseById(id) {
+  const db = await getDb();
+  if (!db) return void 0;
+  const result = await db.select().from(courses).where(eq(courses.id, id)).limit(1);
+  return result[0];
+}
+async function createEnrollment(userId, courseId) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const existing = await db.select().from(enrollments).where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId))).limit(1);
+  if (existing.length > 0) return existing[0];
+  await db.insert(enrollments).values({ userId, courseId, status: "active" });
+  const result = await db.select().from(enrollments).where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId))).limit(1);
+  return result[0];
+}
+async function getMyEnrollments(userId) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select({ enrollment: enrollments, course: courses }).from(enrollments).innerJoin(courses, eq(enrollments.courseId, courses.id)).where(eq(enrollments.userId, userId)).orderBy(desc(enrollments.enrolledAt));
+}
+async function completeEnrollment(enrollmentId, userId) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(enrollments).set({ status: "completed", completedAt: /* @__PURE__ */ new Date() }).where(and(eq(enrollments.id, enrollmentId), eq(enrollments.userId, userId)));
+}
+async function getEnrollment(userId, courseId) {
+  const db = await getDb();
+  if (!db) return void 0;
+  const result = await db.select().from(enrollments).where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId))).limit(1);
+  return result[0];
+}
+async function issueCertificate(enrollmentId, userId, courseId) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const existing = await db.select().from(certificates).where(and(eq(certificates.enrollmentId, enrollmentId), eq(certificates.userId, userId))).limit(1);
+  if (existing.length > 0) return existing[0];
+  const code = `IU${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  await db.insert(certificates).values({ enrollmentId, userId, courseId, code });
+  const result = await db.select().from(certificates).where(eq(certificates.code, code)).limit(1);
+  return result[0];
+}
+async function getMyCertificates(userId) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select({ certificate: certificates, course: courses }).from(certificates).innerJoin(courses, eq(certificates.courseId, courses.id)).where(eq(certificates.userId, userId)).orderBy(desc(certificates.issuedAt));
+}
+async function getCertificateByCode(code) {
+  const db = await getDb();
+  if (!db) return void 0;
+  const result = await db.select({ certificate: certificates, course: courses }).from(certificates).innerJoin(courses, eq(certificates.courseId, courses.id)).where(eq(certificates.code, code)).limit(1);
+  return result[0];
 }
 
 // server/_core/cookies.ts
@@ -555,7 +655,16 @@ function registerOAuthRoutes(app) {
       });
       const cookieOptions = getSessionCookieOptions(req);
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
-      res.redirect(302, "/");
+      let redirectTo = "/";
+      try {
+        const decoded = Buffer.from(state, "base64").toString("utf-8");
+        const parsed = JSON.parse(decoded);
+        if (parsed.returnPath && parsed.returnPath.startsWith("/")) {
+          redirectTo = parsed.returnPath;
+        }
+      } catch {
+      }
+      res.redirect(302, redirectTo);
     } catch (error) {
       console.error("[OAuth] Callback failed", error);
       res.status(500).json({ error: "OAuth callback failed" });
@@ -1011,6 +1120,49 @@ ${input.description.slice(0, 300)}${input.description.length > 300 ? "..." : ""}
     subscribe: publicProcedure.input(z2.object({ email: z2.string().email(), name: z2.string().optional() })).mutation(async ({ input }) => {
       await subscribeNewsletter(input.email, input.name);
       return { success: true };
+    })
+  }),
+  /* ── Cursos Gratuitos ── */
+  courses: router({
+    list: publicProcedure.input(z2.object({ category: z2.string().optional(), level: z2.string().optional() }).optional()).query(async ({ input }) => {
+      return getCourses(input?.category, input?.level);
+    }),
+    bySlug: publicProcedure.input(z2.object({ slug: z2.string() })).query(async ({ input }) => {
+      const course = await getCourseBySlug(input.slug);
+      if (!course) throw new TRPCError3({ code: "NOT_FOUND", message: "Curso n\xE3o encontrado." });
+      return course;
+    }),
+    enroll: protectedProcedure.input(z2.object({ courseId: z2.number() })).mutation(async ({ input, ctx }) => {
+      const course = await getCourseById(input.courseId);
+      if (!course) throw new TRPCError3({ code: "NOT_FOUND", message: "Curso n\xE3o encontrado." });
+      const enrollment = await createEnrollment(ctx.user.id, input.courseId);
+      return { success: true, enrollment, platformUrl: course.platformUrl };
+    }),
+    complete: protectedProcedure.input(z2.object({ enrollmentId: z2.number() })).mutation(async ({ input, ctx }) => {
+      await completeEnrollment(input.enrollmentId, ctx.user.id);
+      return { success: true };
+    }),
+    myEnrollments: protectedProcedure.query(async ({ ctx }) => {
+      return getMyEnrollments(ctx.user.id);
+    }),
+    checkEnrollment: protectedProcedure.input(z2.object({ courseId: z2.number() })).query(async ({ input, ctx }) => {
+      const enrollment = await getEnrollment(ctx.user.id, input.courseId);
+      return enrollment ?? null;
+    })
+  }),
+  /* ── Certificados ── */
+  certificates: router({
+    issue: protectedProcedure.input(z2.object({ enrollmentId: z2.number(), courseId: z2.number() })).mutation(async ({ input, ctx }) => {
+      const cert = await issueCertificate(input.enrollmentId, ctx.user.id, input.courseId);
+      return cert;
+    }),
+    myCertificates: protectedProcedure.query(async ({ ctx }) => {
+      return getMyCertificates(ctx.user.id);
+    }),
+    verify: publicProcedure.input(z2.object({ code: z2.string() })).query(async ({ input }) => {
+      const result = await getCertificateByCode(input.code);
+      if (!result) throw new TRPCError3({ code: "NOT_FOUND", message: "Certificado n\xE3o encontrado." });
+      return result;
     })
   })
 });

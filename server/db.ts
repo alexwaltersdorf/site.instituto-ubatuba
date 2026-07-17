@@ -1,6 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { contacts, ethicsReports, gallery, InsertContact, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertUser, newsletterSubscribers, posts, users } from "../drizzle/schema";
+import { certificates, contacts, courses, enrollments, ethicsReports, gallery, InsertContact, InsertCourse, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertUser, newsletterSubscribers, posts, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -167,4 +167,103 @@ export async function getNewsletterSubscribers(limit = 100) {
   const db = await getDb();
   if (!db) return [];
   return db.select().from(newsletterSubscribers).where(eq(newsletterSubscribers.active, true)).orderBy(desc(newsletterSubscribers.createdAt)).limit(limit);
+}
+
+/* ── Cursos ── */
+export async function getCourses(category?: string, level?: string) {
+  const db = await getDb();
+  if (!db) return [];
+  const conditions = [eq(courses.active, true)];
+  if (category) conditions.push(eq(courses.category, category));
+  if (level) conditions.push(eq(courses.level, level as "iniciante" | "intermediario" | "avancado"));
+  return db.select().from(courses).where(and(...conditions)).orderBy(desc(courses.createdAt));
+}
+
+export async function getCourseBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(courses).where(and(eq(courses.slug, slug), eq(courses.active, true))).limit(1);
+  return result[0];
+}
+
+export async function getCourseById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(courses).where(eq(courses.id, id)).limit(1);
+  return result[0];
+}
+
+export async function createCourse(data: InsertCourse) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(courses).values(data);
+}
+
+/* ── Enrollments ── */
+export async function createEnrollment(userId: number, courseId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  // Check if already enrolled
+  const existing = await db.select().from(enrollments).where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId))).limit(1);
+  if (existing.length > 0) return existing[0];
+  await db.insert(enrollments).values({ userId, courseId, status: "active" });
+  const result = await db.select().from(enrollments).where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId))).limit(1);
+  return result[0];
+}
+
+export async function getMyEnrollments(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select({ enrollment: enrollments, course: courses })
+    .from(enrollments)
+    .innerJoin(courses, eq(enrollments.courseId, courses.id))
+    .where(eq(enrollments.userId, userId))
+    .orderBy(desc(enrollments.enrolledAt));
+}
+
+export async function completeEnrollment(enrollmentId: number, userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(enrollments).set({ status: "completed", completedAt: new Date() }).where(and(eq(enrollments.id, enrollmentId), eq(enrollments.userId, userId)));
+}
+
+export async function getEnrollment(userId: number, courseId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(enrollments).where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId))).limit(1);
+  return result[0];
+}
+
+/* ── Certificates ── */
+export async function issueCertificate(enrollmentId: number, userId: number, courseId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  // Check if already issued
+  const existing = await db.select().from(certificates).where(and(eq(certificates.enrollmentId, enrollmentId), eq(certificates.userId, userId))).limit(1);
+  if (existing.length > 0) return existing[0];
+  const code = `IU${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  await db.insert(certificates).values({ enrollmentId, userId, courseId, code });
+  const result = await db.select().from(certificates).where(eq(certificates.code, code)).limit(1);
+  return result[0];
+}
+
+export async function getMyCertificates(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select({ certificate: certificates, course: courses })
+    .from(certificates)
+    .innerJoin(courses, eq(certificates.courseId, courses.id))
+    .where(eq(certificates.userId, userId))
+    .orderBy(desc(certificates.issuedAt));
+}
+
+export async function getCertificateByCode(code: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select({ certificate: certificates, course: courses })
+    .from(certificates)
+    .innerJoin(courses, eq(certificates.courseId, courses.id))
+    .where(eq(certificates.code, code))
+    .limit(1);
+  return result[0];
 }

@@ -184,6 +184,21 @@ export default function Header() {
               Mascotes
             </Link>
 
+            {/* Cursos */}
+            <Link
+              href="/cursos"
+              className={cn(
+                "px-4 py-2 text-sm font-medium tracking-wide rounded-sm transition-all duration-200",
+                location.startsWith("/cursos")
+                  ? isLight ? "text-forest bg-accent" : "text-white bg-white/15"
+                  : isLight
+                  ? "text-foreground/70 hover:text-forest hover:bg-accent/60"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
+              )}
+            >
+              Cursos
+            </Link>
+
             {/* Transparência */}
             <Link
               href="/transparencia"
@@ -312,6 +327,19 @@ export default function Header() {
             )}
           >
             Mascotes
+          </Link>
+
+          {/* Cursos */}
+          <Link
+            href="/cursos"
+            className={cn(
+              "px-4 py-3 text-sm font-medium rounded-sm transition-colors",
+              location.startsWith("/cursos")
+                ? "text-forest bg-accent font-semibold"
+                : "text-foreground/70 hover:text-forest hover:bg-accent/60"
+            )}
+          >
+            Cursos
           </Link>
 
           {/* Transparência */}
