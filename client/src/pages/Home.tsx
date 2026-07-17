@@ -1009,6 +1009,101 @@ export default function Home() {
       </RevealSection>
 
       {/* ══════════════════════════════════════════════════════════════
+          CURSOS EM DESTAQUE
+      ══════════════════════════════════════════════════════════════ */}
+      <RevealSection className="section-padding bg-cream">
+        <div className="container">
+          <div className="text-center mb-14">
+            <span className="section-label block mb-4">Educação Gratuita</span>
+            <h2 className="section-title mx-auto">Cursos em <span className="text-azul-oceano">Destaque</span></h2>
+            <p className="section-subtitle mx-auto mt-4">
+              Acesso ao ensino de excelência para todos. Cursos gratuitos de universidades renomadas com certificado de conclusão emitido pelo Instituto Ubatuba.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Harvard - CS50 */}
+            <Link href="/cursos/cs50-introducao-ciencia-computacao-harvard" className="card-elegant overflow-hidden group block">
+              <div className="h-40 bg-gradient-to-br from-[#A51C30] to-[#6B0F1A] flex items-center justify-center p-6">
+                <div className="text-center">
+                  <GraduationCap className="w-10 h-10 text-white/90 mx-auto mb-2" />
+                  <span className="text-white/90 text-xs font-semibold tracking-widest uppercase">Harvard University</span>
+                </div>
+              </div>
+              <div className="p-5">
+                <span className="inline-block px-2.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase bg-forest/10 text-forest rounded-full mb-2">Tecnologia</span>
+                <h3 className="font-bold text-foreground text-sm mb-2 group-hover:text-forest transition-colors line-clamp-2">CS50: Introdução à Ciência da Computação</h3>
+                <p className="text-xs text-muted-foreground line-clamp-2">O curso mais popular de Harvard, ministrado por David Malan.</p>
+                <div className="mt-3 flex items-center gap-1.5 text-forest text-xs font-medium group-hover:gap-2.5 transition-all">
+                  Acessar curso <ArrowRight className="w-3 h-3" />
+                </div>
+              </div>
+            </Link>
+
+            {/* USP - Sustentabilidade */}
+            <Link href="/cursos/sustentabilidade-usp" className="card-elegant overflow-hidden group block">
+              <div className="h-40 bg-gradient-to-br from-[#004B8D] to-[#002D5A] flex items-center justify-center p-6">
+                <div className="text-center">
+                  <Leaf className="w-10 h-10 text-white/90 mx-auto mb-2" />
+                  <span className="text-white/90 text-xs font-semibold tracking-widest uppercase">USP</span>
+                </div>
+              </div>
+              <div className="p-5">
+                <span className="inline-block px-2.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase bg-forest/10 text-forest rounded-full mb-2">Meio Ambiente</span>
+                <h3 className="font-bold text-foreground text-sm mb-2 group-hover:text-forest transition-colors line-clamp-2">Sustentabilidade: Conceitos e Aplicações</h3>
+                <p className="text-xs text-muted-foreground line-clamp-2">Desenvolvimento sustentável, economia circular e responsabilidade socioambiental.</p>
+                <div className="mt-3 flex items-center gap-1.5 text-forest text-xs font-medium group-hover:gap-2.5 transition-all">
+                  Acessar curso <ArrowRight className="w-3 h-3" />
+                </div>
+              </div>
+            </Link>
+
+            {/* University of Michigan - Python */}
+            <Link href="/cursos/python-for-everybody-michigan" className="card-elegant overflow-hidden group block">
+              <div className="h-40 bg-gradient-to-br from-[#00274C] to-[#001A33] flex items-center justify-center p-6">
+                <div className="text-center">
+                  <BookOpen className="w-10 h-10 text-[#FFCB05] mx-auto mb-2" />
+                  <span className="text-white/90 text-xs font-semibold tracking-widest uppercase">University of Michigan</span>
+                </div>
+              </div>
+              <div className="p-5">
+                <span className="inline-block px-2.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase bg-forest/10 text-forest rounded-full mb-2">Tecnologia</span>
+                <h3 className="font-bold text-foreground text-sm mb-2 group-hover:text-forest transition-colors line-clamp-2">Python for Everybody</h3>
+                <p className="text-xs text-muted-foreground line-clamp-2">Aprenda Python do zero com o Prof. Charles Severance.</p>
+                <div className="mt-3 flex items-center gap-1.5 text-forest text-xs font-medium group-hover:gap-2.5 transition-all">
+                  Acessar curso <ArrowRight className="w-3 h-3" />
+                </div>
+              </div>
+            </Link>
+
+            {/* UFRS - Inglês */}
+            <Link href="/cursos/ingles-ufrs-aprenda-mais" className="card-elegant overflow-hidden group block">
+              <div className="h-40 bg-gradient-to-br from-[#003366] to-[#001F3F] flex items-center justify-center p-6">
+                <div className="text-center">
+                  <Waves className="w-10 h-10 text-[#FFD700] mx-auto mb-2" />
+                  <span className="text-white/90 text-xs font-semibold tracking-widest uppercase">UFRS / MEC</span>
+                </div>
+              </div>
+              <div className="p-5">
+                <span className="inline-block px-2.5 py-0.5 text-[10px] font-semibold tracking-widest uppercase bg-forest/10 text-forest rounded-full mb-2">Idiomas</span>
+                <h3 className="font-bold text-foreground text-sm mb-2 group-hover:text-forest transition-colors line-clamp-2">Inglês — UFRS / Aprenda Mais (MEC)</h3>
+                <p className="text-xs text-muted-foreground line-clamp-2">Curso gratuito de inglês pela plataforma Aprenda Mais do Governo Federal.</p>
+                <div className="mt-3 flex items-center gap-1.5 text-forest text-xs font-medium group-hover:gap-2.5 transition-all">
+                  Acessar curso <ArrowRight className="w-3 h-3" />
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          <div className="text-center mt-12">
+            <Link href="/cursos" className="btn-outline">
+              Ver Todos os Cursos <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </RevealSection>
+
+      {/* ══════════════════════════════════════════════════════════════
           PARCEIROS (estilo SOS — grid de logos)
       ══════════════════════════════════════════════════════════════ */}
       <RevealSection className="section-padding bg-sand">

@@ -252,3 +252,11 @@
 - [x] Botão "Acessar Plataforma" disponível após inscrição (e também antes, para quem quer apenas explorar)
 - [x] Se usuário não logado, redirecionar para login com returnPath para voltar ao curso
 - [x] OAuth callback atualizado para parsear returnPath do state e redirecionar após login
+
+## Fix: EACCES esbuild na Hostinger
+- [x] Criar .npmrc com enable-pre-post-scripts=false na raiz do projeto
+- [x] Commit e push na branch main
+
+## Cursos em Destaque na Home
+- [x] Adicionar seção com 4 cursos populares na página inicial (Harvard, USP, University of Michigan, UFRS/MEC)
+- [x] Adicionar cursos de Michigan (Python for Everybody) e UFRS (Inglês via Aprenda Mais MEC) ao catálogo
