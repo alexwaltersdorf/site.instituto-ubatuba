@@ -245,3 +245,10 @@
 - [x] Criar página /meus-certificados com tabs (Meus Cursos / Certificados)
 - [x] Adicionar SEO metadata para rotas /cursos, /cursos/:slug, /meus-certificados
 - [x] Corrigir OAuth callback para redirecionar ao returnPath após login
+
+## Expansão de Cursos de Idiomas
+- [x] Adicionar cursos gratuitos de inglês (Kultivi, Fundação Bradesco, IFMG, Aprenda Mais/MEC, Open University, Coursera, Santander/British Council, Prime Cursos)
+- [x] Adicionar cursos gratuitos de espanhol (Aprenda Mais/MEC, Coursera, UNESP Aberta, Kultivi, Universitat Autònoma de Barcelona)
+- [x] Adicionar cursos gratuitos de francês (Coursera/École Polytechnique, Kultivi)
+- [x] Adicionar cursos gratuitos de alemão (DW Learn German, LMU Munique/Coursera)
+- [x] Adicionar cursos gratuitos de italiano, japonês, libras, mandarim e coreano (Kultivi, Fundação Bradesco, Peking University, Yonsei University)
