@@ -5,10 +5,32 @@ import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
+/**
+ * Normaliza a connection string quando a senha contém caracteres reservados
+ * sem URL-encoding (ex.: '@' na senha, como no DATABASE_URL da Hostinger) —
+ * sem isso o parser corta a URL no lugar errado e a conexão nunca abre.
+ * URLs já válidas (um único '@') passam intactas.
+ */
+function normalizeDatabaseUrl(raw: string): string {
+  const schemeIdx = raw.indexOf("://");
+  if (schemeIdx === -1) return raw;
+  const scheme = raw.slice(0, schemeIdx + 3);
+  const rest = raw.slice(schemeIdx + 3);
+  const lastAt = rest.lastIndexOf("@");
+  if (lastAt === -1) return raw;
+  const userinfo = rest.slice(0, lastAt);
+  if (!userinfo.includes("@")) return raw;
+  const colon = userinfo.indexOf(":");
+  if (colon === -1) return raw;
+  const user = userinfo.slice(0, colon);
+  const pass = userinfo.slice(colon + 1);
+  return `${scheme}${encodeURIComponent(user)}:${encodeURIComponent(pass)}@${rest.slice(lastAt + 1)}`;
+}
+
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      _db = drizzle(normalizeDatabaseUrl(process.env.DATABASE_URL));
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
