@@ -42,7 +42,9 @@ function ScrollToTop() {
         return;
       }
     }
-    window.scrollTo(0, 0);
+    // "instant" é obrigatório: o CSS global tem scroll-behavior: smooth e a
+    // animação suave é cancelada no meio da troca de página (fica no rodapé).
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [location]);
 
   return null;
