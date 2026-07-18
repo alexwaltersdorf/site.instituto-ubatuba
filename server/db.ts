@@ -24,7 +24,14 @@ function normalizeDatabaseUrl(raw: string): string {
   if (colon === -1) return raw;
   const user = userinfo.slice(0, colon);
   const pass = userinfo.slice(colon + 1);
-  return `${scheme}${encodeURIComponent(user)}:${encodeURIComponent(pass)}@${rest.slice(lastAt + 1)}`;
+  let hostpart = rest.slice(lastAt + 1);
+  // O web app Node da Hostinger não roda no mesmo host do MySQL compartilhado:
+  // "localhost" não resolve para o banco. O servidor MySQL do plano é
+  // srv722.hstgr.io (ver hPanel → Bancos de dados → MySQL remoto).
+  if (hostpart.startsWith("localhost") && user.startsWith("u666428935_")) {
+    hostpart = hostpart.replace(/^localhost/, "srv722.hstgr.io");
+  }
+  return `${scheme}${encodeURIComponent(user)}:${encodeURIComponent(pass)}@${hostpart}`;
 }
 
 export async function getDb() {
