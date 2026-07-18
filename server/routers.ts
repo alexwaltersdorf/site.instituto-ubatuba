@@ -23,8 +23,9 @@ import {
   getMyEnrollments,
   getPostBySlug,
   getPublishedPosts,
-  getStudentProfile,
+  findStudentByCpf,
   issueCertificate,
+  logStudentEnrollment,
   saveStudentProfile,
   subscribeNewsletter,
   updatePost,
@@ -310,14 +311,12 @@ export const appRouter = router({
       }),
   }),
 
-  /* ── Cadastro de Alunos ── */
+  /* ── Cadastro de Alunos ──
+   * SEM login/OAuth (o domínio próprio não é aceito pelo OAuth da Manus):
+   * o cadastro é público, identificado por CPF e salvo direto no banco
+   * MySQL do site hospedado na Hostinger. */
   students: router({
-    me: protectedProcedure.query(async ({ ctx }) => {
-      const profile = await getStudentProfile(ctx.user.id);
-      return profile ?? null;
-    }),
-
-    register: protectedProcedure
+    register: publicProcedure
       .input(
         z.object({
           fullName: z.string().trim().min(5, "Informe o nome completo"),
@@ -342,16 +341,31 @@ export const appRouter = router({
           email: z.string().trim().email("E-mail inválido"),
         })
       )
-      .mutation(async ({ input, ctx }) => {
-        const isNew = !(await getStudentProfile(ctx.user.id));
-        const profile = await saveStudentProfile({ ...input, userId: ctx.user.id });
-        if (isNew) {
+      .mutation(async ({ input }) => {
+        const cpf = input.cpf.replace(/\D/g, "");
+        const existing = await findStudentByCpf(cpf);
+        const profile = await saveStudentProfile({ ...input, cpf });
+        if (!profile) {
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível salvar o cadastro. Tente novamente." });
+        }
+        if (!existing) {
           await notifyOwner({
             title: `🎓 Novo aluno cadastrado: ${input.fullName}`,
             content: `**Nome:** ${input.fullName}\n**E-mail:** ${input.email}\n**Telefone:** ${input.phone}\n**Cidade:** ${input.city}`,
           });
         }
-        return { success: true, profile };
+        return { success: true, id: profile.id, fullName: profile.fullName };
+      }),
+
+    enroll: publicProcedure
+      .input(z.object({ studentId: z.number(), courseId: z.number(), courseSlug: z.string() }))
+      .mutation(async ({ input }) => {
+        try {
+          await logStudentEnrollment(input.studentId, input.courseId, input.courseSlug);
+        } catch {
+          // registro de inscrição não pode bloquear o acesso ao curso
+        }
+        return { success: true };
       }),
   }),
 

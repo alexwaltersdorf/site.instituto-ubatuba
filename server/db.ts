@@ -1,6 +1,6 @@
 import { and, desc, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { certificates, contacts, courses, enrollments, ethicsReports, gallery, InsertContact, InsertCourse, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertStudentProfile, InsertUser, newsletterSubscribers, posts, studentProfiles, users } from "../drizzle/schema";
+import { certificates, contacts, courses, enrollments, ethicsReports, gallery, InsertContact, InsertCourse, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertStudentProfile, InsertUser, newsletterSubscribers, posts, studentEnrollments, studentProfiles, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -268,19 +268,28 @@ export async function getCertificateByCode(code: string) {
   return result[0];
 }
 
-/* ── Cadastro de Alunos ── */
+/* ── Cadastro de Alunos (sem OAuth — dados salvos no banco do site na Hostinger) ── */
 
-// A Hostinger não roda migrações drizzle no deploy, então a tabela é
-// garantida em runtime na primeira operação (idempotente).
-let studentProfilesTableEnsured = false;
-async function ensureStudentProfilesTable(db: NonNullable<Awaited<ReturnType<typeof getDb>>>) {
-  if (studentProfilesTableEnsured) return;
+// A Hostinger não roda migrações drizzle no deploy, então as tabelas são
+// garantidas em runtime na primeira operação (idempotente).
+let studentTablesEnsured = false;
+async function ensureStudentTables(db: NonNullable<Awaited<ReturnType<typeof getDb>>>) {
+  if (studentTablesEnsured) return;
+  // Remove a versão anterior da tabela (chaveada por userId do OAuth, que
+  // nunca funcionou no domínio próprio) caso exista sem a coluna atual.
+  const legacy = await db.execute(sql`
+    SELECT COUNT(*) AS n FROM information_schema.columns
+    WHERE table_schema = DATABASE() AND table_name = 'student_profiles' AND column_name = 'userId'
+  `);
+  const legacyRows = legacy[0] as unknown as Array<{ n: number | string }>;
+  if (legacyRows?.[0] && Number(legacyRows[0].n) > 0) {
+    await db.execute(sql`DROP TABLE \`student_profiles\``);
+  }
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS \`student_profiles\` (
       \`id\` int AUTO_INCREMENT NOT NULL,
-      \`userId\` int NOT NULL,
-      \`fullName\` varchar(255) NOT NULL,
       \`cpf\` varchar(14) NOT NULL,
+      \`fullName\` varchar(255) NOT NULL,
       \`address\` varchar(255) NOT NULL,
       \`number\` varchar(20) NOT NULL,
       \`neighborhood\` varchar(120) NOT NULL,
@@ -292,26 +301,43 @@ async function ensureStudentProfilesTable(db: NonNullable<Awaited<ReturnType<typ
       \`createdAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
       \`updatedAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       CONSTRAINT \`student_profiles_id\` PRIMARY KEY(\`id\`),
-      CONSTRAINT \`student_profiles_userId_unique\` UNIQUE(\`userId\`)
+      CONSTRAINT \`student_profiles_cpf_unique\` UNIQUE(\`cpf\`)
     )
   `);
-  studentProfilesTableEnsured = true;
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS \`student_enrollments\` (
+      \`id\` int AUTO_INCREMENT NOT NULL,
+      \`studentId\` int NOT NULL,
+      \`courseId\` int NOT NULL,
+      \`courseSlug\` varchar(255) NOT NULL,
+      \`enrolledAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT \`student_enrollments_id\` PRIMARY KEY(\`id\`)
+    )
+  `);
+  studentTablesEnsured = true;
 }
 
-export async function getStudentProfile(userId: number) {
+export async function findStudentByCpf(cpf: string) {
   const db = await getDb();
   if (!db) return undefined;
-  await ensureStudentProfilesTable(db);
-  const result = await db.select().from(studentProfiles).where(eq(studentProfiles.userId, userId)).limit(1);
+  await ensureStudentTables(db);
+  const result = await db.select().from(studentProfiles).where(eq(studentProfiles.cpf, cpf)).limit(1);
   return result[0];
 }
 
 export async function saveStudentProfile(data: InsertStudentProfile) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
-  await ensureStudentProfilesTable(db);
-  const { userId, ...fields } = data;
+  await ensureStudentTables(db);
+  const { cpf, ...fields } = data;
   await db.insert(studentProfiles).values(data).onDuplicateKeyUpdate({ set: fields });
-  const result = await db.select().from(studentProfiles).where(eq(studentProfiles.userId, userId)).limit(1);
+  const result = await db.select().from(studentProfiles).where(eq(studentProfiles.cpf, cpf)).limit(1);
   return result[0];
+}
+
+export async function logStudentEnrollment(studentId: number, courseId: number, courseSlug: string) {
+  const db = await getDb();
+  if (!db) return;
+  await ensureStudentTables(db);
+  await db.insert(studentEnrollments).values({ studentId, courseId, courseSlug });
 }

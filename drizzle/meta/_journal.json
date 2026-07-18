@@ -43,6 +43,13 @@
       "when": 1784339525680,
       "tag": "0005_unusual_frightful_four",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1784373243369,
+      "tag": "0006_even_barracuda",
+      "breakpoints": true
     }
   ]
 }

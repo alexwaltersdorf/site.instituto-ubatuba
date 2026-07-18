@@ -9,8 +9,6 @@ import { Label } from "@/components/ui/label";
 import { useSEO } from "@/components/SEOHead";
 import { InstitutionSeal } from "@/components/InstitutionLogo";
 import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
 import { coursesDemo, CATEGORIES } from "@/data/coursesDemo";
 import { toast } from "sonner";
 
@@ -47,6 +45,32 @@ const EMPTY_FORM = {
   email: "",
 };
 
+/* Cadastro lembrado neste dispositivo (o registro oficial fica no banco do site) */
+const STORAGE_PROFILE = "iu_student_profile";
+const STORAGE_ENROLLED = "iu_enrolled_courses";
+
+type StoredStudent = { id: number; fullName: string };
+
+function loadStoredStudent(): StoredStudent | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_PROFILE);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return parsed && typeof parsed.id === "number" ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function loadEnrolledIds(): number[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_ENROLLED);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((n) => typeof n === "number") : [];
+  } catch {
+    return [];
+  }
+}
+
 function Field({ label, htmlFor, children }: { label: string; htmlFor: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
@@ -60,45 +84,25 @@ function Field({ label, htmlFor, children }: { label: string; htmlFor: string; c
 
 export default function CursoDetalhe() {
   const { slug } = useParams<{ slug: string }>();
-  const { user, loading: authLoading } = useAuth();
 
   const { data: dbCourse, isLoading } = trpc.courses.bySlug.useQuery({ slug: slug! }, { retry: false, enabled: !!slug });
   const course = dbCourse ?? coursesDemo.find((c) => c.slug === slug);
 
-  const { data: enrollment, refetch: refetchEnrollment } = trpc.courses.checkEnrollment.useQuery(
-    { courseId: course?.id ?? 0 },
-    { enabled: !!user && !!course }
-  );
-
-  const enrollMutation = trpc.courses.enroll.useMutation({
-    onSuccess: (data) => {
-      toast.success("Inscrição realizada! Redirecionando para a plataforma do curso...");
-      refetchEnrollment();
-      if (data.platformUrl) {
-        setTimeout(() => {
-          window.open(data.platformUrl, "_blank");
-        }, 800);
-      }
-    },
-    onError: (err) => {
-      toast.error(err.message || "Erro ao realizar inscrição.");
-    },
-  });
-
-  // Cadastro do aluno: obrigatório (uma única vez) antes da inscrição
-  const { data: profile, isLoading: profileLoading, refetch: refetchProfile } = trpc.students.me.useQuery(undefined, {
-    enabled: !!user,
-    retry: false,
-  });
+  const [student, setStudent] = useState<StoredStudent | null>(loadStoredStudent);
+  const [enrolledIds, setEnrolledIds] = useState<number[]>(loadEnrolledIds);
   const [showCadastro, setShowCadastro] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
 
+  const logEnrollment = trpc.students.enroll.useMutation();
+
   const registerMutation = trpc.students.register.useMutation({
-    onSuccess: () => {
-      toast.success("Cadastro realizado com sucesso!");
+    onSuccess: (data) => {
+      const profile: StoredStudent = { id: data.id, fullName: data.fullName };
+      localStorage.setItem(STORAGE_PROFILE, JSON.stringify(profile));
+      setStudent(profile);
       setShowCadastro(false);
-      refetchProfile();
-      proceedToCourse();
+      toast.success("Cadastro realizado! Redirecionando para o curso...");
+      goToCourse(profile);
     },
     onError: (err) => {
       toast.error(err.message || "Verifique os dados do cadastro.");
@@ -134,36 +138,29 @@ export default function CursoDetalhe() {
 
   const category = CATEGORIES.find((c) => c.id === course.category);
   const tags: string[] = course.tags ? JSON.parse(course.tags) : [];
-  const isEnrolled = !!enrollment;
+  const isEnrolled = enrolledIds.includes(course.id);
 
-  /** Leva o aluno ao curso: inscreve (abre a plataforma) ou, se já inscrito, abre direto. */
-  function proceedToCourse() {
+  /** Registra a inscrição no servidor e leva o aluno ao curso. */
+  function goToCourse(profile: StoredStudent) {
     if (!course) return;
-    if (enrollment) {
-      window.open(course.platformUrl, "_blank");
-      return;
+    logEnrollment.mutate({ studentId: profile.id, courseId: course.id, courseSlug: course.slug });
+    if (!enrolledIds.includes(course.id)) {
+      const next = [...enrolledIds, course.id];
+      setEnrolledIds(next);
+      localStorage.setItem(STORAGE_ENROLLED, JSON.stringify(next));
     }
-    enrollMutation.mutate({ courseId: course.id });
+    const win = window.open(course.platformUrl, "_blank", "noopener");
+    if (!win) window.location.href = course.platformUrl;
   }
 
   const handleEnroll = () => {
-    if (!user) {
-      window.location.href = getLoginUrl(`/cursos/${slug}`);
-      return;
-    }
-    if (profileLoading) return;
-    if (!profile) {
-      // Primeiro acesso: exige o cadastro completo antes de liberar o curso
-      setForm((f) => ({
-        ...f,
-        fullName: f.fullName || user.name || "",
-        email: f.email || user.email || "",
-      }));
+    if (!student) {
+      // Primeiro acesso neste dispositivo: cadastro obrigatório (uma única vez)
       setShowCadastro(true);
       return;
     }
     // Já cadastrado: pula o formulário e vai direto ao curso
-    proceedToCourse();
+    goToCourse(student);
   };
 
   return (
@@ -243,29 +240,20 @@ export default function CursoDetalhe() {
                   <Button
                     className="w-full bg-forest hover:bg-forest-dark text-white h-12 text-base"
                     onClick={handleEnroll}
-                    disabled={enrollMutation.isPending || registerMutation.isPending || authLoading}
+                    disabled={registerMutation.isPending}
                   >
-                    {enrollMutation.isPending || registerMutation.isPending ? (
+                    {registerMutation.isPending ? (
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     ) : (
                       <GraduationCap className="w-4 h-4 mr-2" />
                     )}
                     Inscrever-se Gratuitamente
                   </Button>
-                  {isEnrolled && (
-                    <Link href="/meus-certificados">
-                      <Button variant="outline" className="w-full mt-2">
-                        <GraduationCap className="w-4 h-4 mr-2" /> Meus Certificados
-                      </Button>
-                    </Link>
-                  )}
-                  {!user ? (
-                    <p className="text-xs text-center text-muted-foreground">Faça login para se inscrever e acompanhar seu progresso</p>
-                  ) : (
-                    <p className="text-[11px] text-center text-muted-foreground">
-                      Cadastro único e gratuito no Instituto. Seus dados são protegidos (LGPD).
-                    </p>
-                  )}
+                  <p className="text-[11px] text-center text-muted-foreground">
+                    {student
+                      ? `Cadastro ativo: ${student.fullName.split(" ")[0]} — você irá direto ao curso.`
+                      : "Cadastro único e gratuito no Instituto. Seus dados são protegidos (LGPD)."}
+                  </p>
                 </div>
               </div>
             </div>

@@ -162,12 +162,14 @@ export const certificates = mysqlTable("certificates", {
 export type Certificate = typeof certificates.$inferSelect;
 export type InsertCertificate = typeof certificates.$inferInsert;
 
-/* ── Cadastro de Alunos (obrigatório antes da inscrição em cursos) ── */
+/* ── Cadastro de Alunos (obrigatório antes da inscrição em cursos) ──
+ * Identificado por CPF (único), SEM dependência do login/OAuth da Manus:
+ * o cadastro é salvo direto no banco do site hospedado na Hostinger. */
 export const studentProfiles = mysqlTable("student_profiles", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull().unique(),
+  /** CPF normalizado (somente dígitos) — identificador único do aluno */
+  cpf: varchar("cpf", { length: 14 }).notNull().unique(),
   fullName: varchar("fullName", { length: 255 }).notNull(),
-  cpf: varchar("cpf", { length: 14 }).notNull(),
   address: varchar("address", { length: 255 }).notNull(),
   number: varchar("number", { length: 20 }).notNull(),
   neighborhood: varchar("neighborhood", { length: 120 }).notNull(),
@@ -183,3 +185,15 @@ export const studentProfiles = mysqlTable("student_profiles", {
 
 export type StudentProfile = typeof studentProfiles.$inferSelect;
 export type InsertStudentProfile = typeof studentProfiles.$inferInsert;
+
+/* ── Inscrições de Alunos em cursos (registro para relatórios) ── */
+export const studentEnrollments = mysqlTable("student_enrollments", {
+  id: int("id").autoincrement().primaryKey(),
+  studentId: int("studentId").notNull(),
+  courseId: int("courseId").notNull(),
+  courseSlug: varchar("courseSlug", { length: 255 }).notNull(),
+  enrolledAt: timestamp("enrolledAt").defaultNow().notNull(),
+});
+
+export type StudentEnrollment = typeof studentEnrollments.$inferSelect;
+export type InsertStudentEnrollment = typeof studentEnrollments.$inferInsert;
