@@ -1,6 +1,6 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { certificates, contacts, courses, enrollments, ethicsReports, gallery, InsertContact, InsertCourse, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertUser, newsletterSubscribers, posts, users } from "../drizzle/schema";
+import { certificates, contacts, courses, enrollments, ethicsReports, gallery, InsertContact, InsertCourse, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertStudentProfile, InsertUser, newsletterSubscribers, posts, studentProfiles, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -265,5 +265,53 @@ export async function getCertificateByCode(code: string) {
     .innerJoin(courses, eq(certificates.courseId, courses.id))
     .where(eq(certificates.code, code))
     .limit(1);
+  return result[0];
+}
+
+/* ── Cadastro de Alunos ── */
+
+// A Hostinger não roda migrações drizzle no deploy, então a tabela é
+// garantida em runtime na primeira operação (idempotente).
+let studentProfilesTableEnsured = false;
+async function ensureStudentProfilesTable(db: NonNullable<Awaited<ReturnType<typeof getDb>>>) {
+  if (studentProfilesTableEnsured) return;
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS \`student_profiles\` (
+      \`id\` int AUTO_INCREMENT NOT NULL,
+      \`userId\` int NOT NULL,
+      \`fullName\` varchar(255) NOT NULL,
+      \`cpf\` varchar(14) NOT NULL,
+      \`address\` varchar(255) NOT NULL,
+      \`number\` varchar(20) NOT NULL,
+      \`neighborhood\` varchar(120) NOT NULL,
+      \`city\` varchar(120) NOT NULL,
+      \`cep\` varchar(9) NOT NULL,
+      \`birthDate\` varchar(10) NOT NULL,
+      \`phone\` varchar(30) NOT NULL,
+      \`email\` varchar(320) NOT NULL,
+      \`createdAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      \`updatedAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      CONSTRAINT \`student_profiles_id\` PRIMARY KEY(\`id\`),
+      CONSTRAINT \`student_profiles_userId_unique\` UNIQUE(\`userId\`)
+    )
+  `);
+  studentProfilesTableEnsured = true;
+}
+
+export async function getStudentProfile(userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  await ensureStudentProfilesTable(db);
+  const result = await db.select().from(studentProfiles).where(eq(studentProfiles.userId, userId)).limit(1);
+  return result[0];
+}
+
+export async function saveStudentProfile(data: InsertStudentProfile) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await ensureStudentProfilesTable(db);
+  const { userId, ...fields } = data;
+  await db.insert(studentProfiles).values(data).onDuplicateKeyUpdate({ set: fields });
+  const result = await db.select().from(studentProfiles).where(eq(studentProfiles.userId, userId)).limit(1);
   return result[0];
 }

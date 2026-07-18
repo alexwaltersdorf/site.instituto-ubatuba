@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { useParams, Link } from "wouter";
-import { GraduationCap, Clock, Building2, ExternalLink, ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
+import { GraduationCap, Clock, ExternalLink, ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useSEO } from "@/components/SEOHead";
 import { InstitutionSeal } from "@/components/InstitutionLogo";
 import { trpc } from "@/lib/trpc";
@@ -9,6 +13,50 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { coursesDemo, CATEGORIES } from "@/data/coursesDemo";
 import { toast } from "sonner";
+
+/* Máscaras leves para os campos do cadastro */
+const maskCPF = (v: string) => {
+  const d = v.replace(/\D/g, "").slice(0, 11);
+  return d
+    .replace(/^(\d{3})(\d)/, "$1.$2")
+    .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d{1,2})$/, ".$1-$2");
+};
+const maskCEP = (v: string) => {
+  const d = v.replace(/\D/g, "").slice(0, 8);
+  return d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d;
+};
+const maskPhone = (v: string) => {
+  const d = v.replace(/\D/g, "").slice(0, 11);
+  if (d.length <= 2) return d;
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+};
+
+const EMPTY_FORM = {
+  fullName: "",
+  cpf: "",
+  address: "",
+  number: "",
+  neighborhood: "",
+  city: "",
+  cep: "",
+  birthDate: "",
+  phone: "",
+  email: "",
+};
+
+function Field({ label, htmlFor, children }: { label: string; htmlFor: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1.5">
+      <Label htmlFor={htmlFor} className="text-sm font-medium">
+        {label} <span className="text-destructive">*</span>
+      </Label>
+      {children}
+    </div>
+  );
+}
 
 export default function CursoDetalhe() {
   const { slug } = useParams<{ slug: string }>();
@@ -36,6 +84,29 @@ export default function CursoDetalhe() {
       toast.error(err.message || "Erro ao realizar inscrição.");
     },
   });
+
+  // Cadastro do aluno: obrigatório (uma única vez) antes da inscrição
+  const { data: profile, isLoading: profileLoading, refetch: refetchProfile } = trpc.students.me.useQuery(undefined, {
+    enabled: !!user,
+    retry: false,
+  });
+  const [showCadastro, setShowCadastro] = useState(false);
+  const [form, setForm] = useState(EMPTY_FORM);
+
+  const registerMutation = trpc.students.register.useMutation({
+    onSuccess: () => {
+      toast.success("Cadastro realizado com sucesso!");
+      setShowCadastro(false);
+      refetchProfile();
+      proceedToCourse();
+    },
+    onError: (err) => {
+      toast.error(err.message || "Verifique os dados do cadastro.");
+    },
+  });
+
+  const setField = (key: keyof typeof EMPTY_FORM) => (value: string) =>
+    setForm((f) => ({ ...f, [key]: value }));
 
   useSEO({
     title: course ? `${course.title} | Cursos Gratuitos` : "Curso | Instituto Ubatuba",
@@ -65,12 +136,34 @@ export default function CursoDetalhe() {
   const tags: string[] = course.tags ? JSON.parse(course.tags) : [];
   const isEnrolled = !!enrollment;
 
+  /** Leva o aluno ao curso: inscreve (abre a plataforma) ou, se já inscrito, abre direto. */
+  function proceedToCourse() {
+    if (!course) return;
+    if (enrollment) {
+      window.open(course.platformUrl, "_blank");
+      return;
+    }
+    enrollMutation.mutate({ courseId: course.id });
+  }
+
   const handleEnroll = () => {
     if (!user) {
       window.location.href = getLoginUrl(`/cursos/${slug}`);
       return;
     }
-    enrollMutation.mutate({ courseId: course.id });
+    if (profileLoading) return;
+    if (!profile) {
+      // Primeiro acesso: exige o cadastro completo antes de liberar o curso
+      setForm((f) => ({
+        ...f,
+        fullName: f.fullName || user.name || "",
+        email: f.email || user.email || "",
+      }));
+      setShowCadastro(true);
+      return;
+    }
+    // Já cadastrado: pula o formulário e vai direto ao curso
+    proceedToCourse();
   };
 
   return (
@@ -140,40 +233,114 @@ export default function CursoDetalhe() {
                   <p className="text-sm text-muted-foreground">Sem custo algum</p>
                 </div>
 
-                {isEnrolled ? (
-                  <div className="space-y-3">
+                <div className="space-y-3">
+                  {isEnrolled && (
                     <div className="flex items-center justify-center gap-2 text-forest font-medium py-2">
                       <CheckCircle2 className="w-5 h-5" />
                       <span>Inscrito</span>
                     </div>
-                    <Button className="w-full bg-forest hover:bg-forest-dark text-white" onClick={() => window.open(course.platformUrl, "_blank")}>
-                      <ExternalLink className="w-4 h-4 mr-2" /> Acessar Plataforma
-                    </Button>
+                  )}
+                  <Button
+                    className="w-full bg-forest hover:bg-forest-dark text-white h-12 text-base"
+                    onClick={handleEnroll}
+                    disabled={enrollMutation.isPending || registerMutation.isPending || authLoading}
+                  >
+                    {enrollMutation.isPending || registerMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <GraduationCap className="w-4 h-4 mr-2" />
+                    )}
+                    Inscrever-se Gratuitamente
+                  </Button>
+                  {isEnrolled && (
                     <Link href="/meus-certificados">
                       <Button variant="outline" className="w-full mt-2">
                         <GraduationCap className="w-4 h-4 mr-2" /> Meus Certificados
                       </Button>
                     </Link>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <Button className="w-full bg-forest hover:bg-forest-dark text-white h-12 text-base" onClick={handleEnroll} disabled={enrollMutation.isPending || authLoading}>
-                      {enrollMutation.isPending ? (<Loader2 className="w-4 h-4 mr-2 animate-spin" />) : (<GraduationCap className="w-4 h-4 mr-2" />)}
-                      Inscrever-se Gratuitamente
-                    </Button>
-                    <Button variant="outline" className="w-full" onClick={() => window.open(course.platformUrl, "_blank")}>
-                      <ExternalLink className="w-4 h-4 mr-2" /> Acessar Plataforma
-                    </Button>
-                    {!user && (
-                      <p className="text-xs text-center text-muted-foreground">Faça login para se inscrever e acompanhar seu progresso</p>
-                    )}
-                  </div>
-                )}
+                  )}
+                  {!user ? (
+                    <p className="text-xs text-center text-muted-foreground">Faça login para se inscrever e acompanhar seu progresso</p>
+                  ) : (
+                    <p className="text-[11px] text-center text-muted-foreground">
+                      Cadastro único e gratuito no Instituto. Seus dados são protegidos (LGPD).
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Cadastro obrigatório do aluno (uma única vez) */}
+      <Dialog open={showCadastro} onOpenChange={setShowCadastro}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-forest-dark">Cadastro do Aluno</DialogTitle>
+            <DialogDescription>
+              Para se inscrever gratuitamente, complete seu cadastro no Instituto Ubatuba.
+              Você só precisa fazer isso uma vez — nas próximas inscrições irá direto ao curso.
+              Todos os campos são obrigatórios.
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            className="space-y-3"
+            onSubmit={(e) => {
+              e.preventDefault();
+              registerMutation.mutate(form);
+            }}
+          >
+            <Field label="Nome Completo" htmlFor="cad-nome">
+              <Input id="cad-nome" required minLength={5} value={form.fullName} onChange={(e) => setField("fullName")(e.target.value)} placeholder="Seu nome completo" />
+            </Field>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="CPF" htmlFor="cad-cpf">
+                <Input id="cad-cpf" required inputMode="numeric" value={form.cpf} onChange={(e) => setField("cpf")(maskCPF(e.target.value))} placeholder="000.000.000-00" />
+              </Field>
+              <Field label="Data de Nascimento" htmlFor="cad-nascimento">
+                <Input id="cad-nascimento" required type="date" max={new Date().toISOString().slice(0, 10)} value={form.birthDate} onChange={(e) => setField("birthDate")(e.target.value)} />
+              </Field>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="col-span-2">
+                <Field label="Endereço" htmlFor="cad-endereco">
+                  <Input id="cad-endereco" required minLength={3} value={form.address} onChange={(e) => setField("address")(e.target.value)} placeholder="Rua, avenida..." />
+                </Field>
+              </div>
+              <Field label="Número" htmlFor="cad-numero">
+                <Input id="cad-numero" required value={form.number} onChange={(e) => setField("number")(e.target.value)} placeholder="Nº" />
+              </Field>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Bairro" htmlFor="cad-bairro">
+                <Input id="cad-bairro" required minLength={2} value={form.neighborhood} onChange={(e) => setField("neighborhood")(e.target.value)} placeholder="Seu bairro" />
+              </Field>
+              <Field label="Cidade" htmlFor="cad-cidade">
+                <Input id="cad-cidade" required minLength={2} value={form.city} onChange={(e) => setField("city")(e.target.value)} placeholder="Sua cidade" />
+              </Field>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="CEP" htmlFor="cad-cep">
+                <Input id="cad-cep" required inputMode="numeric" value={form.cep} onChange={(e) => setField("cep")(maskCEP(e.target.value))} placeholder="00000-000" />
+              </Field>
+              <Field label="Telefone" htmlFor="cad-telefone">
+                <Input id="cad-telefone" required inputMode="tel" value={form.phone} onChange={(e) => setField("phone")(maskPhone(e.target.value))} placeholder="(00) 00000-0000" />
+              </Field>
+            </div>
+            <Field label="E-mail" htmlFor="cad-email">
+              <Input id="cad-email" required type="email" value={form.email} onChange={(e) => setField("email")(e.target.value)} placeholder="seu@email.com" />
+            </Field>
+            <Button type="submit" className="w-full bg-forest hover:bg-forest-dark text-white h-11 mt-2" disabled={registerMutation.isPending}>
+              {registerMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <GraduationCap className="w-4 h-4 mr-2" />}
+              Concluir cadastro e acessar o curso
+            </Button>
+            <p className="text-[11px] text-center text-muted-foreground">
+              Seus dados são usados apenas pelo Instituto Ubatuba Santuário Ecológico, conforme a LGPD.
+            </p>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

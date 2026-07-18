@@ -23,7 +23,9 @@ import {
   getMyEnrollments,
   getPostBySlug,
   getPublishedPosts,
+  getStudentProfile,
   issueCertificate,
+  saveStudentProfile,
   subscribeNewsletter,
   updatePost,
 } from "./db";
@@ -34,6 +36,19 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
+
+/** Validação de CPF com dígitos verificadores */
+function isValidCPF(raw: string): boolean {
+  const cpf = raw.replace(/\D/g, "");
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+  for (const t of [9, 10]) {
+    let sum = 0;
+    for (let i = 0; i < t; i++) sum += parseInt(cpf[i]) * (t + 1 - i);
+    const digit = ((sum * 10) % 11) % 10;
+    if (digit !== parseInt(cpf[t])) return false;
+  }
+  return true;
+}
 
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
   if (ctx.user.role !== "admin") {
@@ -292,6 +307,51 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         await subscribeNewsletter(input.email, input.name);
         return { success: true };
+      }),
+  }),
+
+  /* ── Cadastro de Alunos ── */
+  students: router({
+    me: protectedProcedure.query(async ({ ctx }) => {
+      const profile = await getStudentProfile(ctx.user.id);
+      return profile ?? null;
+    }),
+
+    register: protectedProcedure
+      .input(
+        z.object({
+          fullName: z.string().trim().min(5, "Informe o nome completo"),
+          cpf: z
+            .string()
+            .trim()
+            .regex(/^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/, "CPF inválido")
+            .refine(isValidCPF, "CPF inválido"),
+          address: z.string().trim().min(3, "Informe o endereço"),
+          number: z.string().trim().min(1, "Informe o número"),
+          neighborhood: z.string().trim().min(2, "Informe o bairro"),
+          city: z.string().trim().min(2, "Informe a cidade"),
+          cep: z.string().trim().regex(/^\d{5}-?\d{3}$/, "CEP inválido"),
+          birthDate: z
+            .string()
+            .regex(/^\d{4}-\d{2}-\d{2}$/, "Data de nascimento inválida")
+            .refine((d) => {
+              const dt = new Date(`${d}T00:00:00`);
+              return !Number.isNaN(dt.getTime()) && dt < new Date() && dt.getFullYear() > 1900;
+            }, "Data de nascimento inválida"),
+          phone: z.string().trim().min(10, "Informe o telefone com DDD"),
+          email: z.string().trim().email("E-mail inválido"),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        const isNew = !(await getStudentProfile(ctx.user.id));
+        const profile = await saveStudentProfile({ ...input, userId: ctx.user.id });
+        if (isNew) {
+          await notifyOwner({
+            title: `🎓 Novo aluno cadastrado: ${input.fullName}`,
+            content: `**Nome:** ${input.fullName}\n**E-mail:** ${input.email}\n**Telefone:** ${input.phone}\n**Cidade:** ${input.city}`,
+          });
+        }
+        return { success: true, profile };
       }),
   }),
 

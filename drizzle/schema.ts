@@ -161,3 +161,25 @@ export const certificates = mysqlTable("certificates", {
 
 export type Certificate = typeof certificates.$inferSelect;
 export type InsertCertificate = typeof certificates.$inferInsert;
+
+/* ── Cadastro de Alunos (obrigatório antes da inscrição em cursos) ── */
+export const studentProfiles = mysqlTable("student_profiles", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  fullName: varchar("fullName", { length: 255 }).notNull(),
+  cpf: varchar("cpf", { length: 14 }).notNull(),
+  address: varchar("address", { length: 255 }).notNull(),
+  number: varchar("number", { length: 20 }).notNull(),
+  neighborhood: varchar("neighborhood", { length: 120 }).notNull(),
+  city: varchar("city", { length: 120 }).notNull(),
+  cep: varchar("cep", { length: 9 }).notNull(),
+  /** Data de nascimento em formato ISO YYYY-MM-DD */
+  birthDate: varchar("birthDate", { length: 10 }).notNull(),
+  phone: varchar("phone", { length: 30 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type StudentProfile = typeof studentProfiles.$inferSelect;
+export type InsertStudentProfile = typeof studentProfiles.$inferInsert;
