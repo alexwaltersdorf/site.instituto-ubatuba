@@ -273,37 +273,40 @@ export async function getCertificateByCode(code: string) {
 // A Hostinger não roda migrações drizzle no deploy, então as tabelas são
 // garantidas em runtime na primeira operação (idempotente).
 let studentTablesEnsured = false;
+
+const CREATE_STUDENT_PROFILES = sql`
+  CREATE TABLE IF NOT EXISTS \`student_profiles\` (
+    \`id\` int AUTO_INCREMENT NOT NULL,
+    \`cpf\` varchar(14) NOT NULL,
+    \`fullName\` varchar(255) NOT NULL,
+    \`address\` varchar(255) NOT NULL,
+    \`number\` varchar(20) NOT NULL,
+    \`neighborhood\` varchar(120) NOT NULL,
+    \`city\` varchar(120) NOT NULL,
+    \`cep\` varchar(9) NOT NULL,
+    \`birthDate\` varchar(10) NOT NULL,
+    \`phone\` varchar(30) NOT NULL,
+    \`email\` varchar(320) NOT NULL,
+    \`createdAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    \`updatedAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT \`student_profiles_id\` PRIMARY KEY(\`id\`),
+    CONSTRAINT \`student_profiles_cpf_unique\` UNIQUE(\`cpf\`)
+  )
+`;
+
 async function ensureStudentTables(db: NonNullable<Awaited<ReturnType<typeof getDb>>>) {
   if (studentTablesEnsured) return;
-  // Remove a versão anterior da tabela (chaveada por userId do OAuth, que
-  // nunca funcionou no domínio próprio) caso exista sem a coluna atual.
-  const legacy = await db.execute(sql`
-    SELECT COUNT(*) AS n FROM information_schema.columns
-    WHERE table_schema = DATABASE() AND table_name = 'student_profiles' AND column_name = 'userId'
-  `);
-  const legacyRows = legacy[0] as unknown as Array<{ n: number | string }>;
-  if (legacyRows?.[0] && Number(legacyRows[0].n) > 0) {
+  await db.execute(CREATE_STUDENT_PROFILES);
+  try {
+    // Confirma que a tabela está no shape atual (chaveada por cpf)
+    await db.execute(sql`SELECT \`cpf\` FROM \`student_profiles\` LIMIT 1`);
+  } catch {
+    // Tabela legada (chaveada por userId do OAuth, sem coluna cpf).
+    // Nunca recebeu dados — o login era impossível no domínio próprio —
+    // então é seguro recriá-la no shape atual.
     await db.execute(sql`DROP TABLE \`student_profiles\``);
+    await db.execute(CREATE_STUDENT_PROFILES);
   }
-  await db.execute(sql`
-    CREATE TABLE IF NOT EXISTS \`student_profiles\` (
-      \`id\` int AUTO_INCREMENT NOT NULL,
-      \`cpf\` varchar(14) NOT NULL,
-      \`fullName\` varchar(255) NOT NULL,
-      \`address\` varchar(255) NOT NULL,
-      \`number\` varchar(20) NOT NULL,
-      \`neighborhood\` varchar(120) NOT NULL,
-      \`city\` varchar(120) NOT NULL,
-      \`cep\` varchar(9) NOT NULL,
-      \`birthDate\` varchar(10) NOT NULL,
-      \`phone\` varchar(30) NOT NULL,
-      \`email\` varchar(320) NOT NULL,
-      \`createdAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      \`updatedAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-      CONSTRAINT \`student_profiles_id\` PRIMARY KEY(\`id\`),
-      CONSTRAINT \`student_profiles_cpf_unique\` UNIQUE(\`cpf\`)
-    )
-  `);
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS \`student_enrollments\` (
       \`id\` int AUTO_INCREMENT NOT NULL,
