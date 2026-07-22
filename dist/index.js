@@ -13,7 +13,7 @@ var UNAUTHED_ERR_MSG = "Please login (10001)";
 var NOT_ADMIN_ERR_MSG = "You do not have required permission (10002)";
 
 // server/db.ts
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 
 // drizzle/schema.ts
@@ -141,13 +141,39 @@ var certificates = mysqlTable("certificates", {
   code: varchar("code", { length: 50 }).notNull().unique(),
   issuedAt: timestamp("issuedAt").defaultNow().notNull()
 });
+var studentProfiles = mysqlTable("student_profiles", {
+  id: int("id").autoincrement().primaryKey(),
+  /** CPF normalizado (somente dígitos) — identificador único do aluno */
+  cpf: varchar("cpf", { length: 14 }).notNull().unique(),
+  fullName: varchar("fullName", { length: 255 }).notNull(),
+  address: varchar("address", { length: 255 }).notNull(),
+  number: varchar("number", { length: 20 }).notNull(),
+  neighborhood: varchar("neighborhood", { length: 120 }).notNull(),
+  city: varchar("city", { length: 120 }).notNull(),
+  cep: varchar("cep", { length: 9 }).notNull(),
+  /** Data de nascimento em formato ISO YYYY-MM-DD */
+  birthDate: varchar("birthDate", { length: 10 }).notNull(),
+  phone: varchar("phone", { length: 30 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull()
+});
+var studentEnrollments = mysqlTable("student_enrollments", {
+  id: int("id").autoincrement().primaryKey(),
+  studentId: int("studentId").notNull(),
+  courseId: int("courseId").notNull(),
+  courseSlug: varchar("courseSlug", { length: 255 }).notNull(),
+  enrolledAt: timestamp("enrolledAt").defaultNow().notNull()
+});
 
 // server/_core/env.ts
 var ENV = {
-  appId: process.env.VITE_APP_ID ?? "",
+  // Fallbacks: em ambientes fora da Manus (ex.: Hostinger) essas envs nao
+  // sao injetadas; valores oficiais do app deste projeto (HOSTINGER-DEPLOY.md).
+  appId: process.env.VITE_APP_ID ?? "6EwoPvwoUEAd368Wyozqqt",
   cookieSecret: process.env.JWT_SECRET ?? "",
   databaseUrl: process.env.DATABASE_URL ?? "",
-  oAuthServerUrl: process.env.OAUTH_SERVER_URL ?? "",
+  oAuthServerUrl: process.env.OAUTH_SERVER_URL ?? "https://api.manus.im",
   ownerOpenId: process.env.OWNER_OPEN_ID ?? "",
   isProduction: process.env.NODE_ENV === "production",
   forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
@@ -156,10 +182,29 @@ var ENV = {
 
 // server/db.ts
 var _db = null;
+function normalizeDatabaseUrl(raw) {
+  const schemeIdx = raw.indexOf("://");
+  if (schemeIdx === -1) return raw;
+  const scheme = raw.slice(0, schemeIdx + 3);
+  const rest = raw.slice(schemeIdx + 3);
+  const lastAt = rest.lastIndexOf("@");
+  if (lastAt === -1) return raw;
+  const userinfo = rest.slice(0, lastAt);
+  if (!userinfo.includes("@")) return raw;
+  const colon = userinfo.indexOf(":");
+  if (colon === -1) return raw;
+  const user = userinfo.slice(0, colon);
+  const pass = userinfo.slice(colon + 1);
+  let hostpart = rest.slice(lastAt + 1);
+  if (hostpart.startsWith("localhost") && user.startsWith("u666428935_")) {
+    hostpart = hostpart.replace(/^localhost/, "srv722.hstgr.io");
+  }
+  return `${scheme}${encodeURIComponent(user)}:${encodeURIComponent(pass)}@${hostpart}`;
+}
 async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      _db = drizzle(normalizeDatabaseUrl(process.env.DATABASE_URL));
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
@@ -351,6 +396,69 @@ async function getCertificateByCode(code) {
   if (!db) return void 0;
   const result = await db.select({ certificate: certificates, course: courses }).from(certificates).innerJoin(courses, eq(certificates.courseId, courses.id)).where(eq(certificates.code, code)).limit(1);
   return result[0];
+}
+var studentTablesEnsured = false;
+var CREATE_STUDENT_PROFILES = sql`
+  CREATE TABLE IF NOT EXISTS \`student_profiles\` (
+    \`id\` int AUTO_INCREMENT NOT NULL,
+    \`cpf\` varchar(14) NOT NULL,
+    \`fullName\` varchar(255) NOT NULL,
+    \`address\` varchar(255) NOT NULL,
+    \`number\` varchar(20) NOT NULL,
+    \`neighborhood\` varchar(120) NOT NULL,
+    \`city\` varchar(120) NOT NULL,
+    \`cep\` varchar(9) NOT NULL,
+    \`birthDate\` varchar(10) NOT NULL,
+    \`phone\` varchar(30) NOT NULL,
+    \`email\` varchar(320) NOT NULL,
+    \`createdAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    \`updatedAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT \`student_profiles_id\` PRIMARY KEY(\`id\`),
+    CONSTRAINT \`student_profiles_cpf_unique\` UNIQUE(\`cpf\`)
+  )
+`;
+async function ensureStudentTables(db) {
+  if (studentTablesEnsured) return;
+  await db.execute(CREATE_STUDENT_PROFILES);
+  try {
+    await db.execute(sql`SELECT \`cpf\` FROM \`student_profiles\` LIMIT 1`);
+  } catch {
+    await db.execute(sql`DROP TABLE \`student_profiles\``);
+    await db.execute(CREATE_STUDENT_PROFILES);
+  }
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS \`student_enrollments\` (
+      \`id\` int AUTO_INCREMENT NOT NULL,
+      \`studentId\` int NOT NULL,
+      \`courseId\` int NOT NULL,
+      \`courseSlug\` varchar(255) NOT NULL,
+      \`enrolledAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT \`student_enrollments_id\` PRIMARY KEY(\`id\`)
+    )
+  `);
+  studentTablesEnsured = true;
+}
+async function findStudentByCpf(cpf) {
+  const db = await getDb();
+  if (!db) return void 0;
+  await ensureStudentTables(db);
+  const result = await db.select().from(studentProfiles).where(eq(studentProfiles.cpf, cpf)).limit(1);
+  return result[0];
+}
+async function saveStudentProfile(data) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await ensureStudentTables(db);
+  const { cpf, ...fields } = data;
+  await db.insert(studentProfiles).values(data).onDuplicateKeyUpdate({ set: fields });
+  const result = await db.select().from(studentProfiles).where(eq(studentProfiles.cpf, cpf)).limit(1);
+  return result[0];
+}
+async function logStudentEnrollment(studentId, courseId, courseSlug) {
+  const db = await getDb();
+  if (!db) return;
+  await ensureStudentTables(db);
+  await db.insert(studentEnrollments).values({ studentId, courseId, courseSlug });
 }
 
 // server/_core/cookies.ts
@@ -903,6 +1011,17 @@ var systemRouter = router({
 });
 
 // server/routers.ts
+function isValidCPF(raw) {
+  const cpf = raw.replace(/\D/g, "");
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+  for (const t2 of [9, 10]) {
+    let sum = 0;
+    for (let i = 0; i < t2; i++) sum += parseInt(cpf[i]) * (t2 + 1 - i);
+    const digit = sum * 10 % 11 % 10;
+    if (digit !== parseInt(cpf[t2])) return false;
+  }
+  return true;
+}
 var adminProcedure2 = protectedProcedure.use(({ ctx, next }) => {
   if (ctx.user.role !== "admin") {
     throw new TRPCError3({ code: "FORBIDDEN", message: "Acesso restrito a administradores." });
@@ -1119,6 +1238,53 @@ ${input.description.slice(0, 300)}${input.description.length > 300 ? "..." : ""}
   newsletter: router({
     subscribe: publicProcedure.input(z2.object({ email: z2.string().email(), name: z2.string().optional() })).mutation(async ({ input }) => {
       await subscribeNewsletter(input.email, input.name);
+      return { success: true };
+    })
+  }),
+  /* ── Cadastro de Alunos ──
+   * SEM login/OAuth (o domínio próprio não é aceito pelo OAuth da Manus):
+   * o cadastro é público, identificado por CPF e salvo direto no banco
+   * MySQL do site hospedado na Hostinger. */
+  students: router({
+    register: publicProcedure.input(
+      z2.object({
+        fullName: z2.string().trim().min(5, "Informe o nome completo"),
+        cpf: z2.string().trim().regex(/^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/, "CPF inv\xE1lido").refine(isValidCPF, "CPF inv\xE1lido"),
+        address: z2.string().trim().min(3, "Informe o endere\xE7o"),
+        number: z2.string().trim().min(1, "Informe o n\xFAmero"),
+        neighborhood: z2.string().trim().min(2, "Informe o bairro"),
+        city: z2.string().trim().min(2, "Informe a cidade"),
+        cep: z2.string().trim().regex(/^\d{5}-?\d{3}$/, "CEP inv\xE1lido"),
+        birthDate: z2.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Data de nascimento inv\xE1lida").refine((d) => {
+          const dt = /* @__PURE__ */ new Date(`${d}T00:00:00`);
+          return !Number.isNaN(dt.getTime()) && dt < /* @__PURE__ */ new Date() && dt.getFullYear() > 1900;
+        }, "Data de nascimento inv\xE1lida"),
+        phone: z2.string().trim().min(10, "Informe o telefone com DDD"),
+        email: z2.string().trim().email("E-mail inv\xE1lido")
+      })
+    ).mutation(async ({ input }) => {
+      const cpf = input.cpf.replace(/\D/g, "");
+      const existing = await findStudentByCpf(cpf);
+      const profile = await saveStudentProfile({ ...input, cpf });
+      if (!profile) {
+        throw new TRPCError3({ code: "INTERNAL_SERVER_ERROR", message: "N\xE3o foi poss\xEDvel salvar o cadastro. Tente novamente." });
+      }
+      if (!existing) {
+        await notifyOwner({
+          title: `\u{1F393} Novo aluno cadastrado: ${input.fullName}`,
+          content: `**Nome:** ${input.fullName}
+**E-mail:** ${input.email}
+**Telefone:** ${input.phone}
+**Cidade:** ${input.city}`
+        });
+      }
+      return { success: true, id: profile.id, fullName: profile.fullName };
+    }),
+    enroll: publicProcedure.input(z2.object({ studentId: z2.number(), courseId: z2.number(), courseSlug: z2.string() })).mutation(async ({ input }) => {
+      try {
+        await logStudentEnrollment(input.studentId, input.courseId, input.courseSlug);
+      } catch {
+      }
       return { success: true };
     })
   }),
