@@ -260,3 +260,7 @@
 ## Cursos em Destaque na Home
 - [x] Adicionar seção com 4 cursos populares na página inicial (Harvard, USP, University of Michigan, UFRS/MEC)
 - [x] Adicionar cursos de Michigan (Python for Everybody) e UFRS (Inglês via Aprenda Mais MEC) ao catálogo
+
+## Mascotes - Aves da Mata Atlântica
+- [x] Upload das imagens tie-sangue.webp e wyra-saira-sete-cores.webp
+- [x] Criar subseção "Aves da Mata Atlântica" na página Mascotes com cards de Tié e Wyrá
