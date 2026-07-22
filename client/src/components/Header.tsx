@@ -156,6 +156,21 @@ export default function Header() {
               </div>
             </div>
 
+            {/* Ubatuba */}
+            <Link
+              href="/ubatuba"
+              className={cn(
+                "px-4 py-2 text-sm font-medium tracking-wide rounded-sm transition-all duration-200",
+                location === "/ubatuba"
+                  ? isLight ? "text-forest bg-accent" : "text-white bg-white/15"
+                  : isLight
+                  ? "text-foreground/70 hover:text-forest hover:bg-accent/60"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
+              )}
+            >
+              Ubatuba
+            </Link>
+
             {/* Ações */}
             <a
               href="/#acoes"
@@ -307,6 +322,19 @@ export default function Header() {
               ))}
             </div>
           </div>
+
+          {/* Ubatuba */}
+          <Link
+            href="/ubatuba"
+            className={cn(
+              "px-4 py-3 text-sm font-medium rounded-sm transition-colors",
+              location === "/ubatuba"
+                ? "text-forest bg-accent font-semibold"
+                : "text-foreground/70 hover:text-forest hover:bg-accent/60"
+            )}
+          >
+            Ubatuba
+          </Link>
 
           {/* Ações */}
           <a

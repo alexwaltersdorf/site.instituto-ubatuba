@@ -23,6 +23,7 @@ import Cursos from "./pages/Cursos";
 import CursoDetalhe from "./pages/CursoDetalhe";
 import MeusCertificados from "./pages/MeusCertificados";
 import CertificadoVerificar from "./pages/CertificadoVerificar";
+import Ubatuba from "./pages/Ubatuba";
 
 /**
  * SPAs mantêm a posição de scroll ao trocar de rota — quem clicava num
@@ -74,6 +75,7 @@ function Router() {
       <Route path="/transparencia" component={() => <Layout><Transparencia /></Layout>} />
       <Route path="/mascotes" component={() => <Layout><Mascotes /></Layout>} />
       <Route path="/emendas-parlamentares" component={() => <Layout><EmendasParlamentares /></Layout>} />
+      <Route path="/ubatuba" component={() => <Layout><Ubatuba /></Layout>} />
       <Route path="/cursos" component={() => <Layout><Cursos /></Layout>} />
       <Route path="/cursos/:slug" component={() => <Layout><CursoDetalhe /></Layout>} />
       <Route path="/meus-certificados" component={() => <Layout><MeusCertificados /></Layout>} />
