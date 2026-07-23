@@ -1,5 +1,11 @@
 # "O Lugar das Muitas Canoas" — Vídeo animado 60s (Google Flow / Veo 3)
 
+> ⚠️ **Atualização de cânone:** as descrições visuais de Kauã, Yara e do selo
+> do Instituto foram revisadas no arquivo `05-carrossel-mascotes-v2.md`
+> (sistema "Guardiões"; Yara não é mais sereia; Ubá pode ser a tartaruga-bebê).
+> Ao produzir o vídeo, usar as descrições do arquivo 05 no lugar das originais
+> abaixo — a estrutura das cenas e as falas permanecem válidas.
+
 > Roteiro + prompts de produção. História da origem do nome de Ubatuba
 > (tupi: **ubá** = canoa + **tyba/tuba** = abundância → "lugar de muitas canoas"),
 > estrelada pelos mascotes do Instituto Ubatuba, em estilo animação 3D tipo Pixar.

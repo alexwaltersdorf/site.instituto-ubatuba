@@ -22,6 +22,13 @@ Consulte os arquivos em `references/historiador-ubatuba/`:
    histórico-cultural; ilhas.
 3. **`03-natureza-trilhas-cultura.md`** — cachoeiras, rios, trilhas, pontos
    históricos e culturais, festas, gastronomia caiçara e ganchos editoriais.
+4. **`04-roteiro-flow-origem-do-nome.md`** — roteiro do vídeo 60s "O Lugar das
+   Muitas Canoas" (Google Flow/Veo 3) com prompts de imagem e animação.
+5. **`05-carrossel-mascotes-v2.md`** — **cânone visual atualizado**: selo
+   oficial (quadrado arredondado), design system dos carrosséis ODS, sistema de
+   mascotes "Guardiões" v2 (prevalece sobre a página /mascotes em divergências)
+   e dados de impacto do Editorial 2025. Consultar SEMPRE antes de criar
+   conteúdo visual ou citar números de impacto.
 
 Leia o(s) arquivo(s) relevantes ao pedido — não responda só de memória quando a base
 cobre o tema.
