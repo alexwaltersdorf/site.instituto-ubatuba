@@ -327,10 +327,16 @@ c4 gJsR1LvSXO · c5 poMQw4Sehw · c6 l7LZBhHgv9 · c7 SOlA8asUb8 · c8 XteqOivBf
 **Balanço:** 23.988 créditos gastos / 45.000 (Fase A 628 + piloto 1.600 +
 8×4K 21.760) → **21.012 de saldo** (margem intacta: dá ~7 retakes 4K).
 
-**Pendências de pós-produção (fora do Hub):** trilha musical única, ajuste
-de tipografia da cena 6 (UBÁ+TYBA→UBATUBA), selo + onda dupla nos 2s finais,
-legendas .srt pt-BR, eventual unificação da voz do narrador (TTS Lucas
-Moreira já gerado como plano B).
+**Pós-produção — assets prontos (23/07/2026, +510 créditos):**
+- ✅ **2 trilhas de 70s** (Lyria 3 Pro, instrumentais): opção 1 épica
+  orquestral com flauta indígena; opção 2 lúdica infantil com marimba —
+  no projeto do filme, escolher uma na edição.
+- ✅ **Cartão final** com o selo + onda dupla sobre pôr do sol (2K):
+  magnific.com/app/creation/YVzEZvfWeC — usar nos 2s finais.
+- ✅ **Legendas**: `filme/legendas-pt-BR.srt` (10 cues sincronizados).
+- Pendente (editor): mixar trilha sob as falas (~-18dB), inserir o cartão
+  final, e checar tipografia da cena 6; TTS Lucas Moreira segue como plano B
+  para unificar o narrador.
 
 ## TIME DE PRODUÇÃO (avaliação)
 
