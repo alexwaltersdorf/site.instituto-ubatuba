@@ -331,8 +331,14 @@ c4 gJsR1LvSXO · c5 poMQw4Sehw · c6 l7LZBhHgv9 · c7 SOlA8asUb8 · c8 XteqOivBf
 - ✅ **2 trilhas de 70s** (Lyria 3 Pro, instrumentais): opção 1 épica
   orquestral com flauta indígena; opção 2 lúdica infantil com marimba —
   no projeto do filme, escolher uma na edição.
-- ✅ **Cartão final** com o selo + onda dupla sobre pôr do sol (2K):
-  magnific.com/app/creation/YVzEZvfWeC — usar nos 2s finais.
+- ✅ **Cartão final v2 (CORRETO)** — fundo limpo gerado
+  (magnific.com/app/creation/629IfNtiJO) + **logotipo OFICIAL do manual
+  aplicado como arquivo** (PNG do site: /manus-storage/LOGOTIPOINSTITUTOUBATUBA
+  _eca5453d.png), composto com sombra suave via sharp. Entregue no chat como
+  `cartao-final-v2.png`.
+  ⚠️ REGRA PERMANENTE: **logotipo nunca é gerado por IA** — sempre compor o
+  arquivo original sobre a arte (a v1 gerada, com selo distorcido e cruz no
+  morro, foi descartada).
 - ✅ **Legendas**: `filme/legendas-pt-BR.srt` (10 cues sincronizados).
 - Pendente (editor): mixar trilha sob as falas (~-18dB), inserir o cartão
   final, e checar tipografia da cena 6; TTS Lucas Moreira segue como plano B
