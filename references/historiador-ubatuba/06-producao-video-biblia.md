@@ -213,7 +213,31 @@ Prompt de movimento por cena (EN, resumo):
 4. Selo + onda dupla da marca nos 2s finais; legendas .srt pt-BR.
 5. `video_upscale` do corte final se necessário (custo sob demanda).
 
-## ORÇAMENTO (créditos do Hub — saldo no início: 711)
+## PLANO ORÇAMENTÁRIO APROVADO — conta Total Quality (plano 45k)
+
+Estratégia **"Pro nos heróis, Mini nos apoios"** — fecha o filme inteiro com
+margem real de retakes:
+
+| Fase | Item | Custo | Subtotal |
+|---|---|---|---|
+| A | 8 imagens master GPT-2 2K + buffer de 4 retakes | 30/un | 360 |
+| A | 8 falas TTS + buffer 2 | ~30/un | 300 |
+| B | 1 clipe piloto Seedance Mini (valida movimento+lip sync) | 1.120 | 1.120 |
+| C | 5 cenas-herói em **Seedance Pro 1080p** (cenas 1, 2, 4, 6, 8 — fala em quadro, lip sync) | 5.600/un | 28.000 |
+| C | 3 cenas de apoio em **Seedance Mini 720p** (cenas 3, 5, 7 — narração off, sem lip sync em quadro) | 1.120/un | 3.360 |
+| — | **Total planejado** | | **~33.100** |
+| — | **Margem de segurança** (2 retakes Pro OU 10 retakes Mini + upscales) | | **~11.900** |
+
+Regras de governança:
+1. Nunca gerar um Pro sem o master de imagem e a fala aprovados.
+2. Cena reprovada: 1º retake sempre em Mini (1.120) para validar a correção;
+   só regenerar em Pro com o Mini aprovado.
+3. Checar `account_balance` antes de cada fase; abortar fase C se margem < 6k.
+4. Cenas 3/5/7 em Mini 720p podem receber `video_upscale` no corte final se o
+   orçamento remanescente permitir (simular custo antes).
+5. Todas em Pro (44.800) só com orçamento extra — inviável com margem em 45k.
+
+## ORÇAMENTO REFERÊNCIA (rodada 1, conta antiga — saldo inicial: 711)
 
 | Item | Unidade | Qtde | Total |
 |---|---|---|---|
