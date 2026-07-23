@@ -38,6 +38,8 @@ const IMAGES = {
   jaciara: "/manus-storage/25-Jaciara_427d8960.jpg",
   benedito: "/manus-storage/26-Benedito_9188c38e.jpg",
   dandara: "/manus-storage/27-Dandara_52fb9bc3.jpg",
+  tie: "/mascotes/28-tie.webp",
+  wyra: "/mascotes/29-wyra.webp",
 };
 
 // ── Categorias ──
@@ -94,6 +96,29 @@ const mascots: Mascot[] = [
     image: IMAGES.yara,
     category: ["principais"],
     color: "bg-ocean",
+  },
+
+  {
+    id: "tie",
+    name: "Tiê",
+    subtitle: "O Cantor Vermelho da Mata",
+    description:
+      "Tiê é um tiê-sangue (Ramphocelus bresilius), a ave vermelha símbolo da Mata Atlântica do litoral. Com plumagem escarlate e asas negras, ele habita as restingas e os quintais de Ubatuba, anunciando o amanhecer com seu canto. Nas histórias dos Guardiões, Tiê é o mensageiro que voa entre a serra e o mar — lembrando que proteger a floresta é proteger cada uma de suas vozes.",
+    image: IMAGES.tie,
+    category: ["principais"],
+    color: "bg-laranja",
+    special: "Ave símbolo da Mata Atlântica",
+  },
+  {
+    id: "wyra",
+    name: "Wyrá",
+    subtitle: "A Joia de Sete Cores",
+    description:
+      "Wyrá significa \"pássaro\" em tupi-guarani — e ela é uma saíra-sete-cores (Tangara seledon), joia da Serra do Mar que só existe na Mata Atlântica. Com cabeça turquesa, peito azul e dorso dourado, Wyrá representa a biodiversidade única de Ubatuba, o município mais preservado do litoral paulista. Onde a saíra canta, a floresta está viva — e é isso que o Instituto trabalha para manter.",
+    image: IMAGES.wyra,
+    category: ["principais"],
+    color: "bg-ocean",
+    special: "Endêmica da Mata Atlântica",
   },
 
   // ── ESPORTE ──
@@ -413,7 +438,7 @@ export default function Mascotes() {
         <div className="relative container text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-white/70 text-xs font-semibold tracking-widest uppercase mb-6">
             <Users className="w-3.5 h-3.5" />
-            27 personagens com alma ubatubense
+            29 personagens com alma ubatubense
           </span>
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4">
             Nossos <span className="text-ocean">Mascotes</span>
