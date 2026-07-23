@@ -66,9 +66,12 @@ brand mascot".
   marrons; pose heroica acolhedora.
 - **Yara** (~10 anos): mesma linha de uniforme; cabelo castanho-escuro longo com
   folhinha verde; **segura na palma da mão a tartaruguinha marinha bebê "Ubá"**.
-- ⚠️ **Divergência de cânone:** neste universo v2, **Ubá é a tartaruga-bebê**;
-  na página /mascotes do site, Ubá é o menino mascote principal. Ao criar
-  conteúdo novo, seguir o v2 (tartaruga) ou confirmar com o Alex qual vale.
+- ✅ **Divergência resolvida (jul/2026):** a página /mascotes do site foi
+  atualizada com a arte v2 — **Ubá é oficialmente a TARTARUGA MARINHA**,
+  mascote principal e "Guardião da Mata Atlântica" (aparece com prancha de
+  surfe). Arandu agora é retratado como menino Guardião da Educação (óculos,
+  lousa) e Cunhambebe como menino Guardião Indígena (muda de árvore). Yara é a
+  menina guardiã (a descrição textual de "mãe d'água" permanece como lore).
 
 ### Guardiões por modalidade (crianças ~10–12, kit branco-e-verde com o selo)
 | Guardião/Guardiã | Traje-chave |
@@ -96,6 +99,37 @@ Todos com **braçadeira/emblema de folha verde** como "token de guardião"
   nativa para plantar.
 - Todos os prompts trazem a cláusula: *"portrayed with cultural authenticity
   and deep respect (never a stereotype or costume)"* — manter sempre.
+
+### As aves — mascotes da fauna (pendentes de subir ao site)
+
+Duas aves reais da Mata Atlântica de Ubatuba, já criadas no Magnific, **ainda
+não publicadas na página /mascotes** (que hoje mostra 27 personagens):
+
+- **Tiê** — **Tiê-sangue** (*Ramphocelus bresilius*), o pássaro vermelho ícone
+  do litoral: corpo escarlate-carmim vivo (cabeça, peito, barriga e dorso),
+  asas e cauda pretas, bico escuro com base prateado-azulada clara. Também é o
+  "pássaro vermelho" que costura a série de vídeos educativos (pousado na placa
+  UBATUBA, voando sobre as canoas).
+- **Wyrá** — **Saíra-sete-cores** (*Tangara seledon*), a joia da Serra do Mar:
+  cabeça verde-turquesa, máscara preta nos olhos e dorso superior preto, uropígio
+  laranja-dourado brilhante, peito e barriga azul-petróleo, asas pretas com
+  bordas verdes. ("Wyrá/gwyrá" = "pássaro" em tupi-guarani.)
+
+**Regra visual das aves (cânone final):** pássaro **100% NATURAL** — sem roupa,
+capa, coleira, lenço ou emblema no corpo; nada de logo nas penas. O selo do
+Instituto aparece **apenas como badge flutuante quadrado-arredondado no canto
+superior esquerdo** da arte. Antropomórfico fofinho, em pé, asa acenando, olhos
+grandes; fundo de Mata Atlântica (Serra do Mar encontrando o mar, folhas de
+costela-de-adão), pousado em galho com musgo. Formato vertical 2:3.
+
+### Elenco da série de vídeos educativos (cânone paralelo)
+
+Existe no Magnific um elenco estilizado (2D/3D painterly, "premium kids'
+series") usado nos vídeos da história das canoas: **@tie** (o Tiê-sangue),
+**@yara** (menina guardiã de verde segurando a tartaruguinha), **@chico**
+(jovem pescador caiçara de chapéu de palha e camisa de linho branca, com
+canoa) e **@alexguia** (guia adulto de cabelo grisalho, óculos e jaleco branco
+com badge IUSE). Usar esse elenco para conteúdo audiovisual educativo.
 
 ### Pessoas reais como mascotes (descrições canônicas)
 - **Alex — Presidente, Guardião da Saúde**: ~48 anos, magro e em forma
