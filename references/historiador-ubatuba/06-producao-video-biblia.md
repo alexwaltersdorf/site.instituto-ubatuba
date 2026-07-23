@@ -284,6 +284,31 @@ re-registrar as referências de personagem na biblioteca (yara, chico, alexguia,
 tie — subir as imagens dos mascotes) e reexecutar os prompts deste documento.
 Tudo é reproduzível a partir deste arquivo.
 
+## LOG DE PRODUÇÃO — Rodada 2 (conta sac@totalquality.med.br, 23/07/2026)
+
+Projeto: "Instituto Ubatuba — Filme Origem do Nome" (conta Total Quality,
+plano 45k). Biblioteca recriada: personagens yara, alexguia, chico, tie.
+
+**Fase A concluída — 628 créditos:**
+| Cena | Status | Link |
+|---|---|---|
+| 1 — A pergunta | ✅ | magnific.com/app/creation/3G6D0nhREY |
+| 2 — Ubá, a canoa | ✅ (1 retry de filtro) | magnific.com/app/creation/WMntopxcXe |
+| 3 — Aldeia Tupinambá | ✅ (style ref da cena 7) | magnific.com/app/creation/3G6DTCgREY |
+| 4 — A canoa pronta | ✅ (Cunhambebe de **manto de penas tupinambá** — resolveu filtro com rigor histórico) | magnific.com/app/creation/brH7wNH5Y2 |
+| 5 — Mar de canoas (aérea) | ✅ | magnific.com/app/creation/ubClxlaQLD |
+| 6 — O nome nasce | ✅ (letras a refinar na pós) | magnific.com/app/creation/3G6D0mjREY |
+| 7 — Canoas de hoje | ✅ | magnific.com/app/creation/swji42Ul8e |
+| 8 — Retrato de família | ✅ | magnific.com/app/creation/43ycztr9Aa |
+| Falas 1–8 (TTS) | ✅ todas | no projeto |
+
+**Fase B:** piloto lip sync cena 2 (Seedance Mini 8s 720p, 1.120 cr) —
+magnific.com/app/creation/hEt11cgvqL
+
+Nota de cânone: a partir da cena 4, Cunhambebe veste o manto de penas
+escarlate tupinambá (historicamente documentado; os mantos originais estão
+em museus europeus) — adotar como visual oficial do personagem.
+
 ## TIME DE PRODUÇÃO (avaliação)
 
 Estrutura enxuta, um especialista por etapa, sob direção única:
