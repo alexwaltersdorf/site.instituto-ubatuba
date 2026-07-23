@@ -309,6 +309,29 @@ Nota de cânone: a partir da cena 4, Cunhambebe veste o manto de penas
 escarlate tupinambá (historicamente documentado; os mantos originais estão
 em museus europeus) — adotar como visual oficial do personagem.
 
+## 🎬 ENTREGA FINAL — Corte 1 completo (23/07/2026)
+
+**"O Lugar das Muitas Canoas" — 64s, 4K, 8 cenas, falas pt-BR com lip sync.**
+Filme montado: magnific.com/app/creation/1sK9B4Sr4r
+
+**Pivot decisivo:** o Seedance 2.0 bloqueia por moderação a combinação
+"áudio de lip sync + personagem criança" (anti-deepfake infantil). Solução:
+**Google Veo 3.1** gera a fala em pt-BR direto do texto do prompt (voz nativa
+sintetizada + lip sync), sem arquivo de áudio — passou sem bloqueio e custa
+2.720/cena em 4K (vs 5.600 do Seedance Pro em 1080p).
+
+Clipes 4K individuais (conta Total Quality, projeto do filme):
+piloto 1080p TecvCc3VNR · c1 MXTfn0vDCm · c2 mCIkd87hJQ · c3 3G6DyNFREY ·
+c4 gJsR1LvSXO · c5 poMQw4Sehw · c6 l7LZBhHgv9 · c7 SOlA8asUb8 · c8 XteqOivBfo
+
+**Balanço:** 23.988 créditos gastos / 45.000 (Fase A 628 + piloto 1.600 +
+8×4K 21.760) → **21.012 de saldo** (margem intacta: dá ~7 retakes 4K).
+
+**Pendências de pós-produção (fora do Hub):** trilha musical única, ajuste
+de tipografia da cena 6 (UBÁ+TYBA→UBATUBA), selo + onda dupla nos 2s finais,
+legendas .srt pt-BR, eventual unificação da voz do narrador (TTS Lucas
+Moreira já gerado como plano B).
+
 ## TIME DE PRODUÇÃO (avaliação)
 
 Estrutura enxuta, um especialista por etapa, sob direção única:
