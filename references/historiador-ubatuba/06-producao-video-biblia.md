@@ -344,6 +344,19 @@ c4 gJsR1LvSXO · c5 poMQw4Sehw · c6 l7LZBhHgv9 · c7 SOlA8asUb8 · c8 XteqOivBf
   final, e checar tipografia da cena 6; TTS Lucas Moreira segue como plano B
   para unificar o narrador.
 
+## 🏁 CORTE FINAL COM TRILHA (24/07/2026)
+
+- Retake da cena 1 (áudio do Alex corrigido, Veo 3.1 4K, +2.720 cr).
+- **Corte 2** concatenado no Hub: magnific.com/app/creation/gJsaPIeSXO
+- **Mixagem local (ffmpeg)**: trilha "playful" (lúdica, Lyria 3 Pro) a 22% de
+  volume sob as falas, fade-in 1,5s, fade-out a partir de 57,5s, limiter.
+  Vídeo 4K intocado (stream copy).
+- **FILME FINAL COM TRILHA na conta Total Quality:**
+  magnific.com/app/creation/tf8A5VimZJ (4K, 143MB) — versão 1080p enviada
+  no chat para conferência.
+- Pendente opcional (editor): cartão final v2 nos 2s finais + legendas .srt.
+- Gasto total ao fim: ~30k de 45k créditos; margem ~15k preservada.
+
 ## TIME DE PRODUÇÃO (avaliação)
 
 Estrutura enxuta, um especialista por etapa, sob direção única:
