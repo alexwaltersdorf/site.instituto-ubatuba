@@ -343,8 +343,16 @@ export const appRouter = router({
       )
       .mutation(async ({ input }) => {
         const cpf = input.cpf.replace(/\D/g, "");
-        const existing = await findStudentByCpf(cpf);
-        const profile = await saveStudentProfile({ ...input, cpf });
+        let existing, profile;
+        try {
+          existing = await findStudentByCpf(cpf);
+          profile = await saveStudentProfile({ ...input, cpf });
+        } catch (err) {
+          const anyErr = err as { cause?: { code?: string; errno?: number; message?: string }; code?: string; message?: string };
+          const cause = anyErr?.cause ?? anyErr;
+          const detail = `${cause?.code ?? ""} ${cause?.message ?? anyErr?.message ?? "erro desconhecido"}`.trim();
+          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `DB_ERROR: ${detail}` });
+        }
         if (!profile) {
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível salvar o cadastro. Tente novamente." });
         }
