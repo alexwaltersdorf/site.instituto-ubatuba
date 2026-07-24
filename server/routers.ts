@@ -38,6 +38,53 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 
+/**
+ * Envia o cadastro do aluno para a planilha do Google Sheets via webhook
+ * do Apps Script (URL na env SHEETS_WEBHOOK_URL). Fire-and-forget: nunca
+ * bloqueia nem quebra o cadastro — se a env não existir ou a chamada
+ * falhar, apenas registra no log.
+ */
+async function sendStudentToSheet(data: {
+  createdAt: string;
+  fullName: string;
+  cpf: string;
+  birthDate: string;
+  address: string;
+  number: string;
+  neighborhood: string;
+  city: string;
+  cep: string;
+  phone: string;
+  email: string;
+}): Promise<void> {
+  const url = process.env.SHEETS_WEBHOOK_URL;
+  if (!url) return;
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+  } catch (err) {
+    console.error("[students.register] Falha ao enviar para o Google Sheets:", (err as Error)?.message);
+  }
+}
+
+/** CPF formatado 000.000.000-00 a partir dos 11 dígitos */
+function formatCPF(digits: string): string {
+  return digits.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+}
+
+/** Data ISO YYYY-MM-DD -> DD/MM/AAAA */
+function formatDateBR(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : iso;
+}
+
 /** Validação de CPF com dígitos verificadores */
 function isValidCPF(raw: string): boolean {
   const cpf = raw.replace(/\D/g, "");
@@ -360,6 +407,20 @@ export const appRouter = router({
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível salvar o cadastro. Tente novamente." });
         }
         if (!existing) {
+          // Planilha do Google Sheets (uma linha por novo aluno)
+          await sendStudentToSheet({
+            createdAt: new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" }),
+            fullName: input.fullName,
+            cpf: formatCPF(cpf),
+            birthDate: formatDateBR(input.birthDate),
+            address: input.address,
+            number: input.number,
+            neighborhood: input.neighborhood,
+            city: input.city,
+            cep: input.cep,
+            phone: input.phone,
+            email: input.email,
+          });
           await notifyOwner({
             title: `🎓 Novo aluno cadastrado: ${input.fullName}`,
             content: `**Nome:** ${input.fullName}\n**E-mail:** ${input.email}\n**Telefone:** ${input.phone}\n**Cidade:** ${input.city}`,
