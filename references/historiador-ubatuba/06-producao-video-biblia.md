@@ -357,6 +357,19 @@ c4 gJsR1LvSXO · c5 poMQw4Sehw · c6 l7LZBhHgv9 · c7 SOlA8asUb8 · c8 XteqOivBf
 - Pendente opcional (editor): cartão final v2 nos 2s finais + legendas .srt.
 - Gasto total ao fim: ~30k de 45k créditos; margem ~15k preservada.
 
+## 📱 VERSÃO 9:16 REELS/TIKTOK (24/07/2026 — custo ZERO créditos)
+
+- Técnica: **recorte vertical inteligente do master 4K** via ffmpeg — janela
+  de crop 1215×2160 com offset X escolhido POR CENA (expressão temporal no
+  filtro `crop`), preservando o personagem principal de cada quadro;
+  saída 1080×1920. Áudio (falas + trilha) intocado.
+- Offsets usados (px, base 3840): c1 2000 · c2 740 · c3 1010 · c4 620 ·
+  c5 1500 · c6 850 · c7 550 · c8 1020 (ajustado p/ incluir o Chico).
+- **Master 9:16 na conta Total Quality:** magnific.com/app/creation/Bmd3g5XoQR
+- Regra aprendida: com master 4K em 16:9, a versão vertical sai de graça por
+  crop dirigido — regenerar em 9:16 nativo só se o recorte quebrar alguma
+  composição específica.
+
 ## TIME DE PRODUÇÃO (avaliação)
 
 Estrutura enxuta, um especialista por etapa, sob direção única:
