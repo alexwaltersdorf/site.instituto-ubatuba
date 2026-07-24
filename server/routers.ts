@@ -348,10 +348,13 @@ export const appRouter = router({
           existing = await findStudentByCpf(cpf);
           profile = await saveStudentProfile({ ...input, cpf });
         } catch (err) {
-          const anyErr = err as { cause?: { code?: string; errno?: number; message?: string }; code?: string; message?: string };
+          const anyErr = err as { cause?: { code?: string; message?: string }; code?: string; message?: string };
           const cause = anyErr?.cause ?? anyErr;
-          const detail = `${cause?.code ?? ""} ${cause?.message ?? anyErr?.message ?? "erro desconhecido"}`.trim();
-          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: `DB_ERROR: ${detail}` });
+          console.error("[students.register] Falha ao salvar cadastro:", cause?.code ?? "", cause?.message ?? anyErr?.message);
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Não foi possível concluir o cadastro no momento. Tente novamente em instantes.",
+          });
         }
         if (!profile) {
           throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Não foi possível salvar o cadastro. Tente novamente." });
