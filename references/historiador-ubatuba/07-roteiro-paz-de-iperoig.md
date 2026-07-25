@@ -61,17 +61,18 @@ wholesome family film. NOT photorealistic, cartoon rounded proportions.
 > cena. A fala pt-BR vai embutida; sempre com a instrução de ritmo contínuo.
 
 ### CENA 1 — "A promessa" (0–8s) — Alex em quadro
-- **História:** Praia do Cruzeiro (Iperoig) ao amanhecer; Alex junto ao
-  monumento/cruzeiro de pedra; o Tiê pousa no topo da cruz.
+- **História:** Baía de Iperoig ao amanhecer, estado natural (século XVI, sem
+  NENHUM elemento moderno); Alex na areia junto a uma ubá encalhada; o Tiê
+  pousa na proa da canoa.
 - **Luz:** golden hour dourada baixa; rim âmbar no cabelo grisalho.
 - **FALA (Alex):** "Aqui, nesta areia, nasceu a primeira paz das Américas.
   Quer conhecer essa história?"
-- **Vídeo (Flow):** Slow push-in on Alex beside the stone cross monument at
-  sunrise; the red tanager lands on the cross, wing flutter; gentle waves.
-  Alex speaks warmly to camera in Brazilian Portuguese: "Aqui, nesta areia,
-  nasceu a primeira paz das Américas. Quer conhecer essa história?" He starts
-  speaking at the very first frame, natural continuous pace, finishing within
-  8 seconds. No long pauses.
+- **Vídeo (Flow):** Slow push-in on Alex beside a beached dugout canoe at
+  sunrise on the pristine bay; the red tanager lands on the canoe bow, wing
+  flutter; gentle calm waves. Alex speaks warmly to camera in Brazilian
+  Portuguese: "Aqui, nesta areia, nasceu a primeira paz das Américas. Quer
+  conhecer essa história?" He starts speaking at the very first frame,
+  natural continuous pace, finishing within 8 seconds. No long pauses.
 
 ### CENA 2 — "Iperoig" (8–16s) — Yara em quadro
 - **História:** Yara na areia aponta para a enseada; a tartaruguinha Ubá na
@@ -185,22 +186,24 @@ wholesome family film. NOT photorealistic, cartoon rounded proportions.
   Honrar essa memória também é fazer as pazes com a história." Continuous
   speech, starts immediately, fits in 8 seconds.
 
-### CENA 11 — "Cidade da Paz" (80–88s) — Chico em quadro
-- **História:** Praia do Cruzeiro hoje: Chico aponta o monumento; famílias e
-  crianças do Instituto brincando; o Tiê sobrevoa em arco.
+### CENA 11 — "A cruz de madeira" (80–88s) — Chico em quadro
+- **História:** 14 de setembro de 1563: a cruz de MADEIRA (dois troncos
+  toscos) recém-fincada na areia para selar a paz; Chico aponta para ela;
+  ubás na areia; o Tiê sobrevoa em arco. Sem nenhum elemento moderno.
 - **Luz:** manhã vibrante de "dia perfeito".
-- **FALA (Chico):** "Por isso Ubatuba é a Cidade da Paz! E essa história mora
-  aqui, na Praia do Cruzeiro — pertinho de você."
-- **Vídeo (Flow):** Tracking shot with Chico walking toward the cross
-  monument, families and kids playing, the red bird arcs overhead. He speaks
-  cheerfully in Brazilian Portuguese: "Por isso Ubatuba é a Cidade da Paz! E
-  essa história mora aqui, na Praia do Cruzeiro — pertinho de você." Speech
-  from frame one, energetic continuous pace, no gaps.
+- **FALA (Chico):** "Para selar a paz, fincaram uma cruz de madeira nesta
+  areia — e o lugar virou a Praia do Cruzeiro. E Ubatuba, a Cidade da Paz!"
+- **Vídeo (Flow):** Tracking shot with Chico walking toward the freshly
+  planted wooden cross on the sand, dugout canoes nearby, the red bird arcs
+  overhead. He speaks cheerfully in Brazilian Portuguese: "Para selar a paz,
+  fincaram uma cruz de madeira nesta areia — e o lugar virou a Praia do
+  Cruzeiro. E Ubatuba, a Cidade da Paz!" Speech from frame one, energetic
+  continuous pace, no gaps.
 
 ### CENA 12 — "Versos de todo dia" (88–96s) — retrato final, Alex em quadro
-- **História:** Pôr do sol no Cruzeiro: Alex, Yara (com Ubá), Chico e o Tiê no
-  ombro de Alex; ao fundo, escrito na areia molhada, a palavra PAZ sendo
-  beijada por uma onda.
+- **História:** Pôr do sol junto à cruz de MADEIRA de 1563: Alex, Yara (com
+  Ubá), Chico e o Tiê no ombro de Alex; na areia lisa à frente, a palavra
+  PAZ escrita à mão. Sem nenhum elemento moderno.
 - **Luz:** contraluz rosa-dourado, halo no grupo (glow de encerramento).
 - **FALA (Alex):** "Que cada onda nos lembre: a paz se escreve todos os dias
   — como versos na areia."
@@ -274,3 +277,37 @@ cena 4 do filme 1) nas cenas 3, 4, 6, 7, 9 e 10; Anchieta consistente
 **Próxima etapa (Google Flow):** baixar os 12 frames em 2K → Flow → Veo 3.1
 "Frames to Video" → colar o prompt de vídeo da cena (seção 4) → montar na
 ordem → trilha 22% + selo oficial (arquivo) + legendas .srt.
+
+### Rodada 2 — VERSÃO DE ÉPOCA (definitiva), 25/07/2026
+
+Diretriz do diretor: **nenhum elemento da atualidade** (sem estátuas, orla
+pavimentada, postes, cruz de concreto). Locação ancorada na geografia REAL
+da baía do Iperoig (pesquisa em sites de turismo + foto de referência):
+enseada curva e abrigada de mar calmo, faixa larga de areia grossa dourada,
+Serra do Mar em camadas ao redor — em estado natural do século XVI, mata
+até a areia. O Cruzeiro aparece como a **cruz de MADEIRA fincada em
+14/09/1563** (historicamente correta; a de concreto é substituição moderna).
+Figurinos dos narradores adaptados para leitura atemporal (linho rústico).
+
+**Frames master DEFINITIVOS (usar estes no Flow):**
+
+| Cena | Link |
+|---|---|
+| 1 — A promessa (Alex + ubá encalhada) | magnific.com/app/creation/9R4zZpLNYZ |
+| 2 — Iperoig (Yara aponta a baía) | magnific.com/app/creation/1skwwSZr4r |
+| 3 — Confederação dos Tamoios | magnific.com/app/creation/8vouE7PIrU |
+| 4 — A voz de Cunhambebe (mantida da rodada 1 — close com fundo desfocado) | magnific.com/app/creation/Te0oxPhVNR |
+| 5 — Dois homens desarmados | magnific.com/app/creation/Te08ey7VNR |
+| 6 — Frente a frente | magnific.com/app/creation/y6O26kiPW9 |
+| 7 — O refém voluntário | magnific.com/app/creation/swLP7Mtl8e |
+| 8 — Versos na areia | magnific.com/app/creation/y6O2ihsPW9 |
+| 9 — A paz selada | magnific.com/app/creation/9R4zZbANYZ |
+| 10 — A outra face | magnific.com/app/creation/dIeaaQoXSL |
+| 11 — A cruz de madeira | magnific.com/app/creation/gJl9PhfSXO |
+| 12 — Versos de todo dia (cruz de madeira + PAZ) | magnific.com/app/creation/hEmquBivqL |
+
+Notas: filtro NSFW muito instável nesta rodada (falsos positivos aleatórios
+em prompts idênticos aos aprovados); estratégia vencedora: reenviar 1-2x e,
+em cena de close com fundo desfocado, reaproveitar o master da rodada
+anterior. Duas gerações da rodada (com orla moderna) foram descartadas por
+diretriz antes do QC. Falhas NSFW não consomem créditos.
