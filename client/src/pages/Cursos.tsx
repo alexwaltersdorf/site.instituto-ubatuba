@@ -413,8 +413,8 @@ function PosterCard({ course, compact }: { course: CourseDemo; compact?: boolean
           </h3>
         </div>
 
-        {/* Rodapé do card */}
-        <div className="px-4 py-3 flex items-center gap-3 text-[11px] text-areia/60 bg-forest-dark">
+        {/* Rodapé do card — Azul Oceano (#008CBF) do manual de marca */}
+        <div className="px-4 py-3 flex items-center gap-3 text-[11px] text-areia/90 bg-ocean">
           <span className="capitalize">{LEVEL_LABEL[course.level]}</span>
           {course.duration && (
             <span className="flex items-center gap-1 ml-auto"><Clock className="w-3 h-3" /> {course.duration}</span>
