@@ -311,3 +311,17 @@ em prompts idênticos aos aprovados); estratégia vencedora: reenviar 1-2x e,
 em cena de close com fundo desfocado, reaproveitar o master da rodada
 anterior. Duas gerações da rodada (com orla moderna) foram descartadas por
 diretriz antes do QC. Falhas NSFW não consomem créditos.
+
+### Trilhas sonoras (25/07/2026) — estilo "playful" do filme 1
+
+2 trilhas instrumentais de ~87-90s (Lyria 3 Pro, 160 cr cada; 1 retake de
+falha grátis), no projeto do filme 2 — escolher uma na edição, mixar a 22%
+sob as falas:
+- **Opção 1** — marimba/xilofone + ukulele; trecho emotivo com música de
+  caixinha e flauta (55-70s); final com glockenspiel:
+  magnific.com/app/creation/5xbUag4Kxe
+- **Opção 2** — marimba + kalimba + violão; flauta de madeira em
+  pergunta-resposta com tambor de aro suave; ponte reflexiva com cordas:
+  magnific.com/app/creation/LUj4HWpswO
+- Duração real ~87s: cobrir os 90s do corte segurando o fade-out final
+  (~3s de cauda) na mixagem.
