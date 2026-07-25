@@ -323,5 +323,9 @@ sob as falas:
 - **Opção 2** — marimba + kalimba + violão; flauta de madeira em
   pergunta-resposta com tambor de aro suave; ponte reflexiva com cordas:
   magnific.com/app/creation/LUj4HWpswO
+- **Opção 3 (ajuste do diretor)** — abre em piano suave (felt piano), a
+  flauta de madeira assume a melodia em transição fluida (~20-30s), meio
+  emotivo com cordas quentes e pulso suave, ponte sussurrada e final
+  luminoso piano+flauta: magnific.com/app/creation/jSxPqbiLD0
 - Duração real ~87s: cobrir os 90s do corte segurando o fade-out final
   (~3s de cauda) na mixagem.
