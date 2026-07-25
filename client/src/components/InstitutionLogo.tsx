@@ -47,8 +47,17 @@ export const INSTITUTION_DOMAINS: Record<string, string> = {
   "Escola Virtual de Governo": "escolavirtual.gov.br",
 };
 
+/**
+ * Logotipos oficiais auto-hospedados (melhor qualidade que o favicon).
+ * Têm prioridade sobre o INSTITUTION_DOMAINS.
+ */
+export const INSTITUTION_LOGOS: Record<string, string> = {
+  "Escola Virtual de Governo": "/logos/escola-virtual.png",
+};
+
 export function institutionLogoUrl(institution: string, explicit?: string | null): string | null {
   if (explicit) return explicit;
+  if (INSTITUTION_LOGOS[institution]) return INSTITUTION_LOGOS[institution];
   const domain = INSTITUTION_DOMAINS[institution];
   if (!domain) return null;
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
@@ -63,8 +72,9 @@ function initials(name: string): string {
 }
 
 /**
- * Selo circular com o logotipo da instituição (fundo Areia para o logo
- * respirar sobre os pôsteres escuros). Cai para monograma se a imagem
+ * Selo circular em Azul Oceano (#008CBF) do manual de marca. O logotipo
+ * fica sobre um disco branco interno para permanecer legível (incluindo
+ * marcas escuras). Cai para monograma (iniciais em branco) se a imagem
  * não carregar.
  */
 export function InstitutionSeal({
@@ -82,19 +92,21 @@ export function InstitutionSeal({
 
   return (
     <span
-      className={`${className} shrink-0 rounded-full bg-areia ring-1 ring-tinta/15 shadow-sm flex items-center justify-center overflow-hidden`}
+      className={`${className} shrink-0 rounded-full bg-ocean ring-1 ring-tinta/15 shadow-sm flex items-center justify-center overflow-hidden`}
       title={institution}
     >
       {showImage ? (
-        <img
-          src={url}
-          alt={`Logotipo ${institution}`}
-          loading="lazy"
-          className="w-[70%] h-[70%] object-contain"
-          onError={() => setFailed(true)}
-        />
+        <span className="w-[72%] h-[72%] rounded-full bg-white flex items-center justify-center overflow-hidden">
+          <img
+            src={url}
+            alt={`Logotipo ${institution}`}
+            loading="lazy"
+            className="w-[82%] h-[82%] object-contain"
+            onError={() => setFailed(true)}
+          />
+        </span>
       ) : (
-        <span className="text-[0.62em] font-extrabold text-forest-dark leading-none select-none">
+        <span className="text-[0.6em] font-extrabold text-white leading-none select-none">
           {initials(institution)}
         </span>
       )}
