@@ -260,3 +260,15 @@
 ## Cursos em Destaque na Home
 - [x] Adicionar seção com 4 cursos populares na página inicial (Harvard, USP, University of Michigan, UFRS/MEC)
 - [x] Adicionar cursos de Michigan (Python for Everybody) e UFRS (Inglês via Aprenda Mais MEC) ao catálogo
+
+## Mascotes - Aves da Mata Atlântica
+- [x] Upload das imagens tie-sangue.webp e wyra-saira-sete-cores.webp
+- [x] Criar subseção "Aves da Mata Atlântica" na página Mascotes com cards de Tié e Wyrá
+
+## Landing Page Ubatuba
+- [x] Pesquisa profunda: 102+ praias, 10+ ilhas, 20+ cachoeiras, trilhas e pontos turísticos
+- [x] Pesquisa cultural: Aldeia Boa Vista, Quilombo da Fazenda, Quilombo da Caçandoca, Quilombo do Camburi
+- [x] Upload de 12 fotos reais de Ubatuba (praias, ilhas, cachoeiras, trilhas, pontos culturais)
+- [x] Criar página /ubatuba com seções: Hero, Introdução, Praias, Ilhas, Cachoeiras, Trilhas, Cultura
+- [x] Adicionar link "Ubatuba" no menu de navegação (desktop + mobile)
+- [x] Registrar rota /ubatuba no App.tsx

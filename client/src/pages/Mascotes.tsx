@@ -38,8 +38,9 @@ const IMAGES = {
   jaciara: "/manus-storage/25-Jaciara_427d8960.jpg",
   benedito: "/manus-storage/26-Benedito_9188c38e.jpg",
   dandara: "/manus-storage/27-Dandara_52fb9bc3.jpg",
-  tie: "/mascotes/28-tie.webp",
-  wyra: "/mascotes/29-wyra.webp",
+  // Aves da Mata Atlântica
+  tie: "/manus-storage/tie-sangue_6c95169a.webp",
+  wyra: "/manus-storage/wyra-saira-sete-cores_64d864f1.webp",
 };
 
 // ── Categorias ──
@@ -96,29 +97,6 @@ const mascots: Mascot[] = [
     image: IMAGES.yara,
     category: ["principais"],
     color: "bg-ocean",
-  },
-
-  {
-    id: "tie",
-    name: "Tiê",
-    subtitle: "O Cantor Vermelho da Mata",
-    description:
-      "Tiê é um tiê-sangue (Ramphocelus bresilius), a ave vermelha símbolo da Mata Atlântica do litoral. Com plumagem escarlate e asas negras, ele habita as restingas e os quintais de Ubatuba, anunciando o amanhecer com seu canto. Nas histórias dos Guardiões, Tiê é o mensageiro que voa entre a serra e o mar — lembrando que proteger a floresta é proteger cada uma de suas vozes.",
-    image: IMAGES.tie,
-    category: ["principais"],
-    color: "bg-laranja",
-    special: "Ave símbolo da Mata Atlântica",
-  },
-  {
-    id: "wyra",
-    name: "Wyrá",
-    subtitle: "A Joia de Sete Cores",
-    description:
-      "Wyrá significa \"pássaro\" em tupi-guarani — e ela é uma saíra-sete-cores (Tangara seledon), joia da Serra do Mar que só existe na Mata Atlântica. Com cabeça turquesa, peito azul e dorso dourado, Wyrá representa a biodiversidade única de Ubatuba, o município mais preservado do litoral paulista. Onde a saíra canta, a floresta está viva — e é isso que o Instituto trabalha para manter.",
-    image: IMAGES.wyra,
-    category: ["principais"],
-    color: "bg-ocean",
-    special: "Endêmica da Mata Atlântica",
   },
 
   // ── ESPORTE ──
@@ -483,6 +461,68 @@ export default function Mascotes() {
             {filteredMascots.map((mascot) => (
               <MascotCard key={mascot.id} mascot={mascot} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          AVES DA MATA ATLÂNTICA
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="py-12 md:py-16 bg-white border-t border-forest/10">
+        <div className="container">
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-forest/5 border border-forest/15 rounded-full text-forest/70 text-xs font-semibold tracking-widest uppercase mb-4">
+              <Leaf className="w-3.5 h-3.5" />
+              Fauna da Serra do Mar
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-ink">
+              Aves da <span className="text-forest">Mata Atlântica</span>
+            </h2>
+            <p className="text-ink/60 text-lg max-w-2xl mx-auto mt-3 leading-relaxed">
+              Mascotes naturais que representam a riqueza da avifauna de Ubatuba — sem capa nem uniforme, apenas a beleza que a natureza lhes deu.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Tié */}
+            <div className="group bg-white rounded-xl shadow-sm border border-forest/10 overflow-hidden hover:shadow-lg hover:border-ocean/30 transition-all duration-300">
+              <div className="relative aspect-[2/3] overflow-hidden bg-cream">
+                <img
+                  src={IMAGES.tie}
+                  alt="Tié - Tiê-sangue"
+                  className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-red-600 ring-2 ring-white shadow" />
+              </div>
+              <div className="p-5">
+                <h3 className="text-lg font-extrabold text-ink mb-0.5">Tié</h3>
+                <p className="text-sm font-semibold text-ocean mb-1">Guardião da Mata Atlântica</p>
+                <p className="text-xs text-ink/50 italic mb-3">Tiê-sangue (Ramphocelus bresilius)</p>
+                <p className="text-sm text-ink/70 leading-relaxed">
+                  O tiê-sangue é uma das aves mais marcantes da Mata Atlântica costeira. O macho tem o corpo vermelho vivo, asas e cauda pretas e a base do bico prateada. Vive em bordas de mata, restingas e quintais de Ubatuba, e ajuda a floresta a se regenerar espalhando sementes por onde passa.
+                </p>
+              </div>
+            </div>
+
+            {/* Wyrá */}
+            <div className="group bg-white rounded-xl shadow-sm border border-forest/10 overflow-hidden hover:shadow-lg hover:border-ocean/30 transition-all duration-300">
+              <div className="relative aspect-[2/3] overflow-hidden bg-cream">
+                <img
+                  src={IMAGES.wyra}
+                  alt="Wyrá - Saíra-sete-cores"
+                  className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white shadow" />
+              </div>
+              <div className="p-5">
+                <h3 className="text-lg font-extrabold text-ink mb-0.5">Wyrá</h3>
+                <p className="text-sm font-semibold text-ocean mb-1">Guardiã da Mata Atlântica</p>
+                <p className="text-xs text-ink/50 italic mb-3">Saíra-sete-cores (Tangara seledon)</p>
+                <p className="text-sm text-ink/70 leading-relaxed">
+                  Wyrá quer dizer "ave" em tupi-guarani. A saíra-sete-cores é a joia da Serra do Mar: cabeça verde-turquesa, máscara preta, peito azul e dorso alaranjado. Endêmica da Mata Atlântica, é um símbolo vivo da riqueza que o Instituto Ubatuba protege.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
