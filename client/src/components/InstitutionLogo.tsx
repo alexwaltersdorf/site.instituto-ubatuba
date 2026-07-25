@@ -44,6 +44,7 @@ export const INSTITUTION_DOMAINS: Record<string, string> = {
   "Universitat Autònoma de Barcelona": "uab.cat",
   "University of Michigan": "umich.edu",
   "British Council": "britishcouncil.org",
+  "Escola Virtual de Governo": "escolavirtual.gov.br",
 };
 
 export function institutionLogoUrl(institution: string, explicit?: string | null): string | null {

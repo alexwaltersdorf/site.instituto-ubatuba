@@ -1,4 +1,4 @@
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, like, or, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { certificates, contacts, courses, enrollments, ethicsReports, gallery, InsertContact, InsertCourse, InsertEthicsReport, InsertGalleryItem, InsertPost, InsertStudentProfile, InsertUser, newsletterSubscribers, posts, studentEnrollments, studentProfiles, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
@@ -206,6 +206,40 @@ export async function getCourses(category?: string, level?: string) {
   if (category) conditions.push(eq(courses.category, category));
   if (level) conditions.push(eq(courses.level, level as "iniciante" | "intermediario" | "avancado"));
   return db.select().from(courses).where(and(...conditions)).orderBy(desc(courses.createdAt));
+}
+
+export async function getCoursesPaginated(opts: {
+  search?: string;
+  category?: string;
+  level?: string;
+  page?: number;
+  pageSize?: number;
+}) {
+  const db = await getDb();
+  if (!db) return { items: [], total: 0, page: 1, pageSize: 24 };
+  const page = Math.max(1, opts.page ?? 1);
+  const pageSize = Math.min(60, Math.max(1, opts.pageSize ?? 24));
+  const conditions = [eq(courses.active, true)];
+  if (opts.category) conditions.push(eq(courses.category, opts.category));
+  if (opts.level) conditions.push(eq(courses.level, opts.level as "iniciante" | "intermediario" | "avancado"));
+  const search = opts.search?.trim();
+  if (search) {
+    const q = `%${search}%`;
+    const m = or(like(courses.title, q), like(courses.institution, q), like(courses.description, q));
+    if (m) conditions.push(m);
+  }
+  const where = and(...conditions);
+  const [items, countRes] = await Promise.all([
+    db.select().from(courses).where(where).orderBy(desc(courses.featured), desc(courses.createdAt)).limit(pageSize).offset((page - 1) * pageSize),
+    db.select({ n: sql<number>`count(*)` }).from(courses).where(where),
+  ]);
+  return { items, total: Number(countRes[0]?.n ?? 0), page, pageSize };
+}
+
+export async function getFeaturedCourses(limit = 5) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(courses).where(and(eq(courses.active, true), eq(courses.featured, true))).orderBy(desc(courses.createdAt)).limit(limit);
 }
 
 export async function getCourseBySlug(slug: string) {

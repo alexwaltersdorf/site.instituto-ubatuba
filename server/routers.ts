@@ -13,7 +13,8 @@ import {
   getContacts,
   getCourseById,
   getCourseBySlug,
-  getCourses,
+  getCoursesPaginated,
+  getFeaturedCourses,
   getEnrollment,
   getEthicsReportByProtocol,
   getEthicsReports,
@@ -446,10 +447,24 @@ export const appRouter = router({
   /* ── Cursos Gratuitos ── */
   courses: router({
     list: publicProcedure
-      .input(z.object({ category: z.string().optional(), level: z.string().optional() }).optional())
+      .input(
+        z
+          .object({
+            search: z.string().optional(),
+            category: z.string().optional(),
+            level: z.string().optional(),
+            page: z.number().min(1).default(1),
+            pageSize: z.number().min(1).max(60).default(24),
+          })
+          .optional()
+      )
       .query(async ({ input }) => {
-        return getCourses(input?.category, input?.level);
+        return getCoursesPaginated(input ?? {});
       }),
+
+    featured: publicProcedure.query(async () => {
+      return getFeaturedCourses(5);
+    }),
 
     bySlug: publicProcedure
       .input(z.object({ slug: z.string() }))
