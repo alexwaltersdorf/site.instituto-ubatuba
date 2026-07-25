@@ -62,9 +62,11 @@ async function sendStudentToSheet(data: {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6000);
+    // charset=utf-8 é essencial: sem ele o Apps Script decodifica o corpo
+    // como latin1 e corrompe acentos (José, Perequê, Itaguá...).
     await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify(data),
       signal: controller.signal,
     });
