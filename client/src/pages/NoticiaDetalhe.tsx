@@ -39,7 +39,7 @@ export default function NoticiaDetalhe({ slug }: Props) {
   useOpenGraph({
     title: `${postTitle} | Instituto Ubatuba`,
     description: postExcerpt,
-    url: `https://www.institutoubatuba.org.br/noticias/${slug}`,
+    url: `https://institutoubatuba.org/noticias/${slug}`,
     type: "article",
   });
 

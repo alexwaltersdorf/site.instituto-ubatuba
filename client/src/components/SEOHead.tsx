@@ -8,7 +8,7 @@ import { useEffect } from "react";
  */
 export function useCanonical(path: string) {
   useEffect(() => {
-    const baseUrl = "https://www.institutoubatuba.org.br";
+    const baseUrl = "https://institutoubatuba.org";
     const canonicalUrl = path === "/" ? baseUrl : `${baseUrl}${path}`;
     
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
@@ -125,7 +125,7 @@ export function useSEO(options: {
   ogDescription?: string;
   ogImage?: string;
 }) {
-  const baseUrl = "https://www.institutoubatuba.org.br";
+  const baseUrl = "https://institutoubatuba.org";
   const canonicalUrl = options.canonical === "/" ? baseUrl : `${baseUrl}${options.canonical}`;
 
   useEffect(() => {

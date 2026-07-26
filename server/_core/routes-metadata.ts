@@ -28,7 +28,7 @@ export interface RouteMetadata {
   changefreq: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
 }
 
-const SITE_URL = "https://www.institutoubatuba.org.br";
+const SITE_URL = "https://institutoubatuba.org";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 export const routesMetadata: Record<string, RouteMetadata> = {
