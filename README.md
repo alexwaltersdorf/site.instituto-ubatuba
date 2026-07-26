@@ -32,6 +32,24 @@ Resumo das regras invioláveis:
 
 ---
 
+## ⚠️ CRÍTICO — Conteúdo editorial (matérias / notícias)
+
+**O leitor NUNCA pode ver marcação Markdown no site.** Símbolos como `##`,
+`**`, `-` e `>` existem só no banco e devem ser convertidos em HTML de
+verdade na renderização, sempre via
+[`client/src/components/MarkdownContent.tsx`](client/src/components/MarkdownContent.tsx).
+
+- **Nunca** renderizar `post.content` direto dentro de `<p>` (bug corrigido em
+  jul/2026: o conteúdo saía com `## Título` e `**negrito**` visíveis na tela).
+- **Nunca** usar `dangerouslySetInnerHTML` para isso — risco de XSS.
+- **Nunca** apagar a marcação do conteúdo salvo: ela é a fonte da formatação.
+- Matérias novas entram em [`server/seed-posts.ts`](server/seed-posts.ts) e são
+  publicadas sozinhas no boot (idempotente, por slug).
+
+Regras completas: [`references/conteudo-editorial-rules.md`](references/conteudo-editorial-rules.md).
+
+---
+
 ## Quick Facts
 
 - **tRPC-first:** define procedures in `server/routers.ts`, consume them with `trpc.*` hooks.
