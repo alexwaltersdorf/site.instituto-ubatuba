@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { postsDemo } from "@/data/postsDemo";
 import { useCanonical, useMetaDescription, useOpenGraph } from "@/components/SEOHead";
+import { MarkdownContent } from "@/components/MarkdownContent";
 
 interface Props {
   slug: string;
@@ -153,11 +154,7 @@ export default function NoticiaDetalhe({ slug }: Props) {
             {/* Conteúdo */}
             <div className="text-foreground leading-relaxed space-y-4">
               {displayPost.content && displayPost.content.length > 0 ? (
-                displayPost.content.split("\n\n").map((paragraph, i) => (
-                  <p key={i} className="text-base leading-[1.8] text-muted-foreground">
-                    {paragraph}
-                  </p>
-                ))
+                <MarkdownContent content={displayPost.content} />
               ) : (
                 <p className="text-base leading-[1.8] text-muted-foreground">
                   {displayPost.excerpt}
