@@ -1,23 +1,31 @@
 /**
- * Publica a matéria "El Niño 2026" na tabela posts.
- * Uso (com DATABASE_URL no ambiente, ex. Hostinger):
- *   node seed-post-elnino.mjs
- * Idempotente: se o slug já existir, atualiza o conteúdo.
+ * Seed de matérias editoriais.
+ *
+ * Roda uma vez no boot do servidor: publica no banco as matérias listadas aqui
+ * que ainda não existem (checagem por slug). É idempotente — se o post já existe,
+ * não faz nada. Qualquer falha é apenas logada, nunca derruba o servidor.
  */
-import mysql from "mysql2/promise";
+import { createPost, getPostBySlug } from "./db";
 
-const DATABASE_URL = process.env.DATABASE_URL;
-if (!DATABASE_URL) {
-  console.error("DATABASE_URL not set");
-  process.exit(1);
-}
-
-const post = {
-  slug: "el-nino-2026-o-que-esperar-em-ubatuba-ods-13",
-  title: "El Niño 2026: o oceano esquentou — o que esperar em Ubatuba",
-  excerpt:
-    "O El Niño de 2026 caminha para ser um dos mais fortes já registrados, segundo a NOAA e o INMET. Entenda o fenômeno, os efeitos esperados no litoral norte de SP e como a ODS 13 orienta a preparação da nossa cidade.",
-  content: `# El Niño 2026: o oceano esquentou — o que esperar em Ubatuba
+const seedPosts = [
+  {
+    slug: "el-nino-2026-o-que-esperar-em-ubatuba-ods-13",
+    title: "El Niño 2026: o oceano esquentou — o que esperar em Ubatuba",
+    excerpt:
+      "O El Niño de 2026 caminha para ser um dos mais fortes já registrados, segundo a NOAA e o INMET. Entenda o fenômeno, os efeitos esperados no litoral norte de SP e como a ODS 13 orienta a preparação da nossa cidade.",
+    coverImage: "/noticias-img/el-nino-2026.jpg",
+    category: "Meio Ambiente",
+    tags: JSON.stringify([
+      "El Niño",
+      "clima",
+      "ODS 13",
+      "ODS 11",
+      "ODS 14",
+      "Defesa Civil",
+      "Serra do Mar",
+      "São Sebastião",
+    ]),
+    content: `# El Niño 2026: o oceano esquentou — o que esperar em Ubatuba
 
 ## Um dos eventos mais fortes já registrados
 
@@ -43,6 +51,14 @@ O litoral norte de São Paulo pode sentir o El Niño de três formas principais:
 2. **Chuvas intensas na Serra do Mar** — em anos de El Niño, eventos extremos de chuva ficam mais prováveis no nosso relevo de encostas. Atenção redobrada com áreas de risco.
 3. **Calor fora de época** — ondas de calor pressionam a saúde, o abastecimento de água e o saneamento, especialmente na alta temporada.
 
+## A lição de São Sebastião
+
+O litoral norte já sabe o que a chuva extrema é capaz de fazer. Entre a noite de 18 e a madrugada de 19 de fevereiro de 2023, São Sebastião registrou cerca de **680 milímetros de chuva em apenas 24 horas** — o maior volume já medido no Brasil nesse intervalo. O desastre deixou **64 mortos**, e a Vila Sahy esteve entre as áreas mais atingidas.
+
+Estudos técnicos já apontavam a vulnerabilidade da região antes da tragédia: o desastre foi agravado pela ocupação irregular e pela supressão da vegetação nas encostas. Três anos depois, o projeto Restaura Litoral colocou **203 hectares em recuperação**, mas o desmatamento segue como ameaça — só em dois meses de 2026 foram identificadas cerca de 40 ocorrências e indícios de esquemas organizados de grilagem.
+
+A lição é direta: encosta desmatada e ocupação irregular transformam chuva forte em tragédia. E, como lembram os especialistas, **eventos extremos não seguem calendário**.
+
 ## O gancho com a Agenda 2030: ODS 13
 
 Falar de El Niño é falar da **ODS 13 — Ação Contra a Mudança Global do Clima**. A meta **13.1** pede exatamente isto: *fortalecer a resiliência e a capacidade de adaptação a riscos e desastres relacionados ao clima*. Uma cidade informada e preparada protege vidas — e é esse o papel da educação climática que o Instituto Ubatuba promove. O tema também conversa com a **ODS 11** (cidades resilientes) e a **ODS 14** (vida na água).
@@ -59,38 +75,27 @@ Falar de El Niño é falar da **ODS 13 — Ação Contra a Mudança Global do Cl
 - NOAA / Climate Prediction Center — ENSO Diagnostic Discussion (jul/2026)
 - INMET — "El Niño 2026: monitoramento, previsões e possíveis impactos no Brasil"
 - Nota Técnica Conjunta El Niño 2026 — INPE, INMET, Funceme e CENSIPAM
+- CNN Brasil — "Tragédia de São Sebastião completa três anos e deixa alerta climático"
 
 ---
 
 *O Instituto Ubatuba Santuário Ecológico acompanha o clima e educa a comunidade para um futuro mais seguro. Siga [@instituto.ubatuba](https://www.instagram.com/instituto.ubatuba) e compartilhe este alerta.*`,
-  coverImage: "/noticias-img/el-nino-2026.jpg",
-  category: "Meio Ambiente",
-  tags: JSON.stringify([
-    "El Niño",
-    "clima",
-    "ODS 13",
-    "ODS 11",
-    "ODS 14",
-    "Defesa Civil",
-    "Serra do Mar",
-    "pesca",
-  ]),
-};
+  },
+];
 
-const conn = await mysql.createConnection(DATABASE_URL);
-const now = new Date();
-const [rows] = await conn.execute("SELECT id FROM posts WHERE slug = ?", [post.slug]);
-if (rows.length > 0) {
-  await conn.execute(
-    "UPDATE posts SET title=?, excerpt=?, content=?, coverImage=?, category=?, tags=?, published=1, publishedAt=COALESCE(publishedAt, ?) WHERE slug=?",
-    [post.title, post.excerpt, post.content, post.coverImage, post.category, post.tags, now, post.slug]
-  );
-  console.log("Post atualizado:", post.slug);
-} else {
-  await conn.execute(
-    "INSERT INTO posts (slug, title, excerpt, content, coverImage, category, tags, published, publishedAt) VALUES (?,?,?,?,?,?,?,1,?)",
-    [post.slug, post.title, post.excerpt, post.content, post.coverImage, post.category, post.tags, now]
-  );
-  console.log("Post publicado:", post.slug);
+export async function seedEditorialPosts() {
+  for (const post of seedPosts) {
+    try {
+      const existing = await getPostBySlug(post.slug);
+      if (existing) continue;
+      await createPost({
+        ...post,
+        published: true,
+        publishedAt: new Date(),
+      });
+      console.log(`[seed-posts] publicado: ${post.slug}`);
+    } catch (err) {
+      console.warn(`[seed-posts] falha ao publicar ${post.slug}:`, err);
+    }
+  }
 }
-await conn.end();

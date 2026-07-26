@@ -10,6 +10,7 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { registerStripeWebhook } from "../stripe-webhook";
 import { registerSEORoutes } from "../seo";
+import { seedEditorialPosts } from "../seed-posts";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -65,6 +66,8 @@ async function startServer() {
 
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    // Publica materias editoriais pendentes (idempotente; nunca derruba o server)
+    void seedEditorialPosts().catch(err => console.warn("[seed-posts] erro:", err));
   });
 }
 
