@@ -329,3 +329,34 @@ sob as falas:
   luminoso piano+flauta: magnific.com/app/creation/jSxPqbiLD0
 - Duração real ~87s: cobrir os 90s do corte segurando o fade-out final
   (~3s de cauda) na mixagem.
+
+## 🎬 ENTREGA FINAL — Corte completo (27/07/2026)
+
+**"A Paz que Nasceu na Areia" — 90,0s exatos, 12 cenas, falas pt-BR.**
+Clipes gerados no Google Flow (Veo 3.1, 720p 24fps 8s cada, custo ZERO de
+créditos do Hub) e entregues pelo Google Drive; montagem local (ffmpeg).
+
+- **Master 16:9:** magnific.com/app/creation/hEmUGd5vqL
+- **Master 9:16 (Reels/TikTok):** magnific.com/app/creation/iA6Ikyx3uK
+- **Legendas:** `filme/legendas-paz-de-iperoig-pt-BR.srt` (12 cues)
+
+**Método do corte 96s → 90,0s (regra: nunca cortar fala):** medido o volume
+médio em janelas de 0,25s na cauda de cada clipe para achar onde a fala
+termina e só a ambiência continua. Cortes aplicados por cena (s):
+c1 7,21 · c2 7,63 · c3 7,63 · c4 6,92 · c5 7,71 · c6 6,88 · c7 8,00 (fala
+até o fim, sem corte) · c8 7,63 · c9 7,83 · c10 7,83 · c11 7,83 · c12 6,92.
+
+**Mixagem:** trilha opção 3 (piano→flauta) esticada de 87,07s para 90,0s
+via `atempo=0.96718` (imperceptível, faz o final da música coincidir com o
+fim do filme), a 22% de volume, fade-in 1,5s e fade-out a partir de 87,5s;
+limiter + `loudnorm I=-14 LUFS` (padrão web). Selo oficial (arquivo PNG,
+nunca IA) com fade-in no canto inferior direito nos últimos 4s.
+
+**Versão 9:16:** crop dirigido 405×720 → 1080×1920 com offset X por cena
+(560·250·330·380·590·300·300·438·420·190·330·400), selo recentralizado.
+
+⚠️ **Ponto de atenção (cena 8):** o Veo escreveu na areia um texto que
+imita português mas é ilegível/sem sentido ("Sem papel versos, Dunfo se
+brecia…"). Passa despercebido no ritmo do filme, mas se for exibido em
+tela grande vale regenerar a cena 8 no Flow com "abstract poetic marks
+carved in sand, NO letters, NO readable text" no prompt.
