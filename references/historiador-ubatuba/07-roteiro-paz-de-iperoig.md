@@ -330,27 +330,40 @@ sob as falas:
 - Duração real ~87s: cobrir os 90s do corte segurando o fade-out final
   (~3s de cauda) na mixagem.
 
-## 🎬 ENTREGA FINAL — Corte completo (27/07/2026)
+## 🎬 ENTREGA FINAL — Corte v2 (27/07/2026)
 
-**"A Paz que Nasceu na Areia" — 90,0s exatos, 12 cenas, falas pt-BR.**
+**"A Paz que Nasceu na Areia" — 90,5s, 12 cenas, falas pt-BR.**
 Clipes gerados no Google Flow (Veo 3.1, 720p 24fps 8s cada, custo ZERO de
 créditos do Hub) e entregues pelo Google Drive; montagem local (ffmpeg).
 
-- **Master 16:9:** magnific.com/app/creation/hEmUGd5vqL
-- **Master 9:16 (Reels/TikTok):** magnific.com/app/creation/iA6Ikyx3uK
+- **Master 16:9:** magnific.com/app/creation/Te0bBIuVNR
+- **Master 9:16 (Reels/TikTok):** magnific.com/app/creation/XtdjvuuBfo
 - **Legendas:** `filme/legendas-paz-de-iperoig-pt-BR.srt` (12 cues)
 
-**Método do corte 96s → 90,0s (regra: nunca cortar fala):** medido o volume
-médio em janelas de 0,25s na cauda de cada clipe para achar onde a fala
-termina e só a ambiência continua. Cortes aplicados por cena (s):
-c1 7,21 · c2 7,63 · c3 7,63 · c4 6,92 · c5 7,71 · c6 6,88 · c7 8,00 (fala
-até o fim, sem corte) · c8 7,63 · c9 7,83 · c10 7,83 · c11 7,83 · c12 6,92.
+### ⚠️ Lição do corte v1 (erro corrigido)
 
-**Mixagem:** trilha opção 3 (piano→flauta) esticada de 87,07s para 90,0s
-via `atempo=0.96718` (imperceptível, faz o final da música coincidir com o
-fim do filme), a 22% de volume, fade-in 1,5s e fade-out a partir de 87,5s;
+O corte v1 mediu o volume em janelas de 0,25 s no áudio cheio e cortou a
+cena 12 em 6,92 s — **decepando o fim da palavra "areia"**. Causa: ondas e
+ambiência mascaram a cauda da fala, e janelas largas escondem a queda.
+
+**Método correto (usar sempre):** filtrar a banda da voz
+(`highpass=250,lowpass=3800`), medir `mean_volume` em janelas de **0,1 s** e
+tratar **> -30 dB como fala** (a ambiência fica em -32 dB ou menos). O corte
+entra 0,1 s antes da primeira sílaba e sai **0,35 s depois da última**.
+Conferir cada emenda: 0,1 s antes do corte deve estar abaixo de -27 dB.
+
+**Cortes v2 (frames a 24 fps, início→fim):** c1 7→186 · c2 0→184 ·
+c3 7→188 · c4 0→169 · c5 0→192 · c6 5→145 · c7 0→192 · c8 0→184 ·
+c9 0→192 · c10 0→192 · c11 0→192 · c12 2→176. Total **90,46 s**.
+Cenas 5, 7, 9, 10 e 11 têm fala até o último frame — nunca cortar.
+Onde havia respiro antes da 1ª sílaba (c1, c3, c6, c12), o tempo foi
+recuperado no início, o que compensou o alongamento das caudas.
+
+**Mixagem:** trilha opção 3 (piano→flauta) esticada de 87,07 s para ~90,5 s
+via `atempo=0.96227` (imperceptível; faz o acorde final coincidir com o fim
+do filme), a 22% de volume, fade-in 1,5 s e fade-out a partir de 88 s;
 limiter + `loudnorm I=-14 LUFS` (padrão web). Selo oficial (arquivo PNG,
-nunca IA) com fade-in no canto inferior direito nos últimos 4s.
+nunca IA) com fade-in no canto inferior direito nos últimos 4 s.
 
 **Versão 9:16:** crop dirigido 405×720 → 1080×1920 com offset X por cena
 (560·250·330·380·590·300·300·438·420·190·330·400), selo recentralizado.
