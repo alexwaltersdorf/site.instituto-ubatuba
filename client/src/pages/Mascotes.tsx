@@ -416,7 +416,7 @@ export default function Mascotes() {
         <div className="relative container text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-white/70 text-xs font-semibold tracking-widest uppercase mb-6">
             <Users className="w-3.5 h-3.5" />
-            27 personagens com alma ubatubense
+            29 personagens com alma ubatubense
           </span>
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4">
             Nossos <span className="text-ocean">Mascotes</span>
