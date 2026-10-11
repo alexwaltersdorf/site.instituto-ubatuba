@@ -53,3 +53,22 @@ grep -rhoE 'manus-storage/[A-Za-z0-9_.-]+' client/ | sed 's#manus-storage/##' | 
   nao usar foto de rede social.
 - Novos assets do site devem ir **direto para `client/public/`**, nao para o storage
   da Manus. O padrao de `client/public/cursos/` e o certo.
+
+## Resgatar o que ainda esta na Manus
+
+Se a credencial do projeto Manus voltar a valer, da para baixar TUDO de uma vez e
+encerrar a dependencia:
+
+```bash
+BUILT_IN_FORGE_API_URL=https://forge.butterfly-effect.dev \
+BUILT_IN_FORGE_API_KEY=<chave nova> \
+node scripts/resgatar-assets-manus.mjs
+```
+
+O script descobre sozinho as chaves referenciadas no codigo, pula o que ja existe
+em `client/public/manus-storage/`, valida o conteudo por magic number (nao grava
+pagina de erro como se fosse imagem) e grava com o nome exato da chave. Depois e
+so otimizar as imagens grandes, commitar e dar push.
+
+Onde a chave e usada em producao: variaveis de ambiente do app na Hostinger
+(`BUILT_IN_FORGE_API_KEY`), conforme `HOSTINGER-DEPLOY.md`.
