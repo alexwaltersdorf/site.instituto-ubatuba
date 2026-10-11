@@ -33,18 +33,25 @@ Se o ambiente Manus reclamar de `ERR_PNPM_IGNORED_BUILDS` para o esbuild:
 esbuild na resolução (nada a executar, nada a ignorar). Não delete esse
 arquivo e não "conserte" o aviso via whitelist.
 
-Estado correto do `pnpm-workspace.yaml` (não adicionar esbuild):
+Estado correto do `pnpm-workspace.yaml` (confere com o arquivo real):
 
 ```yaml
 onlyBuiltDependencies:
   - "@tailwindcss/oxide"
-
 allowBuilds:
-  "@tailwindcss/oxide": true
-
+  esbuild: false
+  "@esbuild/linux-x64": false
+  "@esbuild/darwin-arm64": false
+  "@esbuild/darwin-x64": false
+  "@esbuild/win32-x64": false
 overrides:
   "tailwindcss>nanoid": "3.3.7"
 ```
+
+> As entradas do esbuild com valor **`false`** são corretas e devem permanecer
+> (vieram do checkpoint do Manus de 2026-07-22): elas dizem ao pnpm para não
+> rodar os scripts, o que elimina o `ERR_PNPM_IGNORED_BUILDS` sem executar nada.
+> O proibido é `true`.
 
 ## REGRA 2 — Não tocar nestes arquivos sem necessidade absoluta
 
@@ -53,9 +60,11 @@ overrides:
 - `scripts/fix-esbuild.cjs` — aplica `chmod +x` nos binários do esbuild
   antes de todo build (é o 1º passo dos scripts `build` e `postinstall`).
   NÃO remover da cadeia de build.
-- `.npmrc` — deve conter apenas `legacy-peer-deps=true`. NÃO adicionar
-  `enable-pre-post-scripts=false` (já foi tentado; não corrige o EACCES e
-  arrisca suprimir o postinstall do próprio projeto, que é quem builda).
+- `.npmrc` — hoje contém `legacy-peer-deps=true` e `ignore-build-warnings=true`
+  (a 2ª veio do checkpoint do Manus de 2026-07-22; é opção do pnpm, o npm
+  apenas avisa que não a conhece). NÃO adicionar `enable-pre-post-scripts=false`
+  (já foi tentado; não corrige o EACCES e arrisca suprimir o postinstall do
+  próprio projeto, que é quem builda).
 - `package.json` → scripts `build`, `postinstall` e `start`: a Hostinger
   depende exatamente dessa estrutura (install → postinstall builda → start
   serve `dist/index.js`). Não remover o `postinstall`.
