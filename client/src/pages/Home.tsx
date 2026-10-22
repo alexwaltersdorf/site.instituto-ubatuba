@@ -10,7 +10,7 @@ import FloatingSidebar from "@/components/FloatingSidebar";
 
 const HERO_IMAGE = "/manus-storage/ubatuba-hero_110ea313.jpg";
 const PRAIA_IMAGE = "/manus-storage/ubatuba-praia_8ed0b366.jpg";
-const NATUREZA_IMAGE = "/manus-storage/ubatuba-natureza_083c332c.png";
+const NATUREZA_IMAGE = "/manus-storage/ubatuba-natureza.jpg";
 
 /* ── Dados ── */
 
@@ -47,12 +47,9 @@ const impactNumbers = [
 
 const esporteImages = [
   { src: "/manus-storage/esporte_futebol_01_eab01f3c.jpg", alt: "Escolinha de Futebol — crianças treinando em campo" },
-  { src: "/manus-storage/esporte_futevolei_01_075b0952.jpg", alt: "Escolinha de Futevôlei — jovens praticando na praia" },
-  { src: "/manus-storage/esporte_skate_01_bdaf9970.jpg", alt: "Escolinha de Skate — inclusão pelo esporte radical" },
   { src: "/manus-storage/esporte_surfe_01_4756749a.jpg", alt: "Escolinha de Surfe — aulas no mar de Ubatuba" },
   { src: "/manus-storage/esporte_surfe_02_dcda585e.jpg", alt: "Surfe — jovens conectados com o oceano" },
   { src: "/manus-storage/esporte_futebol_02_aa55a128.jpg", alt: "Futebol — formação de cidadania pelo esporte" },
-  { src: "/manus-storage/esporte_radical_01_744eeafa.webp", alt: "Esportes radicais — aventura e superação" },
   { src: "/manus-storage/esporte_guardioes_01_8ddcf9ac.webp", alt: "Guardiões do Litoral — jovens protetores da natureza" },
 ];
 
@@ -66,12 +63,7 @@ const causasData = [
     image: HERO_IMAGE,
     link: "#acoes",
     gallery: [
-      { src: "/manus-storage/saude_equipe_outubro_rosa_30c65acf.webp", alt: "Equipe de saúde no Outubro Rosa" },
-      { src: "/manus-storage/saude_palestra_comunitaria_087af887.webp", alt: "Palestra de saúde comunitária" },
-      { src: "/manus-storage/saude_grupo_mulheres_ff963075.webp", alt: "Grupo de mulheres em ação de saúde" },
-      { src: "/manus-storage/saude_evento_rosa_e8d42020.JPEG", alt: "Evento Outubro Rosa" },
-      { src: "/manus-storage/saude_ultrassom_85631ea7.webp", alt: "Exame de ultrassom gratuito" },
-      { src: "/manus-storage/saude_consulta_medica_8b0bf6d6.webp", alt: "Consulta médica comunitária" },
+      { src: "/manus-storage/saude_equipe_outubro_rosa_30c65acf.webp", alt: "Ação de saúde com a Total Quality Medicina Diagnóstica" },
     ],
   },
   {
@@ -506,12 +498,7 @@ const programas = [
     bg: "bg-earth/10",
     border: "border-earth/20",
     images: [
-      { src: "/manus-storage/saude_equipe_outubro_rosa_30c65acf.webp", alt: "Equipe de saúde no Outubro Rosa" },
-      { src: "/manus-storage/saude_palestra_comunitaria_087af887.webp", alt: "Palestra de saúde comunitária" },
-      { src: "/manus-storage/saude_grupo_mulheres_ff963075.webp", alt: "Grupo de mulheres em ação de saúde" },
-      { src: "/manus-storage/saude_evento_rosa_e8d42020.JPEG", alt: "Evento Outubro Rosa com comunidade" },
-      { src: "/manus-storage/saude_ultrassom_85631ea7.webp", alt: "Exame de ultrassom gratuito" },
-      { src: "/manus-storage/saude_consulta_medica_8b0bf6d6.webp", alt: "Consulta médica comunitária" },
+      { src: "/manus-storage/saude_equipe_outubro_rosa_30c65acf.webp", alt: "Ação de saúde com a Total Quality Medicina Diagnóstica" },
     ],
   },
   {
@@ -532,16 +519,7 @@ const programas = [
     bg: "bg-forest-light/10",
     border: "border-forest-light/20",
     images: [
-      { src: "/manus-storage/feira_literaria_criancas_db3322cc.jpg", alt: "Crianças participando da Feira Literária" },
-      { src: "/manus-storage/feira_literaria_palco_4a670986.JPEG", alt: "Apresentação no palco da Feira Literária" },
-      { src: "/manus-storage/feira_literaria_leitura_b1803c62.jpg", alt: "Momento de leitura com alunos" },
-      { src: "/manus-storage/feira_literaria_banner_e3e5de01.webp", alt: "Banner da Feira Literária" },
-      { src: "/manus-storage/feira_literaria_teatro_7517dc4d.webp", alt: "Encenação teatral dos alunos" },
-      { src: "/manus-storage/feira_literaria_apresentacao_8d9d2a86.webp", alt: "Apresentação cultural dos estudantes" },
-      { src: "/manus-storage/feira_literaria_alunos_2d34f79e.webp", alt: "Alunos reunidos na Feira Literária" },
-      { src: "/manus-storage/feira_literaria_grupo_f4ce68a5.webp", alt: "Grupo de alunos em atividade literária" },
-      { src: "/manus-storage/feira_literaria_plateia_473b972d.webp", alt: "Plateia assistindo à apresentação" },
-      { src: "/manus-storage/feira_literaria_encenacao_9d5acc6f.webp", alt: "Encenação literária dos estudantes" },
+      { src: "/manus-storage/feira_literaria_alunos_2d34f79e.webp", alt: "Alunos em atividade educativa do Instituto" },
     ],
   },
   {
@@ -562,19 +540,8 @@ const programas = [
     bg: "bg-earth/10",
     border: "border-earth/20",
     images: [
-      { src: "/manus-storage/festival_pipas_praia_a67c2a3e.webp", alt: "Pai e filho empinando pipa na praia" },
-      { src: "/manus-storage/festival_pipas_bandeira_50bc9892.webp", alt: "Pipa com bandeira de Ubatuba" },
-      { src: "/manus-storage/festival_tenda_equipe_47c337af.webp", alt: "Equipe do Instituto na tenda do festival" },
-      { src: "/manus-storage/festival_escultura_criancas_6d9d4675.webp", alt: "Crianças esculpindo na areia" },
-      { src: "/manus-storage/festival_escultura_roda_0d35331f.webp", alt: "Escultura de roda na areia" },
-      { src: "/manus-storage/festival_escultura_artista_c4b77740.webp", alt: "Artista criando escultura de tartaruga" },
-      { src: "/manus-storage/festival_escultura_sereia_6bbe8b40.webp", alt: "Escultura de sereia na areia" },
-      { src: "/manus-storage/festival_escultura_caranguejo_6e7c0afa.webp", alt: "Escultura de caranguejo na areia" },
-      { src: "/manus-storage/festival_escultura_pessoa_0e51b2d2.webp", alt: "Escultura de figura humana na areia" },
-      { src: "/manus-storage/festival_escultura_elefante_fe7aba55.webp", alt: "Escultura de elefante na areia" },
       { src: "/manus-storage/festival_comunidade_tenda_c7c9efa8.webp", alt: "Comunidade reunida na tenda do Instituto" },
       { src: "/manus-storage/festival_oficina_pipas_e69d60d0.webp", alt: "Oficina de construção de pipas" },
-      { src: "/manus-storage/festival_tenda_publico_f81c00a5.webp", alt: "Público no festival com tenda do Instituto" },
     ],
   },
 ];
