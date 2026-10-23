@@ -44,10 +44,14 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    <!--
+      Script do umami removido (out/2026): vinha do template da Manus e os
+      placeholders VITE_ANALYTICS_ENDPOINT / VITE_ANALYTICS_WEBSITE_ID
+      nunca eram substituidos, porque a Hostinger nao define nenhuma env
+      VITE_*. O resultado era um GET para "/VITE_ANALYTICS_ENDPOINT/umami"
+      falhando com 400 em toda carga de pagina. A analytics do site e o
+      Google tag (gtag.js) declarado no <head>.
+    -->
   </body>
 
 </html>
