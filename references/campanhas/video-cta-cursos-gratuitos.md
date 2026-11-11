@@ -9,7 +9,8 @@
 
 ## 🎬 ENTREGA FINAL — 29,8 s, 9:16 (11/11/2026)
 
-**Master:** magnific.com/app/creation/rgp48rwxtc · 1080×1920 · 24 fps · −14,8 LUFS
+**Master (v2, corrigido):** magnific.com/app/creation/w4mA5yr7EI · 26,5 s · 1080×1920 · 24 fps · −14,6 LUFS
+**v1 (com erro de pronúncia, não usar):** magnific.com/app/creation/rgp48rwxtc
 **Legendas:** `legendas-cta-cursos.srt` (8 cues)
 
 ### Como foi feito, do começo ao fim
@@ -23,13 +24,13 @@
 3. **Trilha** — piano elétrico → violão + groove leve, 29,2 s. **80 créditos.**
 4. **Montagem** — ffmpeg local, custo zero.
 
-**Total: 14.680 créditos.** Veo não está mais no catálogo; Seedance 2.5 é hoje
+**Total: 18.200 créditos** (inclui a retomada da cena 4). Veo não está mais no catálogo; Seedance 2.5 é hoje
 o modelo de áudio nativo com lip sync. **1080p custa 6.320/clipe** (25.280 nos
 quatro) — fora de um plano de 20k, por isso 720p.
 
 ### Cortes (24 fps, frame inicial | nº de frames)
 
-`c1 5|179 · c2 10|174 · c3 0|188 · c4 7|173` → **714 frames = 29,75 s**
+`c1 5|179 · c2 10|174 · c3 0|188 · c4 98|94` → **635 frames = 26,46 s**
 
 Regra aplicada: entra 0,2 s antes da 1ª sílaba, sai 0,25 s depois da última —
 pausa de ~0,3 s entre falas, o ritmo que o filme 2 pediu. A cena 4 guarda
@@ -38,6 +39,28 @@ pausa de ~0,3 s entre falas, o ritmo que o filme 2 pediu. A cena 4 guarda
 **Verificações feitas antes de fechar:** fala medida na banda da voz
 (`highpass=250,lowpass=3800`, janelas de 0,1 s, fala > −30 dB) em cada clipe e
 no corte final; nenhuma emenda corta sílaba; loudness final −14,8 LUFS / −1,2 dBTP.
+
+
+### ⚠️ "Ubatuba" — o modelo NÃO pronuncia nomes próprios
+
+Seedance 2.5 errou o nome em **duas tomadas seguidas**: primeiro "Iubatábio",
+depois, já com guia fonético explícito no prompt ("oo-bah-TOO-bah", quatro
+sílabas, tónica na terceira, e a lista do que NÃO dizer), saiu "Ubatapa".
+Todas as outras palavras das quatro cenas saíram perfeitas — o defeito é
+específico de nome próprio fora do vocabulário do modelo.
+
+**Regra para os próximos vídeos: não confie a um modelo de vídeo a pronúncia
+de "Ubatuba", "Iperoig", "Cunhambebe" ou qualquer nome próprio local.** Ou se
+escreve a fala sem o nome, deixando-o no texto em tela, ou se usa TTS
+(ElevenLabs acerta) e depois lip sync — que custa 3.200 créditos por clipe,
+além dos 18 do TTS.
+
+**Correção aplicada no v2, a custo zero:** a frase com o erro foi cortada da
+cena 4 (começa depois dela, em 4,08 s da tomada). A voz continua idêntica às
+outras cenas porque é o mesmo clipe. O chamado para ação passa a ser
+"Tudo gratuito. Sua vaga já está lá." com a faixa verde do endereço em tela
+durante toda a cena. O filme ficou 26,5 s em vez de 29,8 s — mais seco, o que
+não prejudica um Reel.
 
 ### Na tela
 

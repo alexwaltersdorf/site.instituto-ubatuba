@@ -29,11 +29,9 @@ No seu ritmo, pelo celular.
 E com certificado.
 
 7
-00:00:22,800 --> 00:00:26,500
-Corre pro site do Instituto
-Ubatuba, na página Cursos.
+00:00:22,900 --> 00:00:23,800
+Tudo gratuito.
 
 8
-00:00:26,600 --> 00:00:28,900
-Tudo gratuito.
+00:00:24,200 --> 00:00:25,400
 Sua vaga já está lá.
