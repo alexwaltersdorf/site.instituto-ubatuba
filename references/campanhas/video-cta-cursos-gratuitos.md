@@ -7,6 +7,46 @@
 
 ---
 
+## 🎬 ENTREGA FINAL — 29,8 s, 9:16 (11/11/2026)
+
+**Master:** magnific.com/app/creation/rgp48rwxtc · 1080×1920 · 24 fps · −14,8 LUFS
+**Legendas:** `legendas-cta-cursos.srt` (8 cues)
+
+### Como foi feito, do começo ao fim
+
+1. **Frames** — Nano Banana 2.1, 2K 9:16. Cena 1 do zero; cenas 2-4 com a
+   cena 1 como referência de imagem, o que travou rosto, sardas e figurino.
+   **520 créditos.**
+2. **Clipes** — Seedance 2.5, 720p 9:16, 8 s cada, frame inicial = o PNG da
+   cena, fala pt-BR entre aspas no prompt (voz nativa + lip sync),
+   `withSoundEffects` + `noMusic`. **3.520 créditos por clipe = 14.080.**
+3. **Trilha** — piano elétrico → violão + groove leve, 29,2 s. **80 créditos.**
+4. **Montagem** — ffmpeg local, custo zero.
+
+**Total: 14.680 créditos.** Veo não está mais no catálogo; Seedance 2.5 é hoje
+o modelo de áudio nativo com lip sync. **1080p custa 6.320/clipe** (25.280 nos
+quatro) — fora de um plano de 20k, por isso 720p.
+
+### Cortes (24 fps, frame inicial | nº de frames)
+
+`c1 5|179 · c2 10|174 · c3 0|188 · c4 7|173` → **714 frames = 29,75 s**
+
+Regra aplicada: entra 0,2 s antes da 1ª sílaba, sai 0,25 s depois da última —
+pausa de ~0,3 s entre falas, o ritmo que o filme 2 pediu. A cena 4 guarda
+**1,10 s de respiro** depois da última palavra, com fade de áudio.
+
+**Verificações feitas antes de fechar:** fala medida na banda da voz
+(`highpass=250,lowpass=3800`, janelas de 0,1 s, fala > −30 dB) em cada clipe e
+no corte final; nenhuma emenda corta sílaba; loudness final −14,8 LUFS / −1,2 dBTP.
+
+### Na tela
+
+Selo oficial (PNG do manual, nunca IA) no topo direito, fora da área da UI do
+Reels. Textos em Poppins com a paleta oficial: **1.127** em Amarelo Sol,
+instituições e certificado em Areia, e a URL em faixa Verde Serra no fecho.
+
+---
+
 ## 1. Dados verificados na API de produção (11/11/2026)
 
 Números conferidos em `institutoubatuba.org/api/trpc/courses.list` — **não
