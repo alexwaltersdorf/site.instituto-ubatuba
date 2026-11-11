@@ -81,6 +81,28 @@ watermark, logo`.
 
 ---
 
+## 2-B. ✅ FRAMES GERADOS (11/11/2026) — Magnific, Nano Banana 2.1, 2K 9:16
+
+As quatro cenas já existem. A cena 1 foi gerada do zero e as outras três usaram
+**a cena 1 como referência de imagem**, o que travou o rosto, as sardas, o
+cabelo e a camisa nas quatro. Projeto: *Instituto Ubatuba — CTA Cursos Gratuitos*.
+
+| Cena | Frame | Link |
+|---|---|---|
+| 1 — Gancho | deck, mata e oceano desfocado, golden hour | magnific.com/app/creation/fH2j9qVCDY |
+| 2 — Credibilidade | mesa de madeira clara, laptop, caderno, café | magnific.com/app/creation/8a9bwiMIrU |
+| 3 — Como funciona | trilha de areia na mata, celular na mão | magnific.com/app/creation/bx07ABz5Y2 |
+| 4 — CTA | praia, mar aberto, mão aberta em convite | magnific.com/app/creation/ov4qUYe829 |
+
+Variantes alternativas de cada cena ficaram no mesmo projeto, caso alguma
+precise ser trocada. **Custo: 520 créditos** (8 imagens a 65).
+
+**No Flow:** subir cada PNG como frame inicial do clipe correspondente e colar o
+prompt da cena 3 abaixo — o Veo gera a fala pt-BR com lip sync a partir do texto
+entre aspas, sem áudio externo.
+
+---
+
 ## 3. Roteiro — fala exata (pt-BR)
 
 Ritmo: ~16 palavras por clipe de 8 s, com respiro no fim. A fala vai **dentro do
