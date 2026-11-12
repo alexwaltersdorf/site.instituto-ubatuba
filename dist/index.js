@@ -13,7 +13,7 @@ var UNAUTHED_ERR_MSG = "Please login (10001)";
 var NOT_ADMIN_ERR_MSG = "You do not have required permission (10002)";
 
 // server/db.ts
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, like, or, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 
 // drizzle/schema.ts
@@ -331,13 +331,38 @@ async function subscribeNewsletter(email, name) {
   if (!db) throw new Error("Database not available");
   await db.insert(newsletterSubscribers).values({ email, name: name ?? null, lgpdConsent: true }).onDuplicateKeyUpdate({ set: { active: true } });
 }
-async function getCourses(category, level) {
+async function getCoursesPaginated(opts) {
+  const db = await getDb();
+  if (!db) return { items: [], total: 0, page: 1, pageSize: 24 };
+  const page = Math.max(1, opts.page ?? 1);
+  const pageSize = Math.min(60, Math.max(1, opts.pageSize ?? 24));
+  const conditions = [eq(courses.active, true)];
+  if (opts.category) conditions.push(eq(courses.category, opts.category));
+  if (opts.level) conditions.push(eq(courses.level, opts.level));
+  if (opts.institution) conditions.push(eq(courses.institution, opts.institution));
+  const search = opts.search?.trim();
+  if (search) {
+    const q = `%${search}%`;
+    const m = or(like(courses.title, q), like(courses.institution, q), like(courses.description, q));
+    if (m) conditions.push(m);
+  }
+  const where = and(...conditions);
+  const [items, countRes] = await Promise.all([
+    db.select().from(courses).where(where).orderBy(desc(courses.featured), desc(courses.createdAt)).limit(pageSize).offset((page - 1) * pageSize),
+    db.select({ n: sql`count(*)` }).from(courses).where(where)
+  ]);
+  return { items, total: Number(countRes[0]?.n ?? 0), page, pageSize };
+}
+async function getCourseInstitutions() {
   const db = await getDb();
   if (!db) return [];
-  const conditions = [eq(courses.active, true)];
-  if (category) conditions.push(eq(courses.category, category));
-  if (level) conditions.push(eq(courses.level, level));
-  return db.select().from(courses).where(and(...conditions)).orderBy(desc(courses.createdAt));
+  const rows = await db.select({ institution: courses.institution, n: sql`count(*)` }).from(courses).where(eq(courses.active, true)).groupBy(courses.institution).orderBy(sql`count(*) desc`, courses.institution);
+  return rows.map((r) => ({ institution: r.institution, count: Number(r.n) }));
+}
+async function getFeaturedCourses(limit = 5) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(courses).where(and(eq(courses.active, true), eq(courses.featured, true))).orderBy(desc(courses.createdAt)).limit(limit);
 }
 async function getCourseBySlug(slug) {
   const db = await getDb();
@@ -1011,6 +1036,30 @@ var systemRouter = router({
 });
 
 // server/routers.ts
+async function sendStudentToSheet(data) {
+  const url = process.env.SHEETS_WEBHOOK_URL;
+  if (!url) return;
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 6e3);
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify(data),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+  } catch (err) {
+    console.error("[students.register] Falha ao enviar para o Google Sheets:", err?.message);
+  }
+}
+function formatCPF(digits) {
+  return digits.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+}
+function formatDateBR(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : iso;
+}
 function isValidCPF(raw) {
   const cpf = raw.replace(/\D/g, "");
   if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
@@ -1264,12 +1313,36 @@ ${input.description.slice(0, 300)}${input.description.length > 300 ? "..." : ""}
       })
     ).mutation(async ({ input }) => {
       const cpf = input.cpf.replace(/\D/g, "");
-      const existing = await findStudentByCpf(cpf);
-      const profile = await saveStudentProfile({ ...input, cpf });
+      let existing, profile;
+      try {
+        existing = await findStudentByCpf(cpf);
+        profile = await saveStudentProfile({ ...input, cpf });
+      } catch (err) {
+        const anyErr = err;
+        const cause = anyErr?.cause ?? anyErr;
+        console.error("[students.register] Falha ao salvar cadastro:", cause?.code ?? "", cause?.message ?? anyErr?.message);
+        throw new TRPCError3({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "N\xE3o foi poss\xEDvel concluir o cadastro no momento. Tente novamente em instantes."
+        });
+      }
       if (!profile) {
         throw new TRPCError3({ code: "INTERNAL_SERVER_ERROR", message: "N\xE3o foi poss\xEDvel salvar o cadastro. Tente novamente." });
       }
       if (!existing) {
+        await sendStudentToSheet({
+          createdAt: (/* @__PURE__ */ new Date()).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" }),
+          fullName: input.fullName,
+          cpf: formatCPF(cpf),
+          birthDate: formatDateBR(input.birthDate),
+          address: input.address,
+          number: input.number,
+          neighborhood: input.neighborhood,
+          city: input.city,
+          cep: input.cep,
+          phone: input.phone,
+          email: input.email
+        });
         await notifyOwner({
           title: `\u{1F393} Novo aluno cadastrado: ${input.fullName}`,
           content: `**Nome:** ${input.fullName}
@@ -1290,8 +1363,23 @@ ${input.description.slice(0, 300)}${input.description.length > 300 ? "..." : ""}
   }),
   /* ── Cursos Gratuitos ── */
   courses: router({
-    list: publicProcedure.input(z2.object({ category: z2.string().optional(), level: z2.string().optional() }).optional()).query(async ({ input }) => {
-      return getCourses(input?.category, input?.level);
+    list: publicProcedure.input(
+      z2.object({
+        search: z2.string().optional(),
+        category: z2.string().optional(),
+        level: z2.string().optional(),
+        institution: z2.string().optional(),
+        page: z2.number().min(1).default(1),
+        pageSize: z2.number().min(1).max(60).default(24)
+      }).optional()
+    ).query(async ({ input }) => {
+      return getCoursesPaginated(input ?? {});
+    }),
+    institutions: publicProcedure.query(async () => {
+      return getCourseInstitutions();
+    }),
+    featured: publicProcedure.query(async () => {
+      return getFeaturedCourses(5);
     }),
     bySlug: publicProcedure.input(z2.object({ slug: z2.string() })).query(async ({ input }) => {
       const course = await getCourseBySlug(input.slug);
