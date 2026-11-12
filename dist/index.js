@@ -1204,37 +1204,62 @@ ${input.message}`
       } else {
         throw new TRPCError3({ code: "BAD_REQUEST", message: "Informe um valor de doa\xE7\xE3o." });
       }
+      const sessionBase = {
+        mode: "payment",
+        line_items: [
+          {
+            price_data: {
+              currency: DONATION_CURRENCY,
+              unit_amount: amountBRL,
+              product_data: {
+                name: DONATION_PRODUCT_NAME,
+                description: DONATION_PRODUCT_DESCRIPTION
+              }
+            },
+            quantity: 1
+          }
+        ],
+        customer_email: input.donorEmail,
+        metadata: {
+          customer_name: input.donorName ?? "",
+          customer_email: input.donorEmail ?? "",
+          tier_id: input.tierId ?? "custom",
+          amount_brl_cents: amountBRL.toString()
+        },
+        allow_promotion_codes: true,
+        success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${input.origin}/apoie`
+      };
       let session;
       try {
         session = await stripe.checkout.sessions.create({
-          payment_method_types: ["card"],
-          mode: "payment",
-          line_items: [
-            {
-              price_data: {
-                currency: DONATION_CURRENCY,
-                unit_amount: amountBRL,
-                product_data: {
-                  name: DONATION_PRODUCT_NAME,
-                  description: DONATION_PRODUCT_DESCRIPTION
-                }
-              },
-              quantity: 1
-            }
-          ],
-          customer_email: input.donorEmail,
-          metadata: {
-            customer_name: input.donorName ?? "",
-            customer_email: input.donorEmail ?? "",
-            tier_id: input.tierId ?? "custom",
-            amount_brl_cents: amountBRL.toString()
-          },
-          allow_promotion_codes: true,
-          success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${input.origin}/apoie`
+          ...sessionBase,
+          payment_method_types: ["card", "pix"]
         });
       } catch (err) {
         const e = err;
+        const pixIndisponivel = e?.type === "StripeInvalidRequestError" && /pix/i.test(e?.message ?? "");
+        if (pixIndisponivel) {
+          console.error(
+            "[donation] Pix recusado pelo Stripe \u2014 a doa\xE7\xE3o seguiu s\xF3 com cart\xE3o. Habilite o Pix em Configura\xE7\xF5es \u2192 M\xE9todos de pagamento. Detalhe:",
+            e?.message ?? ""
+          );
+          try {
+            session = await stripe.checkout.sessions.create({
+              ...sessionBase,
+              payment_method_types: ["card"]
+            });
+          } catch (err2) {
+            const e2 = err2;
+            console.error("[donation] Stripe recusou tamb\xE9m com cart\xE3o:", e2?.type ?? "", e2?.code ?? "", e2?.message ?? String(err2));
+            throw new TRPCError3({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "N\xE3o foi poss\xEDvel abrir o pagamento agora. Tente novamente em instantes \u2014 se continuar, fale com o Instituto pelo e-mail ubatuba@institutoubatuba.org que registramos sua doa\xE7\xE3o por outro meio."
+            });
+          }
+          if (!session.url) throw new TRPCError3({ code: "INTERNAL_SERVER_ERROR", message: "Erro ao criar sess\xE3o de pagamento." });
+          return { checkoutUrl: session.url };
+        }
         console.error(
           "[donation] Stripe recusou a cria\xE7\xE3o da sess\xE3o:",
           e?.type ?? "",

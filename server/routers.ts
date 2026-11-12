@@ -298,37 +298,76 @@ export const appRouter = router({
          * e não diz nada de útil para quem só quer doar. Fica no log do servidor
          * e o doador recebe um texto que dá o próximo passo.
          */
+        const sessionBase = {
+          mode: "payment" as const,
+          line_items: [
+            {
+              price_data: {
+                currency: DONATION_CURRENCY,
+                unit_amount: amountBRL,
+                product_data: {
+                  name: DONATION_PRODUCT_NAME,
+                  description: DONATION_PRODUCT_DESCRIPTION,
+                },
+              },
+              quantity: 1,
+            },
+          ],
+          customer_email: input.donorEmail,
+          metadata: {
+            customer_name: input.donorName ?? "",
+            customer_email: input.donorEmail ?? "",
+            tier_id: input.tierId ?? "custom",
+            amount_brl_cents: amountBRL.toString(),
+          },
+          allow_promotion_codes: true,
+          success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${input.origin}/apoie`,
+        };
+
         let session;
         try {
+          // Pix primeiro: é instantâneo, sem taxa de cartão, e no Brasil muita
+          // gente doa por Pix e não doaria de cartão.
           session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-            mode: "payment",
-            line_items: [
-              {
-                price_data: {
-                  currency: DONATION_CURRENCY,
-                  unit_amount: amountBRL,
-                  product_data: {
-                    name: DONATION_PRODUCT_NAME,
-                    description: DONATION_PRODUCT_DESCRIPTION,
-                  },
-                },
-                quantity: 1,
-              },
-            ],
-            customer_email: input.donorEmail,
-            metadata: {
-              customer_name: input.donorName ?? "",
-              customer_email: input.donorEmail ?? "",
-              tier_id: input.tierId ?? "custom",
-              amount_brl_cents: amountBRL.toString(),
-            },
-            allow_promotion_codes: true,
-            success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${input.origin}/apoie`,
+            ...sessionBase,
+            payment_method_types: ["card", "pix"],
           });
         } catch (err) {
           const e = err as { type?: string; code?: string; statusCode?: number; message?: string };
+          /**
+           * Se o Pix não estiver habilitado na conta do Stripe, a criação falha
+           * com erro de parâmetro inválido — e derrubaria TODA a arrecadação,
+           * não só o Pix. Nesse caso volta para cartão, que já funcionava, e
+           * deixa no log o que precisa ser ligado no painel.
+           */
+          const pixIndisponivel =
+            e?.type === "StripeInvalidRequestError" &&
+            /pix/i.test(e?.message ?? "");
+
+          if (pixIndisponivel) {
+            console.error(
+              "[donation] Pix recusado pelo Stripe — a doação seguiu só com cartão. Habilite o Pix em Configurações → Métodos de pagamento. Detalhe:",
+              e?.message ?? ""
+            );
+            try {
+              session = await stripe.checkout.sessions.create({
+                ...sessionBase,
+                payment_method_types: ["card"],
+              });
+            } catch (err2) {
+              const e2 = err2 as { type?: string; code?: string; message?: string };
+              console.error("[donation] Stripe recusou também com cartão:", e2?.type ?? "", e2?.code ?? "", e2?.message ?? String(err2));
+              throw new TRPCError({
+                code: "INTERNAL_SERVER_ERROR",
+                message:
+                  "Não foi possível abrir o pagamento agora. Tente novamente em instantes — se continuar, fale com o Instituto pelo e-mail ubatuba@institutoubatuba.org que registramos sua doação por outro meio.",
+              });
+            }
+            if (!session.url) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erro ao criar sessão de pagamento." });
+            return { checkoutUrl: session.url };
+          }
+
           console.error(
             "[donation] Stripe recusou a criação da sessão:",
             e?.type ?? "",
