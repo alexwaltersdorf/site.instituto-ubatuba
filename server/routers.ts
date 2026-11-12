@@ -313,7 +313,23 @@ export const appRouter = router({
          * BRL). Doador fora do Brasil, ou que troque a moeda no seletor do
          * Stripe, continua vendo apenas cartão.
          */
+        /**
+         * Parâmetros vindos do Checkout Studio (painel do Stripe). Mexer neles
+         * aqui faz o código divergir do painel: mude lá e traga a mudança para
+         * cá, não o contrário.
+         *
+         * `payment_method_collection` fica de fora de propósito: só vale para
+         * `mode: "subscription"`, e doação aqui é pagamento único.
+         */
         const sessionBase = {
+          ui_mode: "hosted_page" as const,
+          billing_address_collection: "auto" as const,
+          phone_number_collection: { enabled: false },
+          automatic_tax: { enabled: false },
+          allow_promotion_codes: false,
+          submit_type: "auto" as const,
+          integration_identifier: "hosted_web_0001",
+          origin_context: "web" as const,
           mode: "payment" as const,
           line_items: [
             {
@@ -328,6 +344,12 @@ export const appRouter = router({
               quantity: 1,
             },
           ],
+          /**
+           * `customer_email` e `metadata` não vêm do Checkout Studio: são do
+           * Instituto. São eles que fazem o pagamento no painel do Stripe ter
+           * nome, e-mail e plano do doador em vez de ser uma linha anônima, e
+           * que preenchem o e-mail do recibo. Tirá-los apagaria esse registro.
+           */
           customer_email: input.donorEmail,
           metadata: {
             customer_name: input.donorName ?? "",
@@ -335,7 +357,6 @@ export const appRouter = router({
             tier_id: input.tierId ?? "custom",
             amount_brl_cents: amountBRL.toString(),
           },
-          allow_promotion_codes: true,
           success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${input.origin}/apoie`,
         };
