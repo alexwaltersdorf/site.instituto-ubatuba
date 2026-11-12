@@ -13,6 +13,7 @@ import {
   getContacts,
   getCourseById,
   getCourseBySlug,
+  getCourseInstitutions,
   getCoursesPaginated,
   getFeaturedCourses,
   getEnrollment,
@@ -442,6 +443,23 @@ export const appRouter = router({
         }
         return { success: true };
       }),
+
+    /**
+     * Registra que o aluno saiu para o catálogo de uma instituição parceira.
+     * Grava na mesma tabela das inscrições, com courseId 0 e o slug prefixado
+     * por "instituicao:" — assim dá para separar os dois tipos de saída numa
+     * consulta (WHERE courseSlug LIKE 'instituicao:%') sem exigir migração.
+     */
+    visitInstitution: publicProcedure
+      .input(z.object({ studentId: z.number(), institutionSlug: z.string().trim().min(2).max(60) }))
+      .mutation(async ({ input }) => {
+        try {
+          await logStudentEnrollment(input.studentId, 0, `instituicao:${input.institutionSlug}`);
+        } catch {
+          // o registro não pode impedir o aluno de chegar à instituição
+        }
+        return { success: true };
+      }),
   }),
 
   /* ── Cursos Gratuitos ── */
@@ -453,6 +471,7 @@ export const appRouter = router({
             search: z.string().optional(),
             category: z.string().optional(),
             level: z.string().optional(),
+            institution: z.string().optional(),
             page: z.number().min(1).default(1),
             pageSize: z.number().min(1).max(60).default(24),
           })
@@ -461,6 +480,10 @@ export const appRouter = router({
       .query(async ({ input }) => {
         return getCoursesPaginated(input ?? {});
       }),
+
+    institutions: publicProcedure.query(async () => {
+      return getCourseInstitutions();
+    }),
 
     featured: publicProcedure.query(async () => {
       return getFeaturedCourses(5);

@@ -212,6 +212,7 @@ export async function getCoursesPaginated(opts: {
   search?: string;
   category?: string;
   level?: string;
+  institution?: string;
   page?: number;
   pageSize?: number;
 }) {
@@ -222,6 +223,7 @@ export async function getCoursesPaginated(opts: {
   const conditions = [eq(courses.active, true)];
   if (opts.category) conditions.push(eq(courses.category, opts.category));
   if (opts.level) conditions.push(eq(courses.level, opts.level as "iniciante" | "intermediario" | "avancado"));
+  if (opts.institution) conditions.push(eq(courses.institution, opts.institution));
   const search = opts.search?.trim();
   if (search) {
     const q = `%${search}%`;
@@ -234,6 +236,23 @@ export async function getCoursesPaginated(opts: {
     db.select({ n: sql<number>`count(*)` }).from(courses).where(where),
   ]);
   return { items, total: Number(countRes[0]?.n ?? 0), page, pageSize };
+}
+
+/**
+ * Instituições que têm curso ativo, com a contagem de cada uma — alimenta o
+ * filtro "Instituições" da página de cursos. Ordena pela quantidade (as maiores
+ * primeiro) porque o aluno procura antes por quem tem mais oferta.
+ */
+export async function getCourseInstitutions() {
+  const db = await getDb();
+  if (!db) return [];
+  const rows = await db
+    .select({ institution: courses.institution, n: sql<number>`count(*)` })
+    .from(courses)
+    .where(eq(courses.active, true))
+    .groupBy(courses.institution)
+    .orderBy(sql`count(*) desc`, courses.institution);
+  return rows.map((r) => ({ institution: r.institution, count: Number(r.n) }));
 }
 
 export async function getFeaturedCourses(limit = 5) {
