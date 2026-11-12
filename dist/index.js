@@ -1,6 +1,6 @@
 // server/_core/index.ts
 import "dotenv/config";
-import express3 from "express";
+import express4 from "express";
 import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
@@ -806,43 +806,22 @@ function registerOAuthRoutes(app) {
 }
 
 // server/_core/storageProxy.ts
+import path from "path";
+import express from "express";
+function resolvePublicDir() {
+  return process.env.NODE_ENV === "development" ? path.resolve(import.meta.dirname, "../..", "dist", "public") : path.resolve(import.meta.dirname, "public");
+}
 function registerStorageProxy(app) {
-  app.get("/manus-storage/*", async (req, res) => {
-    const key = req.params[0];
-    if (!key) {
-      res.status(400).send("Missing storage key");
-      return;
-    }
-    if (!ENV.forgeApiUrl || !ENV.forgeApiKey) {
-      res.status(500).send("Storage proxy not configured");
-      return;
-    }
-    try {
-      const forgeUrl = new URL(
-        "v1/storage/presign/get",
-        ENV.forgeApiUrl.replace(/\/+$/, "") + "/"
-      );
-      forgeUrl.searchParams.set("path", key);
-      const forgeResp = await fetch(forgeUrl, {
-        headers: { Authorization: `Bearer ${ENV.forgeApiKey}` }
-      });
-      if (!forgeResp.ok) {
-        const body = await forgeResp.text().catch(() => "");
-        console.error(`[StorageProxy] forge error: ${forgeResp.status} ${body}`);
-        res.status(502).send("Storage backend error");
-        return;
-      }
-      const { url } = await forgeResp.json();
-      if (!url) {
-        res.status(502).send("Empty signed URL from backend");
-        return;
-      }
-      res.set("Cache-Control", "no-store");
-      res.redirect(307, url);
-    } catch (err) {
-      console.error("[StorageProxy] failed:", err);
-      res.status(502).send("Storage proxy error");
-    }
+  const localDir = path.join(resolvePublicDir(), "manus-storage");
+  app.use(
+    "/manus-storage",
+    express.static(localDir, {
+      maxAge: "30d",
+      fallthrough: true
+    })
+  );
+  app.use("/manus-storage", (_req, res) => {
+    res.status(404).type("text/plain").send("Asset not found");
   });
 }
 
@@ -1209,6 +1188,11 @@ ${input.message}`
     ).mutation(async ({ input }) => {
       const stripeKey = process.env.STRIPE_SECRET_KEY;
       if (!stripeKey) throw new TRPCError3({ code: "INTERNAL_SERVER_ERROR", message: "Pagamentos n\xE3o configurados." });
+      if (process.env.NODE_ENV === "production" && stripeKey.startsWith("sk_test_")) {
+        console.error(
+          "[donation] STRIPE_SECRET_KEY \xE9 uma chave de TESTE em produ\xE7\xE3o \u2014 nenhuma doa\xE7\xE3o real ser\xE1 cobrada. Troque por uma chave sk_live_."
+        );
+      }
       const stripe = new Stripe(stripeKey);
       let amountBRL;
       if (input.tierId) {
@@ -1220,33 +1204,49 @@ ${input.message}`
       } else {
         throw new TRPCError3({ code: "BAD_REQUEST", message: "Informe um valor de doa\xE7\xE3o." });
       }
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        mode: "payment",
-        line_items: [
-          {
-            price_data: {
-              currency: DONATION_CURRENCY,
-              unit_amount: amountBRL,
-              product_data: {
-                name: DONATION_PRODUCT_NAME,
-                description: DONATION_PRODUCT_DESCRIPTION
-              }
-            },
-            quantity: 1
-          }
-        ],
-        customer_email: input.donorEmail,
-        metadata: {
-          customer_name: input.donorName ?? "",
-          customer_email: input.donorEmail ?? "",
-          tier_id: input.tierId ?? "custom",
-          amount_brl_cents: amountBRL.toString()
-        },
-        allow_promotion_codes: true,
-        success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${input.origin}/apoie`
-      });
+      let session;
+      try {
+        session = await stripe.checkout.sessions.create({
+          payment_method_types: ["card"],
+          mode: "payment",
+          line_items: [
+            {
+              price_data: {
+                currency: DONATION_CURRENCY,
+                unit_amount: amountBRL,
+                product_data: {
+                  name: DONATION_PRODUCT_NAME,
+                  description: DONATION_PRODUCT_DESCRIPTION
+                }
+              },
+              quantity: 1
+            }
+          ],
+          customer_email: input.donorEmail,
+          metadata: {
+            customer_name: input.donorName ?? "",
+            customer_email: input.donorEmail ?? "",
+            tier_id: input.tierId ?? "custom",
+            amount_brl_cents: amountBRL.toString()
+          },
+          allow_promotion_codes: true,
+          success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${input.origin}/apoie`
+        });
+      } catch (err) {
+        const e = err;
+        console.error(
+          "[donation] Stripe recusou a cria\xE7\xE3o da sess\xE3o:",
+          e?.type ?? "",
+          e?.code ?? "",
+          e?.statusCode ?? "",
+          e?.message ?? String(err)
+        );
+        throw new TRPCError3({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "N\xE3o foi poss\xEDvel abrir o pagamento agora. Tente novamente em instantes \u2014 se continuar, fale com o Instituto pelo e-mail ubatuba@institutoubatuba.org que registramos sua doa\xE7\xE3o por outro meio."
+        });
+      }
       if (!session.url) throw new TRPCError3({ code: "INTERNAL_SERVER_ERROR", message: "Erro ao criar sess\xE3o de pagamento." });
       return { checkoutUrl: session.url };
     })
@@ -1450,10 +1450,10 @@ async function createContext(opts) {
 }
 
 // server/_core/vite.ts
-import express from "express";
+import express2 from "express";
 import fs2 from "fs";
 import { nanoid } from "nanoid";
-import path2 from "path";
+import path3 from "path";
 import { createServer as createViteServer } from "vite";
 
 // vite.config.ts
@@ -1461,11 +1461,11 @@ import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import fs from "node:fs";
-import path from "node:path";
+import path2 from "node:path";
 import { defineConfig } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 var PROJECT_ROOT = import.meta.dirname;
-var LOG_DIR = path.join(PROJECT_ROOT, ".manus-logs");
+var LOG_DIR = path2.join(PROJECT_ROOT, ".manus-logs");
 var MAX_LOG_SIZE_BYTES = 1 * 1024 * 1024;
 var TRIM_TARGET_BYTES = Math.floor(MAX_LOG_SIZE_BYTES * 0.6);
 function ensureLogDir() {
@@ -1496,7 +1496,7 @@ function trimLogFile(logPath, maxSize) {
 function writeToLogFile(source, entries) {
   if (entries.length === 0) return;
   ensureLogDir();
-  const logPath = path.join(LOG_DIR, `${source}.log`);
+  const logPath = path2.join(LOG_DIR, `${source}.log`);
   const lines = entries.map((entry) => {
     const ts = (/* @__PURE__ */ new Date()).toISOString();
     return `[${ts}] ${JSON.stringify(entry)}`;
@@ -1576,16 +1576,16 @@ var vite_config_default = defineConfig({
   plugins,
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets")
+      "@": path2.resolve(import.meta.dirname, "client", "src"),
+      "@shared": path2.resolve(import.meta.dirname, "shared"),
+      "@assets": path2.resolve(import.meta.dirname, "attached_assets")
     }
   },
-  envDir: path.resolve(import.meta.dirname),
-  root: path.resolve(import.meta.dirname, "client"),
-  publicDir: path.resolve(import.meta.dirname, "client", "public"),
+  envDir: path2.resolve(import.meta.dirname),
+  root: path2.resolve(import.meta.dirname, "client"),
+  publicDir: path2.resolve(import.meta.dirname, "client", "public"),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: path2.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true
   },
   server: {
@@ -1607,7 +1607,7 @@ var vite_config_default = defineConfig({
 });
 
 // server/_core/routes-metadata.ts
-var SITE_URL = "https://www.institutoubatuba.org.br";
+var SITE_URL = "https://institutoubatuba.org";
 var DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 var routesMetadata = {
   "": {
@@ -1743,8 +1743,8 @@ var routesMetadata = {
     changefreq: "monthly"
   }
 };
-function getRouteMetadata(path3) {
-  const cleanPath = path3.replace(/^\//, "").replace(/\/$/, "");
+function getRouteMetadata(path4) {
+  const cleanPath = path4.replace(/^\//, "").replace(/\/$/, "");
   if (routesMetadata[cleanPath]) {
     return routesMetadata[cleanPath];
   }
@@ -1782,8 +1782,8 @@ function formatSlugToTitle(slug) {
   return slug.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 }
 function getAllStaticRoutes() {
-  return Object.entries(routesMetadata).filter(([path3]) => path3 !== "obrigado").map(([path3, metadata]) => ({
-    path: path3 === "" ? "/" : `/${path3}`,
+  return Object.entries(routesMetadata).filter(([path4]) => path4 !== "obrigado").map(([path4, metadata]) => ({
+    path: path4 === "" ? "/" : `/${path4}`,
     metadata
   }));
 }
@@ -1840,7 +1840,7 @@ async function setupVite(app, server) {
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
     try {
-      const clientTemplate = path2.resolve(
+      const clientTemplate = path3.resolve(
         import.meta.dirname,
         "../..",
         "client",
@@ -1861,15 +1861,15 @@ async function setupVite(app, server) {
   });
 }
 function serveStatic(app) {
-  const distPath = process.env.NODE_ENV === "development" ? path2.resolve(import.meta.dirname, "../..", "dist", "public") : path2.resolve(import.meta.dirname, "public");
+  const distPath = process.env.NODE_ENV === "development" ? path3.resolve(import.meta.dirname, "../..", "dist", "public") : path3.resolve(import.meta.dirname, "public");
   if (!fs2.existsSync(distPath)) {
     console.error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`
     );
   }
-  app.use(express.static(distPath));
+  app.use(express2.static(distPath));
   app.use("*", (req, res) => {
-    const indexPath = path2.resolve(distPath, "index.html");
+    const indexPath = path3.resolve(distPath, "index.html");
     let html = fs2.readFileSync(indexPath, "utf-8");
     html = injectSEOMetaTags(html, req.originalUrl);
     res.status(200).set({ "Content-Type": "text/html" }).end(html);
@@ -1877,7 +1877,7 @@ function serveStatic(app) {
 }
 
 // server/stripe-webhook.ts
-import express2 from "express";
+import express3 from "express";
 import Stripe2 from "stripe";
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -1887,7 +1887,7 @@ function getStripe() {
 function registerStripeWebhook(app) {
   app.post(
     "/api/stripe/webhook",
-    express2.raw({ type: "application/json" }),
+    express3.raw({ type: "application/json" }),
     async (req, res) => {
       const sig = req.headers["stripe-signature"];
       const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -2016,6 +2016,98 @@ function escapeXml(str) {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 }
 
+// server/seed-posts.ts
+var seedPosts = [
+  {
+    slug: "el-nino-2026-o-que-esperar-em-ubatuba-ods-13",
+    title: "El Ni\xF1o 2026: o oceano esquentou \u2014 o que esperar em Ubatuba",
+    excerpt: "O El Ni\xF1o de 2026 caminha para ser um dos mais fortes j\xE1 registrados, segundo a NOAA e o INMET. Entenda o fen\xF4meno, os efeitos esperados no litoral norte de SP e como a ODS 13 orienta a prepara\xE7\xE3o da nossa cidade.",
+    coverImage: "/noticias-img/el-nino-2026.jpg",
+    category: "Meio Ambiente",
+    tags: JSON.stringify([
+      "El Ni\xF1o",
+      "clima",
+      "ODS 13",
+      "ODS 11",
+      "ODS 14",
+      "Defesa Civil",
+      "Serra do Mar",
+      "S\xE3o Sebasti\xE3o"
+    ]),
+    content: `# El Ni\xF1o 2026: o oceano esquentou \u2014 o que esperar em Ubatuba
+
+## Um dos eventos mais fortes j\xE1 registrados
+
+O Oceano Pac\xEDfico vive, em 2026, um aquecimento fora do comum. Em julho, o \xEDndice Ni\xF1o 3.4 \u2014 o principal term\xF4metro do fen\xF4meno \u2014 atingiu **+2,1 \xB0C acima da m\xE9dia**, e a ag\xEAncia clim\xE1tica americana (NOAA) estima **97% de chance** de o El Ni\xF1o durar at\xE9 o in\xEDcio de 2027. Dos 26 modelos clim\xE1ticos internacionais acompanhados, **23 preveem um evento "muito forte"** no trimestre outubro\u2013dezembro.
+
+No Brasil, o monitoramento \xE9 feito em conjunto por INMET, INPE, Funceme e CENSIPAM, que publicaram nota t\xE9cnica alertando para a alta probabilidade de um El Ni\xF1o muito forte.
+
+## O que \xE9 o El Ni\xF1o?
+
+O El Ni\xF1o \xE9 o aquecimento anormal das \xE1guas do Pac\xEDfico Equatorial. Esse calor extra muda a circula\xE7\xE3o dos ventos e a distribui\xE7\xE3o das chuvas no planeta inteiro. O fen\xF4meno \xE9 natural e ocorre a cada 2 a 7 anos \u2014 mas, num mundo j\xE1 aquecido pelas mudan\xE7as clim\xE1ticas, seus efeitos tendem a ser mais intensos.
+
+## Efeitos opostos pelo Brasil
+
+- **Norte e Nordeste:** maior risco de seca e de inc\xEAndios florestais.
+- **Sul:** chuvas acima da m\xE9dia e risco de enchentes.
+- **Sudeste:** ondas de calor mais frequentes e maior chance de eventos extremos de chuva.
+
+## E aqui em Ubatuba?
+
+O litoral norte de S\xE3o Paulo pode sentir o El Ni\xF1o de tr\xEAs formas principais:
+
+1. **Mar mais quente** \u2014 a temperatura da \xE1gua altera o comportamento dos cardumes, afetando a pesca artesanal cai\xE7ara, e aumenta o estresse sobre a vida marinha.
+2. **Chuvas intensas na Serra do Mar** \u2014 em anos de El Ni\xF1o, eventos extremos de chuva ficam mais prov\xE1veis no nosso relevo de encostas. Aten\xE7\xE3o redobrada com \xE1reas de risco.
+3. **Calor fora de \xE9poca** \u2014 ondas de calor pressionam a sa\xFAde, o abastecimento de \xE1gua e o saneamento, especialmente na alta temporada.
+
+## A li\xE7\xE3o de S\xE3o Sebasti\xE3o
+
+O litoral norte j\xE1 sabe o que a chuva extrema \xE9 capaz de fazer. Entre a noite de 18 e a madrugada de 19 de fevereiro de 2023, S\xE3o Sebasti\xE3o registrou cerca de **680 mil\xEDmetros de chuva em apenas 24 horas** \u2014 o maior volume j\xE1 medido no Brasil nesse intervalo. O desastre deixou **64 mortos**, e a Vila Sahy esteve entre as \xE1reas mais atingidas.
+
+Estudos t\xE9cnicos j\xE1 apontavam a vulnerabilidade da regi\xE3o antes da trag\xE9dia: o desastre foi agravado pela ocupa\xE7\xE3o irregular e pela supress\xE3o da vegeta\xE7\xE3o nas encostas. Tr\xEAs anos depois, o projeto Restaura Litoral colocou **203 hectares em recupera\xE7\xE3o**, mas o desmatamento segue como amea\xE7a \u2014 s\xF3 em dois meses de 2026 foram identificadas cerca de 40 ocorr\xEAncias e ind\xEDcios de esquemas organizados de grilagem.
+
+A li\xE7\xE3o \xE9 direta: encosta desmatada e ocupa\xE7\xE3o irregular transformam chuva forte em trag\xE9dia. E, como lembram os especialistas, **eventos extremos n\xE3o seguem calend\xE1rio**.
+
+## O gancho com a Agenda 2030: ODS 13
+
+Falar de El Ni\xF1o \xE9 falar da **ODS 13 \u2014 A\xE7\xE3o Contra a Mudan\xE7a Global do Clima**. A meta **13.1** pede exatamente isto: *fortalecer a resili\xEAncia e a capacidade de adapta\xE7\xE3o a riscos e desastres relacionados ao clima*. Uma cidade informada e preparada protege vidas \u2014 e \xE9 esse o papel da educa\xE7\xE3o clim\xE1tica que o Instituto Ubatuba promove. O tema tamb\xE9m conversa com a **ODS 11** (cidades resilientes) e a **ODS 14** (vida na \xE1gua).
+
+## Como se preparar
+
+- **Cadastre-se nos alertas da Defesa Civil:** envie seu CEP por SMS para o n\xFAmero **40199**.
+- **Em chuva forte, evite encostas e \xE1reas de risco.** Trincas nas paredes, portas emperrando e \xE1gua barrenta s\xE3o sinais de perigo: saia na hora.
+- **Proteja a mata.** A floresta em p\xE9 segura a encosta, absorve a chuva e refresca a cidade \u2014 \xE9 a nossa melhor defesa natural.
+- **Acompanhe fontes oficiais:** INMET, Defesa Civil e os canais do Instituto Ubatuba.
+
+## Fontes
+
+- NOAA / Climate Prediction Center \u2014 ENSO Diagnostic Discussion (jul/2026)
+- INMET \u2014 "El Ni\xF1o 2026: monitoramento, previs\xF5es e poss\xEDveis impactos no Brasil"
+- Nota T\xE9cnica Conjunta El Ni\xF1o 2026 \u2014 INPE, INMET, Funceme e CENSIPAM
+- CNN Brasil \u2014 "Trag\xE9dia de S\xE3o Sebasti\xE3o completa tr\xEAs anos e deixa alerta clim\xE1tico"
+
+---
+
+*O Instituto Ubatuba Santu\xE1rio Ecol\xF3gico acompanha o clima e educa a comunidade para um futuro mais seguro. Siga [@instituto.ubatuba](https://www.instagram.com/instituto.ubatuba) e compartilhe este alerta.*`
+  }
+];
+async function seedEditorialPosts() {
+  for (const post of seedPosts) {
+    try {
+      const existing = await getPostBySlug(post.slug);
+      if (existing) continue;
+      await createPost({
+        ...post,
+        published: true,
+        publishedAt: /* @__PURE__ */ new Date()
+      });
+      console.log(`[seed-posts] publicado: ${post.slug}`);
+    } catch (err) {
+      console.warn(`[seed-posts] falha ao publicar ${post.slug}:`, err);
+    }
+  }
+}
+
 // server/_core/index.ts
 function isPortAvailable(port) {
   return new Promise((resolve) => {
@@ -2035,11 +2127,11 @@ async function findAvailablePort(startPort = 3e3) {
   throw new Error(`No available port found starting from ${startPort}`);
 }
 async function startServer() {
-  const app = express3();
+  const app = express4();
   const server = createServer(app);
   registerStripeWebhook(app);
-  app.use(express3.json({ limit: "50mb" }));
-  app.use(express3.urlencoded({ limit: "50mb", extended: true }));
+  app.use(express4.json({ limit: "50mb" }));
+  app.use(express4.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
   registerSEORoutes(app);
@@ -2062,6 +2154,7 @@ async function startServer() {
   }
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    void seedEditorialPosts().catch((err) => console.warn("[seed-posts] erro:", err));
   });
 }
 startServer().catch(console.error);
