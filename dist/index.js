@@ -1205,6 +1205,14 @@ ${input.message}`
         throw new TRPCError3({ code: "BAD_REQUEST", message: "Informe um valor de doa\xE7\xE3o." });
       }
       const sessionBase = {
+        ui_mode: "hosted_page",
+        billing_address_collection: "auto",
+        phone_number_collection: { enabled: false },
+        automatic_tax: { enabled: false },
+        allow_promotion_codes: false,
+        submit_type: "auto",
+        integration_identifier: "hosted_web_0001",
+        origin_context: "web",
         mode: "payment",
         line_items: [
           {
@@ -1219,6 +1227,12 @@ ${input.message}`
             quantity: 1
           }
         ],
+        /**
+         * `customer_email` e `metadata` não vêm do Checkout Studio: são do
+         * Instituto. São eles que fazem o pagamento no painel do Stripe ter
+         * nome, e-mail e plano do doador em vez de ser uma linha anônima, e
+         * que preenchem o e-mail do recibo. Tirá-los apagaria esse registro.
+         */
         customer_email: input.donorEmail,
         metadata: {
           customer_name: input.donorName ?? "",
@@ -1226,7 +1240,6 @@ ${input.message}`
           tier_id: input.tierId ?? "custom",
           amount_brl_cents: amountBRL.toString()
         },
-        allow_promotion_codes: true,
         success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${input.origin}/apoie`
       };
