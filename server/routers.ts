@@ -298,6 +298,21 @@ export const appRouter = router({
          * e não diz nada de útil para quem só quer doar. Fica no log do servidor
          * e o doador recebe um texto que dá o próximo passo.
          */
+        /**
+         * Sem `payment_method_types`: assim o Stripe usa os métodos ligados no
+         * painel (Configurações → Métodos de pagamento) e mostra a cada doador
+         * o que faz sentido para ele — Pix para quem está no Brasil pagando em
+         * real, cartão para todo mundo, carteiras onde houver.
+         *
+         * Listar os métodos aqui, como estava antes, DESLIGA essa escolha
+         * automática: o que fosse ativado no painel não apareceria, porque a
+         * lista do código vence. Deixando de fora, ligar ou desligar um meio de
+         * pagamento vira configuração, não implantação.
+         *
+         * Pix exige cliente no Brasil e cobrança em BRL (o site já cobra em
+         * BRL). Doador fora do Brasil, ou que troque a moeda no seletor do
+         * Stripe, continua vendo apenas cartão.
+         */
         const sessionBase = {
           mode: "payment" as const,
           line_items: [
@@ -327,47 +342,9 @@ export const appRouter = router({
 
         let session;
         try {
-          // Pix primeiro: é instantâneo, sem taxa de cartão, e no Brasil muita
-          // gente doa por Pix e não doaria de cartão.
-          session = await stripe.checkout.sessions.create({
-            ...sessionBase,
-            payment_method_types: ["card", "pix"],
-          });
+          session = await stripe.checkout.sessions.create(sessionBase);
         } catch (err) {
           const e = err as { type?: string; code?: string; statusCode?: number; message?: string };
-          /**
-           * Se o Pix não estiver habilitado na conta do Stripe, a criação falha
-           * com erro de parâmetro inválido — e derrubaria TODA a arrecadação,
-           * não só o Pix. Nesse caso volta para cartão, que já funcionava, e
-           * deixa no log o que precisa ser ligado no painel.
-           */
-          const pixIndisponivel =
-            e?.type === "StripeInvalidRequestError" &&
-            /pix/i.test(e?.message ?? "");
-
-          if (pixIndisponivel) {
-            console.error(
-              "[donation] Pix recusado pelo Stripe — a doação seguiu só com cartão. Habilite o Pix em Configurações → Métodos de pagamento. Detalhe:",
-              e?.message ?? ""
-            );
-            try {
-              session = await stripe.checkout.sessions.create({
-                ...sessionBase,
-                payment_method_types: ["card"],
-              });
-            } catch (err2) {
-              const e2 = err2 as { type?: string; code?: string; message?: string };
-              console.error("[donation] Stripe recusou também com cartão:", e2?.type ?? "", e2?.code ?? "", e2?.message ?? String(err2));
-              throw new TRPCError({
-                code: "INTERNAL_SERVER_ERROR",
-                message:
-                  "Não foi possível abrir o pagamento agora. Tente novamente em instantes — se continuar, fale com o Instituto pelo e-mail ubatuba@institutoubatuba.org que registramos sua doação por outro meio.",
-              });
-            }
-            if (!session.url) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erro ao criar sessão de pagamento." });
-            return { checkoutUrl: session.url };
-          }
-
           console.error(
             "[donation] Stripe recusou a criação da sessão:",
             e?.type ?? "",
