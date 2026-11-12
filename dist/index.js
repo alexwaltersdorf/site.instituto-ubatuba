@@ -1359,6 +1359,19 @@ ${input.description.slice(0, 300)}${input.description.length > 300 ? "..." : ""}
       } catch {
       }
       return { success: true };
+    }),
+    /**
+     * Registra que o aluno saiu para o catálogo de uma instituição parceira.
+     * Grava na mesma tabela das inscrições, com courseId 0 e o slug prefixado
+     * por "instituicao:" — assim dá para separar os dois tipos de saída numa
+     * consulta (WHERE courseSlug LIKE 'instituicao:%') sem exigir migração.
+     */
+    visitInstitution: publicProcedure.input(z2.object({ studentId: z2.number(), institutionSlug: z2.string().trim().min(2).max(60) })).mutation(async ({ input }) => {
+      try {
+        await logStudentEnrollment(input.studentId, 0, `instituicao:${input.institutionSlug}`);
+      } catch {
+      }
+      return { success: true };
     })
   }),
   /* ── Cursos Gratuitos ── */

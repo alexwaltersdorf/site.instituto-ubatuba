@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { Link } from "wouter";
-import { Search, GraduationCap, Clock, Building2, ChevronLeft, ChevronRight, Play, Info, X, Loader2 } from "lucide-react";
+import { Search, GraduationCap, Clock, Building2, ChevronLeft, ChevronRight, Play, Info, X, Loader2, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,12 @@ import { useSEO } from "@/components/SEOHead";
 import { InstitutionSeal } from "@/components/InstitutionLogo";
 import { trpc } from "@/lib/trpc";
 import { coursesDemo, CATEGORIES, type CourseDemo } from "@/data/coursesDemo";
+import { INSTITUICOES_PARCEIRAS, GRUPOS, type InstituicaoParceira } from "@/data/instituicoes";
+import {
+  CadastroAlunoDialog,
+  loadStoredStudent,
+  type StoredStudent,
+} from "@/components/CadastroAlunoDialog";
 
 const PAGE_SIZE = 24;
 
@@ -62,6 +68,12 @@ export default function Cursos() {
   const [selectedInstitution, setSelectedInstitution] = useState<string>("all");
   const [page, setPage] = useState(1);
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  /* Saída para o catálogo de uma instituição parceira */
+  const [student, setStudent] = useState<StoredStudent | null>(loadStoredStudent);
+  const [showCadastro, setShowCadastro] = useState(false);
+  const [pendente, setPendente] = useState<InstituicaoParceira | null>(null);
+  const logVisit = trpc.students.visitInstitution.useMutation();
 
   // Debounce da busca (evita uma consulta por tecla)
   useEffect(() => {
@@ -146,6 +158,25 @@ export default function Cursos() {
     setPage(p);
     resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  /** Registra a saída e abre o catálogo da instituição numa nova aba. */
+  function irParaInstituicao(inst: InstituicaoParceira, profile: StoredStudent) {
+    logVisit.mutate({ studentId: profile.id, institutionSlug: inst.slug });
+    setPendente(null);
+    const win = window.open(inst.url, "_blank", "noopener");
+    // Bloqueador de pop-up: segue na mesma aba em vez de não ir a lugar nenhum.
+    if (!win) window.location.href = inst.url;
+  }
+
+  /**
+   * Primeiro clique neste dispositivo abre o cadastro; depois dele (e em todos
+   * os acessos seguintes) o aluno vai direto ao catálogo da instituição.
+   */
+  function abrirInstituicao(inst: InstituicaoParceira) {
+    setPendente(inst);
+    if (student) irParaInstituicao(inst, student);
+    else setShowCadastro(true);
+  }
 
   return (
     <div className="min-h-screen bg-tinta text-areia">
@@ -256,18 +287,50 @@ export default function Cursos() {
         </div>
       </section>
 
-      {/* Instituições parceiras */}
+      {/* Instituições parceiras — cada uma leva ao catálogo gratuito de origem */}
       <section className="px-4 py-16 border-t border-areia/10 mt-4">
         <div className="container max-w-6xl text-center">
           <h2 className="text-lg font-semibold text-areia mb-2">Instituições Parceiras</h2>
-          <p className="text-sm text-areia/50 mb-8">Cursos oferecidos por universidades e plataformas reconhecidas</p>
-          <div className="flex flex-wrap justify-center gap-3 text-sm">
-            {["Harvard", "MIT", "Stanford", "USP", "UNICAMP", "FGV", "Fiocruz", "SENAI", "Santander", "Escola Virtual de Governo", "Fundação Bradesco", "Kultivi", "MEC"].map((name) => (
-              <span key={name} className="px-3 py-1.5 bg-areia/10 text-areia/80 rounded-full font-medium">{name}</span>
-            ))}
-          </div>
+          <p className="text-sm text-areia/50 mb-10">
+            Clique na instituição para abrir o catálogo gratuito dela. No primeiro acesso
+            pedimos um cadastro rápido — depois disso, vai direto.
+          </p>
+
+          {GRUPOS.map((grupo) => {
+            const doGrupo = INSTITUICOES_PARCEIRAS.filter((i) => i.grupo === grupo.id);
+            if (doGrupo.length === 0) return null;
+            return (
+              <div key={grupo.id} className="mb-9 last:mb-0">
+                <p className="text-[11px] uppercase tracking-widest text-areia/40 mb-4">{grupo.label}</p>
+                <div className="flex flex-wrap justify-center gap-3 text-sm">
+                  {doGrupo.map((inst) => (
+                    <button
+                      key={inst.slug}
+                      type="button"
+                      onClick={() => abrirInstituicao(inst)}
+                      title={inst.ressalva ?? `Abrir o catálogo gratuito — ${inst.nome}`}
+                      className="group inline-flex items-center gap-1.5 px-4 py-2 bg-areia/10 hover:bg-amarelo-sol text-areia/80 hover:text-tinta rounded-full font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amarelo-sol focus-visible:ring-offset-2 focus-visible:ring-offset-tinta"
+                    >
+                      {inst.nome}
+                      <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-70 transition-opacity" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
+
+      <CadastroAlunoDialog
+        open={showCadastro}
+        onOpenChange={setShowCadastro}
+        destino={pendente?.nome ?? "a instituição"}
+        onRegistered={(profile) => {
+          setStudent(profile);
+          if (pendente) irParaInstituicao(pendente, profile);
+        }}
+      />
     </div>
   );
 }
