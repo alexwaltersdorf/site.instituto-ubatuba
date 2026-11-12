@@ -59,6 +59,7 @@ export default function Cursos() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedLevel, setSelectedLevel] = useState<string>("all");
+  const [selectedInstitution, setSelectedInstitution] = useState<string>("all");
   const [page, setPage] = useState(1);
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -71,21 +72,41 @@ export default function Cursos() {
   // Volta para a 1ª página quando um filtro muda
   useEffect(() => {
     setPage(1);
-  }, [search, selectedCategory, selectedLevel]);
+  }, [search, selectedCategory, selectedLevel, selectedInstitution]);
 
-  const browsing = search === "" && selectedCategory === "all" && selectedLevel === "all";
+  const browsing =
+    search === "" &&
+    selectedCategory === "all" &&
+    selectedLevel === "all" &&
+    selectedInstitution === "all";
 
   const listQuery = trpc.courses.list.useQuery(
     {
       search: search || undefined,
       category: selectedCategory === "all" ? undefined : selectedCategory,
       level: selectedLevel === "all" ? undefined : selectedLevel,
+      institution: selectedInstitution === "all" ? undefined : selectedInstitution,
       page,
       pageSize: PAGE_SIZE,
     },
     { retry: false, placeholderData: (prev) => prev }
   );
   const featuredQuery = trpc.courses.featured.useQuery(undefined, { retry: false });
+  const institutionsQuery = trpc.courses.institutions.useQuery(undefined, { retry: false });
+
+  /**
+   * Lista do filtro de instituições. Sem banco, cai no fallback local para o
+   * seletor não aparecer vazio — mesma estratégia da grade de cursos.
+   */
+  const institutions = useMemo(() => {
+    const fromDb = institutionsQuery.data ?? [];
+    if (fromDb.length > 0) return fromDb;
+    const cnt = new Map<string, number>();
+    for (const c of coursesDemo) cnt.set(c.institution, (cnt.get(c.institution) ?? 0) + 1);
+    return [...cnt.entries()]
+      .map(([institution, count]) => ({ institution, count }))
+      .sort((a, b) => b.count - a.count || a.institution.localeCompare(b.institution));
+  }, [institutionsQuery.data]);
 
   // Fallback local (coursesDemo) caso o banco esteja indisponível
   const demoPage = useMemo(() => {
@@ -93,15 +114,23 @@ export default function Cursos() {
     const arr = coursesDemo.filter((c) => {
       const okCat = selectedCategory === "all" || c.category === selectedCategory;
       const okLvl = selectedLevel === "all" || c.level === selectedLevel;
+      const okInst = selectedInstitution === "all" || c.institution === selectedInstitution;
       const okS = q === "" || norm(`${c.title} ${c.institution} ${c.description ?? ""}`).includes(q);
-      return okCat && okLvl && okS;
+      return okCat && okLvl && okInst && okS;
     });
     const start = (page - 1) * PAGE_SIZE;
     return { items: arr.slice(start, start + PAGE_SIZE), total: arr.length };
-  }, [search, selectedCategory, selectedLevel, page]);
+  }, [search, selectedCategory, selectedLevel, selectedInstitution, page]);
 
   const data = listQuery.data;
-  const demoNeeded = !!data && data.total === 0 && browsing; // banco vazio/indisponível
+  /**
+   * Banco vazio ou indisponível: a consulta de instituições volta sem nenhuma
+   * linha. Esse é o sinal certo — antes o fallback só valia na navegação sem
+   * filtro, então qualquer filtro (categoria, nível e agora instituição)
+   * esvaziava a grade em ambiente sem banco, mesmo com os cursos locais à mão.
+   */
+  const bancoVazio = institutionsQuery.isSuccess && (institutionsQuery.data?.length ?? 0) === 0;
+  const demoNeeded = bancoVazio || (!!data && data.total === 0 && browsing);
   const items: CourseDemo[] = demoNeeded
     ? demoPage.items
     : ((data?.items ?? []) as unknown as CourseDemo[]);
@@ -142,6 +171,19 @@ export default function Cursos() {
                 {CATEGORIES.map((cat) => (<SelectItem key={cat.id} value={cat.id}>{cat.icon} {cat.label}</SelectItem>))}
               </SelectContent>
             </Select>
+            <Select value={selectedInstitution} onValueChange={setSelectedInstitution}>
+              <SelectTrigger className="w-[230px] h-11 rounded-xl bg-tinta/60 border-areia/15 text-areia">
+                <SelectValue placeholder="Instituição" />
+              </SelectTrigger>
+              <SelectContent className="max-h-[320px]">
+                <SelectItem value="all">Todas as instituições</SelectItem>
+                {institutions.map((inst) => (
+                  <SelectItem key={inst.institution} value={inst.institution}>
+                    {inst.institution} ({inst.count.toLocaleString("pt-BR")})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <Select value={selectedLevel} onValueChange={setSelectedLevel}>
               <SelectTrigger className="w-[160px] h-11 rounded-xl bg-tinta/60 border-areia/15 text-areia"><SelectValue placeholder="Nível" /></SelectTrigger>
               <SelectContent>
@@ -153,7 +195,7 @@ export default function Cursos() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => { setSelectedCategory("all"); setSelectedLevel("all"); setSearchInput(""); setSearch(""); }}
+                onClick={() => { setSelectedCategory("all"); setSelectedLevel("all"); setSelectedInstitution("all"); setSearchInput(""); setSearch(""); }}
                 className="text-areia/70 hover:text-areia hover:bg-areia/10"
               >
                 <X className="w-4 h-4 mr-1" /> Limpar

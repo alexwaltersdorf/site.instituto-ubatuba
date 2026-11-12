@@ -13,6 +13,7 @@ import {
   getContacts,
   getCourseById,
   getCourseBySlug,
+  getCourseInstitutions,
   getCoursesPaginated,
   getFeaturedCourses,
   getEnrollment,
@@ -453,6 +454,7 @@ export const appRouter = router({
             search: z.string().optional(),
             category: z.string().optional(),
             level: z.string().optional(),
+            institution: z.string().optional(),
             page: z.number().min(1).default(1),
             pageSize: z.number().min(1).max(60).default(24),
           })
@@ -461,6 +463,10 @@ export const appRouter = router({
       .query(async ({ input }) => {
         return getCoursesPaginated(input ?? {});
       }),
+
+    institutions: publicProcedure.query(async () => {
+      return getCourseInstitutions();
+    }),
 
     featured: publicProcedure.query(async () => {
       return getFeaturedCourses(5);
