@@ -115,7 +115,7 @@ export default function Cursos() {
     if (fromDb.length > 0) return fromDb;
     const cnt = new Map<string, number>();
     for (const c of coursesDemo) cnt.set(c.institution, (cnt.get(c.institution) ?? 0) + 1);
-    return [...cnt.entries()]
+    return Array.from(cnt.entries())
       .map(([institution, count]) => ({ institution, count }))
       .sort((a, b) => b.count - a.count || a.institution.localeCompare(b.institution));
   }, [institutionsQuery.data]);

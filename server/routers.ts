@@ -269,6 +269,15 @@ export const appRouter = router({
         const stripeKey = process.env.STRIPE_SECRET_KEY;
         if (!stripeKey) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Pagamentos não configurados." });
 
+        // Chave de teste em produção aceita apenas cartões de teste: o doador é
+        // recusado e nenhum centavo entra. Como o erro do Stripe nesse caso não
+        // diz isso, o aviso vai para o log do servidor.
+        if (process.env.NODE_ENV === "production" && stripeKey.startsWith("sk_test_")) {
+          console.error(
+            "[donation] STRIPE_SECRET_KEY é uma chave de TESTE em produção — nenhuma doação real será cobrada. Troque por uma chave sk_live_."
+          );
+        }
+
         const stripe = new Stripe(stripeKey);
 
         // Determina o valor da doação
@@ -283,9 +292,29 @@ export const appRouter = router({
           throw new TRPCError({ code: "BAD_REQUEST", message: "Informe um valor de doação." });
         }
 
-        const session = await stripe.checkout.sessions.create({
-          payment_method_types: ["card"],
-          mode: "payment",
+        /**
+         * A mensagem de erro do Stripe não pode chegar ao doador: ela carrega
+         * pedaços da chave secreta ("Expired API Key provided: sk_test_…AHsqyI")
+         * e não diz nada de útil para quem só quer doar. Fica no log do servidor
+         * e o doador recebe um texto que dá o próximo passo.
+         */
+        /**
+         * Sem `payment_method_types`: assim o Stripe usa os métodos ligados no
+         * painel (Configurações → Métodos de pagamento) e mostra a cada doador
+         * o que faz sentido para ele — Pix para quem está no Brasil pagando em
+         * real, cartão para todo mundo, carteiras onde houver.
+         *
+         * Listar os métodos aqui, como estava antes, DESLIGA essa escolha
+         * automática: o que fosse ativado no painel não apareceria, porque a
+         * lista do código vence. Deixando de fora, ligar ou desligar um meio de
+         * pagamento vira configuração, não implantação.
+         *
+         * Pix exige cliente no Brasil e cobrança em BRL (o site já cobra em
+         * BRL). Doador fora do Brasil, ou que troque a moeda no seletor do
+         * Stripe, continua vendo apenas cartão.
+         */
+        const sessionBase = {
+          mode: "payment" as const,
           line_items: [
             {
               price_data: {
@@ -309,7 +338,26 @@ export const appRouter = router({
           allow_promotion_codes: true,
           success_url: `${input.origin}/obrigado?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${input.origin}/apoie`,
-        });
+        };
+
+        let session;
+        try {
+          session = await stripe.checkout.sessions.create(sessionBase);
+        } catch (err) {
+          const e = err as { type?: string; code?: string; statusCode?: number; message?: string };
+          console.error(
+            "[donation] Stripe recusou a criação da sessão:",
+            e?.type ?? "",
+            e?.code ?? "",
+            e?.statusCode ?? "",
+            e?.message ?? String(err)
+          );
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              "Não foi possível abrir o pagamento agora. Tente novamente em instantes — se continuar, fale com o Instituto pelo e-mail ubatuba@institutoubatuba.org que registramos sua doação por outro meio.",
+          });
+        }
 
         if (!session.url) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Erro ao criar sessão de pagamento." });
         return { checkoutUrl: session.url };
